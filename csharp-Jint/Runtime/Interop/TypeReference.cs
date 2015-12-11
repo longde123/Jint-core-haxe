@@ -17,13 +17,13 @@ namespace Jint.Runtime.Interop
         {
         }
 
-        public Type TypeRef { get; set; }
+        public Type Type { get; set; }
 
         public static TypeReference CreateTypeReference(Engine engine, Type type)
         {
             var obj = new TypeReference(engine);
             obj.Extensible = false;
-            obj.TypeRef = type;
+            obj.Type = type;
 
             // The value of the [[Prototype]] internal property of the TypeReference constructor is the Function prototype object 
             obj.Prototype = engine.Function.PrototypeObject;
@@ -44,7 +44,7 @@ namespace Jint.Runtime.Interop
 
         public ObjectInstance Construct(JsValue[] arguments)
         {
-            var constructors = TypeRef.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
+            var constructors = Type.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
             
             var methods = TypeConverter.FindBestMatch(Engine, constructors, arguments).ToList();
 
@@ -140,7 +140,7 @@ namespace Jint.Runtime.Interop
         {
             // todo: cache members locally
 
-            if (TypeRef.IsEnum)
+            if (Type.IsEnum)
             {
                 Array enumValues = null;//todo Enum.GetValues(TypeRef);
                 Array enumNames = null;//todoEnum.GetNames(TypeRef);
@@ -155,19 +155,19 @@ namespace Jint.Runtime.Interop
                 return PropertyDescriptor.Undefined;
             }
 
-            var propertyInfo = TypeRef.GetProperty(propertyName, BindingFlags.Public | BindingFlags.Static);
+            var propertyInfo = Type.GetProperty(propertyName, BindingFlags.Public | BindingFlags.Static);
             if (propertyInfo != null)
             {
-                return new PropertyInfoDescriptor(Engine, propertyInfo, TypeRef);
+                return new PropertyInfoDescriptor(Engine, propertyInfo, Type);
             }
 
-            var fieldInfo = TypeRef.GetField(propertyName, BindingFlags.Public | BindingFlags.Static);
+            var fieldInfo = Type.GetField(propertyName, BindingFlags.Public | BindingFlags.Static);
             if (fieldInfo != null)
             {
-                return new FieldInfoDescriptor(Engine, fieldInfo, TypeRef);
+                return new FieldInfoDescriptor(Engine, fieldInfo, Type);
             }
 
-            var methodInfo = TypeRef
+            var methodInfo = Type
                 .GetMethods(BindingFlags.Public | BindingFlags.Static)
                 .Where(mi => mi.Name == propertyName)
                 .ToArray();
@@ -184,7 +184,7 @@ namespace Jint.Runtime.Interop
         {
             get
             {
-                return TypeRef;
+                return Type;
             } 
         }
 

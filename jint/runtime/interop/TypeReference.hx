@@ -9,12 +9,12 @@ class TypeReference extends jint.native.function.FunctionInstance implements jin
     {
         super(engine, null, null, false);
     }
-    public var TypeRef:system.TypeCS;
+    public var Type:system.TypeCS;
     public static function CreateTypeReference(engine:jint.Engine, type:system.TypeCS):jint.runtime.interop.TypeReference
     {
         var obj:jint.runtime.interop.TypeReference = new jint.runtime.interop.TypeReference(engine);
         obj.Extensible = false;
-        obj.TypeRef = type;
+        obj.Type = type;
         obj.Prototype = engine.Function.PrototypeObject;
         obj.FastAddProperty("length", 0, false, false, false);
         obj.FastAddProperty("prototype", engine.Object.PrototypeObject, false, false, false);
@@ -26,7 +26,7 @@ class TypeReference extends jint.native.function.FunctionInstance implements jin
     }
     public function Construct(arguments:Array<jint.native.JsValue>):jint.native.object.ObjectInstance
     {
-        var constructors:Array<system.reflection.ConstructorInfo> = TypeRef.GetConstructors_BindingFlags(system.reflection.BindingFlags.Public | system.reflection.BindingFlags.Instance);
+        var constructors:Array<system.reflection.ConstructorInfo> = Type.GetConstructors_BindingFlags(system.reflection.BindingFlags.Public | system.reflection.BindingFlags.Instance);
         var methods:Array<system.reflection.MethodBase> = system.linq.Enumerable.ToList(jint.runtime.TypeConverter.FindBestMatch(Engine, constructors, arguments));
         for (method in methods)
         {
@@ -101,7 +101,7 @@ class TypeReference extends jint.native.function.FunctionInstance implements jin
     }
     override public function GetOwnProperty(propertyName:String):jint.runtime.descriptors.PropertyDescriptor
     {
-        if (TypeRef.IsEnum)
+        if (Type.IsEnum)
         {
             var enumValues = null;
             var enumNames = null;
@@ -118,17 +118,17 @@ class TypeReference extends jint.native.function.FunctionInstance implements jin
             } //end for
             return jint.runtime.descriptors.PropertyDescriptor.Undefined;
         }
-        var propertyInfo:system.reflection.PropertyInfo = TypeRef.GetProperty_String_BindingFlags(propertyName, system.reflection.BindingFlags.Public | system.reflection.BindingFlags.Static);
+        var propertyInfo:system.reflection.PropertyInfo = Type.GetProperty_String_BindingFlags(propertyName, system.reflection.BindingFlags.Public | system.reflection.BindingFlags.Static);
         if (propertyInfo != null)
         {
-            return new jint.runtime.descriptors.specialized.PropertyInfoDescriptor(Engine, propertyInfo, TypeRef);
+            return new jint.runtime.descriptors.specialized.PropertyInfoDescriptor(Engine, propertyInfo, Type);
         }
-        var fieldInfo:system.reflection.FieldInfo = TypeRef.GetField_String_BindingFlags(propertyName, system.reflection.BindingFlags.Public | system.reflection.BindingFlags.Static);
+        var fieldInfo:system.reflection.FieldInfo = Type.GetField_String_BindingFlags(propertyName, system.reflection.BindingFlags.Public | system.reflection.BindingFlags.Static);
         if (fieldInfo != null)
         {
-            return new jint.runtime.descriptors.specialized.FieldInfoDescriptor(Engine, fieldInfo, TypeRef);
+            return new jint.runtime.descriptors.specialized.FieldInfoDescriptor(Engine, fieldInfo, Type);
         }
-        var methodInfo:Array<system.reflection.MethodInfo> = system.linq.Enumerable.ToArray(system.linq.Enumerable.Where(TypeRef.GetMethods_BindingFlags(system.reflection.BindingFlags.Public | system.reflection.BindingFlags.Static), function (mi:system.reflection.MethodInfo):Bool { return mi.Name == propertyName; } ));
+        var methodInfo:Array<system.reflection.MethodInfo> = system.linq.Enumerable.ToArray(system.linq.Enumerable.Where(Type.GetMethods_BindingFlags(system.reflection.BindingFlags.Public | system.reflection.BindingFlags.Static), function (mi:system.reflection.MethodInfo):Bool { return mi.Name == propertyName; } ));
         if (methodInfo.length == 0)
         {
             return jint.runtime.descriptors.PropertyDescriptor.Undefined;
@@ -138,7 +138,7 @@ class TypeReference extends jint.native.function.FunctionInstance implements jin
     public var Target(get_Target, never):Dynamic;
     public function get_Target():Dynamic
     {
-        return TypeRef;
+        return Type;
     }
 
     override public function get_Class():String

@@ -39,7 +39,7 @@ class NamespaceReference extends jint.native.object.ObjectInstance implements ji
                 {
                     return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(Engine.TypeError, "Invalid generic type parameter");
                 }
-                genericTypes[i] = jint.runtime.Arguments.At(arguments, i).As().TypeRef;
+                genericTypes[i] = jint.runtime.Arguments.At(arguments, i).As().Type;
                 i++;
             }
         } //end for
@@ -48,7 +48,7 @@ class NamespaceReference extends jint.native.object.ObjectInstance implements ji
         {
             return jint.native.Undefined.Instance;
         }
-        var genericType:system.TypeCS = typeReference.TypeRef.MakeGenericType(genericTypes);
+        var genericType:system.TypeCS = typeReference.Type.MakeGenericType(genericTypes);
         return jint.runtime.interop.TypeReference.CreateTypeReference(Engine, genericType);
     }
     override public function Get(propertyName:String):jint.native.JsValue
