@@ -14,3 +14,11 @@ https://github.com/sebastienros/jint
 #Jint Core Haxe 
 
 Version is still in the development  ,not officially used 
+
+
+
+Todo List 
+
+Step 1  jint\parser
+
+Step 2  jint\runtime   jint\native
