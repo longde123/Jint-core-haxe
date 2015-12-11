@@ -3,6 +3,7 @@
 # Jint
 
 Jint is a __Javascript interpreter__ for .NET which provides full __ECMA 5.1__ compliance 
+https://github.com/sebastienros/jint
 
 # Features
 
