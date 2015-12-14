@@ -1423,7 +1423,7 @@ class JavaScriptParser
         _lineStart = start;
         return found;
     }
-    private function ThrowError(token:jint.parser.Token, messageFormat:String, arguments:Array<Dynamic>):Void
+    private function ThrowError(token:jint.parser.Token, messageFormat:String, ?arguments:Array<Dynamic>):Void
     {
         var exception:jint.parser.ParserException;
         var msg:String = system.String.Format_String_(messageFormat, arguments);
@@ -1438,7 +1438,7 @@ class JavaScriptParser
         exception.Description = msg;
         throw exception;
     }
-    private function ThrowErrorTolerant(token:jint.parser.Token, messageFormat:String, arguments:Array<Dynamic>):Void
+    private function ThrowErrorTolerant(token:jint.parser.Token, messageFormat:String, ?arguments:Array<Dynamic>):Void
     {
         try
         {
