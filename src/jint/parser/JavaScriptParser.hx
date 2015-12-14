@@ -1249,7 +1249,7 @@ class JavaScriptParser
         functionDeclaration.Expression = false;
         functionDeclaration.VariableDeclarations = LeaveVariableScope();
         functionDeclaration.FunctionDeclarations = LeaveFunctionScope();
-        _functionScopes[0].FunctionDeclarations.push(functionDeclaration);
+        _functionScopes[_functionScopes.length-1].FunctionDeclarations.push(functionDeclaration);
         return functionDeclaration;
     }
     public function CreateFunctionExpression(id:jint.parser.ast.Identifier, parameters:Array<jint.parser.ast.Identifier>, defaults:Array<jint.parser.ast.Expression>, body:jint.parser.ast.Statement, strict:Bool):jint.parser.ast.FunctionExpression
@@ -1438,7 +1438,7 @@ class JavaScriptParser
         variableDeclaration.Type = jint.parser.ast.SyntaxNodes.VariableDeclaration;
         variableDeclaration.Declarations = declarations;
         variableDeclaration.Kind = kind;
-        _variableScopes[0].VariableDeclarations.push(variableDeclaration);
+        _variableScopes[_variableScopes.length-1].VariableDeclarations.push(variableDeclaration);
         return variableDeclaration;
     }
     public function CreateVariableDeclarator(id:jint.parser.ast.Identifier, init:jint.parser.ast.Expression):jint.parser.ast.VariableDeclarator

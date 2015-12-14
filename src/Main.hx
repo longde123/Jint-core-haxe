@@ -97,6 +97,10 @@ class Main
 		var node2 = node.As(VariableDeclaration);
 		node2.Declarations;
 			 
+		JavaScriptParser.cctor();
+		//JavaScriptParser_Regexes.cctor();
+		Messages.cctor();
+		Token.cctor();
 	}
 	
 }
