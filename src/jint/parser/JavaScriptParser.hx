@@ -1,5 +1,58 @@
 package jint.parser;
 using StringTools;
+import haxe.ds.StringMap.StringMap;
+import jint.parser.ast.ArrayExpression;
+import jint.parser.ast.AssignmentExpression;
+import jint.parser.ast.AssignmentOperator;
+import jint.parser.ast.BinaryExpression;
+import jint.parser.ast.BinaryOperator;
+import jint.parser.ast.BlockStatement;
+import jint.parser.ast.BreakStatement;
+import jint.parser.ast.CallExpression;
+import jint.parser.ast.CatchClause;
+import jint.parser.ast.ConditionalExpression;
+import jint.parser.ast.ContinueStatement;
+import jint.parser.ast.DebuggerStatement;
+import jint.parser.ast.DoWhileStatement;
+import jint.parser.ast.EmptyStatement;
+import jint.parser.ast.Expression;
+import jint.parser.ast.ExpressionStatement;
+import jint.parser.ast.ForInStatement;
+import jint.parser.ast.ForStatement;
+import jint.parser.ast.FunctionDeclaration;
+import jint.parser.ast.FunctionExpression;
+import jint.parser.ast.Identifier;
+import jint.parser.ast.IfStatement;
+import jint.parser.ast.IPropertyKeyExpression;
+import jint.parser.ast.LabelledStatement;
+import jint.parser.ast.Literal;
+import jint.parser.ast.LogicalExpression;
+import jint.parser.ast.LogicalOperator;
+import jint.parser.ast.MemberExpression;
+import jint.parser.ast.NewExpression;
+import jint.parser.ast.ObjectExpression;
+import jint.parser.ast.Program;
+import jint.parser.ast.Property;
+import jint.parser.ast.PropertyKind;
+import jint.parser.ast.RegExpLiteral;
+import jint.parser.ast.ReturnStatement;
+import jint.parser.ast.SequenceExpression;
+import jint.parser.ast.Statement;
+import jint.parser.ast.SwitchCase;
+import jint.parser.ast.SwitchStatement;
+import jint.parser.ast.SyntaxNode;
+import jint.parser.ast.SyntaxNodes;
+import jint.parser.ast.ThisExpression;
+import jint.parser.ast.ThrowStatement;
+import jint.parser.ast.TryStatement;
+import jint.parser.ast.UnaryExpression;
+import jint.parser.ast.UnaryOperator;
+import jint.parser.ast.UpdateExpression;
+import jint.parser.ast.VariableDeclaration;
+import jint.parser.ast.VariableDeclarator;
+import jint.parser.ast.WhileStatement;
+import jint.parser.ast.WithStatement;
+
 import system.*;
 import anonymoustypes.*;
  
@@ -546,7 +599,8 @@ class JavaScriptParser
         }
         var token:jint.parser.Token = new jint.parser.Token();
         token.Type = jint.parser.Tokens.NumericLiteral;
-        token.Value = system.Convert.ToInt64_String_Int32(number, 16);
+		//todo Convert.ToInt64(number, 16);;
+        token.Value = Std.parseFloat(number);
         token.LineNumber = new Nullable_Int(_lineNumber);
         token.LineStart = _lineStart;
         token.Range = [ start, _index ];
@@ -643,7 +697,7 @@ class JavaScriptParser
         var n:Float;
         try
         {
-            n = system.Double.Parse_String_NumberStyles_IFormatProvider(number, system.globalization.NumberStyles.AllowDecimalPoint | system.globalization.NumberStyles.AllowExponent, system.globalization.CultureInfo.InvariantCulture);
+            n = Std.parseFloat(number);
             if (n > 3.4028235e+38)
             {
                 n = Math.POSITIVE_INFINITY;
@@ -1195,7 +1249,7 @@ class JavaScriptParser
         functionDeclaration.Expression = false;
         functionDeclaration.VariableDeclarations = LeaveVariableScope();
         functionDeclaration.FunctionDeclarations = LeaveFunctionScope();
-        _functionScopes.Peek().FunctionDeclarations.Add(functionDeclaration);
+        _functionScopes[0].FunctionDeclarations.push(functionDeclaration);
         return functionDeclaration;
     }
     public function CreateFunctionExpression(id:jint.parser.ast.Identifier, parameters:Array<jint.parser.ast.Identifier>, defaults:Array<jint.parser.ast.Expression>, body:jint.parser.ast.Statement, strict:Bool):jint.parser.ast.FunctionExpression
@@ -1384,7 +1438,7 @@ class JavaScriptParser
         variableDeclaration.Type = jint.parser.ast.SyntaxNodes.VariableDeclaration;
         variableDeclaration.Declarations = declarations;
         variableDeclaration.Kind = kind;
-        _variableScopes.Peek().VariableDeclarations.Add(variableDeclaration);
+        _variableScopes[0].VariableDeclarations.push(variableDeclaration);
         return variableDeclaration;
     }
     public function CreateVariableDeclarator(id:jint.parser.ast.Identifier, init:jint.parser.ast.Expression):jint.parser.ast.VariableDeclarator
@@ -1426,7 +1480,7 @@ class JavaScriptParser
     private function ThrowError(token:jint.parser.Token, messageFormat:String, ?arguments:Array<Dynamic>):Void
     {
         var exception:jint.parser.ParserException;
-        var msg:String = system.String.Format_String_(messageFormat, arguments);
+        var msg:String = Std.string(arguments);
         if (token != null && token.LineNumber.HasValue)
         {
             exception = new jint.parser.ParserException("Line " + token.LineNumber + ": " + msg);
@@ -1492,7 +1546,7 @@ class JavaScriptParser
     private function Expect(value:String):Void
     {
         var token:jint.parser.Token = Lex();
-        if (token.Type != jint.parser.Tokens.Punctuator || !system.Cs2Hx.Equals(value, token.Value))
+        if (token.Type != jint.parser.Tokens.Punctuator || !system.Cs2Hx.Equals_String(value, token.Value))
         {
             ThrowUnexpected(token);
         }
@@ -1500,14 +1554,14 @@ class JavaScriptParser
     private function ExpectKeyword(keyword:String):Void
     {
         var token:jint.parser.Token = Lex();
-        if (token.Type != jint.parser.Tokens.Keyword || !system.Cs2Hx.Equals(keyword, token.Value))
+        if (token.Type != jint.parser.Tokens.Keyword || !system.Cs2Hx.Equals_String(keyword, token.Value))
         {
             ThrowUnexpected(token);
         }
     }
     private function Match(value:String):Bool
     {
-        return _lookahead.Type == jint.parser.Tokens.Punctuator && system.Cs2Hx.Equals(value, _lookahead.Value);
+        return _lookahead.Type == jint.parser.Tokens.Punctuator && system.Cs2Hx.Equals_String(value, _lookahead.Value);
     }
     private function MatchKeyword(keyword:Dynamic):Bool
     {
@@ -1609,7 +1663,7 @@ class JavaScriptParser
         if (token.Type == jint.parser.Tokens.Identifier)
         {
             var id:jint.parser.ast.IPropertyKeyExpression = ParseObjectPropertyKey();
-            if (system.Cs2Hx.Equals("get", token.Value) && !Match(":"))
+            if (system.Cs2Hx.Equals_String("get", token.Value) && !Match(":"))
             {
                 var key:jint.parser.ast.IPropertyKeyExpression = ParseObjectPropertyKey();
                 Expect("(");
@@ -1617,7 +1671,7 @@ class JavaScriptParser
                 value = ParsePropertyFunction([  ]);
                 return MarkEnd(CreateProperty(jint.parser.ast.PropertyKind.Get, key, value));
             }
-            if (system.Cs2Hx.Equals("set", token.Value) && !Match(":"))
+            if (system.Cs2Hx.Equals_String("set", token.Value) && !Match(":"))
             {
                 var key:jint.parser.ast.IPropertyKeyExpression = ParseObjectPropertyKey();
                 Expect("(");
@@ -1656,7 +1710,7 @@ class JavaScriptParser
     private function ParseObjectInitialiser():jint.parser.ast.ObjectExpression
     {
         var properties:Array<jint.parser.ast.Property> = new Array<jint.parser.ast.Property>();
-        var map:system.collections.generic.Dictionary<String, Int> = new system.collections.generic.Dictionary<String, Int>();
+        var map:StringMap<Int> = new StringMap<Int>();
         Expect("{");
         while (!Match("}"))
         {
@@ -1664,9 +1718,10 @@ class JavaScriptParser
             var name:String = property.Key.GetKey();
             var kind:Int = property.Kind;
             var key:String = "$" + name;
-            if (map.ContainsKey(key))
+		  
+            if (map.exists(key))
             {
-                if (map.GetValue_TKey(key) == jint.parser.ast.PropertyKind.Data)
+                if (map.get(key) == jint.parser.ast.PropertyKind.Data)
                 {
                     if (_strict && kind == jint.parser.ast.PropertyKind.Data)
                     {
@@ -1683,16 +1738,17 @@ class JavaScriptParser
                     {
                         ThrowErrorTolerant(jint.parser.Token.Empty, jint.parser.Messages.AccessorDataProperty);
                     }
-                    else if ((map.GetValue_TKey(key) & kind) == kind)
+                    else if ((map.get(key) & kind) == kind)
                     {
                         ThrowErrorTolerant(jint.parser.Token.Empty, jint.parser.Messages.AccessorGetSet);
                     }
                 }
-                map.GetValue_TKey(key) |= kind;
+				var map_value = map.get(key);
+                map.set(key, map_value|= kind);
             }
             else
             {
-                map.SetValue(key, kind);
+                map.set(key, kind);
             }
             properties.push(property);
             if (!Match("}"))
@@ -1746,7 +1802,7 @@ class JavaScriptParser
         else if (type == jint.parser.Tokens.BooleanLiteral)
         {
             var token:jint.parser.Token = Lex();
-            token.Value = (system.Cs2Hx.Equals("true", token.Value));
+            token.Value = (system.Cs2Hx.Equals_String("true", token.Value));
             expr = CreateLiteral(token);
         }
         else if (type == jint.parser.Tokens.NullLiteral)
@@ -2094,7 +2150,8 @@ class JavaScriptParser
                     break;
                 }
                 Lex();
-                (cast(expr, jint.parser.ast.SequenceExpression)).Expressions.Add(ParseAssignmentExpression());
+				var sequenceExpression:SequenceExpression = (cast(expr, jint.parser.ast.SequenceExpression)); 
+                sequenceExpression.Expressions.push(ParseAssignmentExpression());
             }
         }
         return MarkEndIf(expr);
