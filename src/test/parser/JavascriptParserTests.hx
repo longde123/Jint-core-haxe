@@ -12,7 +12,7 @@ class JavascriptParserTests extends TestCase
 {
 	private   var  _parser:JavaScriptParser = new JavaScriptParser();
 	 
-	 
+
 	public  function  testShouldParseThis()
 	{
 		var program:Program = _parser.Parse("this");
@@ -68,7 +68,101 @@ class JavascriptParserTests extends TestCase
             assertEquals(2.0, binary.Left.As(BinaryExpression).Right.As(Literal).Value);
             assertEquals(BinaryOperator.Plus, binary.Left.As(BinaryExpression).Operator);
         }
+		public function  testShouldParseNumericLiterals()
+        {
+			var Theory:Array<Array<Dynamic>>=[
+			[0, "0"],
+			[42, "42"],
+			[0.14, "0.14"],
+			[3.14159, "3.14159"],
+			[6.02214179e+23, "6.02214179e+23"],
+			[1.492417830e-10, "1.492417830e-10"],
+			[0, "0X0"],
+			[0, "0X0;"],
+			[0xabc, "0Xabc"],
+			[0xdef, "0Xdef"],
+			[0x1A, "0X1A"],
+			[0x10, "0x10"],
+			[0x100, "0x100"],
+			[0x04, "0X04"],
+			[2, "02"],
+			[10, "012"],
+			[10, "0012"]];
+			for  (i in 0...Theory.length)
+			{
+				var data = Theory[i];
+				ShouldParseNumericLiterals(data[0], data[1]);
+			}
+		}
+        function   ShouldParseNumericLiterals( expected,  source)
+        {
+            var literal;
 
+            var program = _parser.Parse(source);
+            var body = program.Body;
+			
+			assertTrue(body!=null);
+            assertEquals(1, body.length );
+            literal = body[0].As(ExpressionStatement).Expression.As(Literal);
+			
+			assertTrue(literal != null); 
+            assertEquals(expected,Std.parseFloat(literal.Value));
+        }
+			/*
+		public function  testShouldParseStringLiterals()
+        {
+				var Theory:Array<Array<Dynamic>>=[
+				["Hello", "'Hello'"], 
+				["\u0061", "'\u0061'"],
+				["\x61", "'\x61'"],
+				["Hello\nworld", "'Hello\nworld'"],
+				["Hello\\\nworld", "'Hello\\\nworld'"]];
+				for  (i in 0...Theory.length)
+				{
+					var data = Theory[i];
+					ShouldParseStringLiterals(data[0], data[1]);
+				}
+		}
+
+        public function ShouldParseStringLiterals(  expected,   source)
+        {
+            var literal:Literal;
+
+            var program = _parser.Parse(source);
+            var body = program.Body;
+			 
+			//assertTrue(body!=null);
+          //  assertEquals(1, body.length );
+			//literal = body[0].As(ExpressionStatement).Expression.As(Literal);
+			//assertTrue(literal != null); 
+           // assertEquals(expected, literal.Value);
+		 
+        }
+		public void ShouldInsertSemicolons(string source)
+        {
+            var program = _parser.Parse(source);
+            var body = program.Body;
+
+            Assert.NotNull(body);
+        }
+ 
+		*/
+       public function testShouldProvideLocationForMultiLinesStringLiterals()
+        {
+           var source = "'\\\\'";
+		   trace(source.length);
+            var program = _parser.Parse(source);
+            var expr = program.Body[0].As(ExpressionStatement).Expression;
+            assertEquals(1, expr.Location.Start.Line);
+            assertEquals(0, expr.Location.Start.Column);
+        //    assertEquals(3, expr.Location.End.Line);
+          //  assertEquals(1, expr.Location.End.Column);
+        }
 	
 	
+
+        
+
+   
+	 
 }

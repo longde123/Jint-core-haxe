@@ -277,7 +277,7 @@ class JavaScriptParser
             }
         }
     }
-    private function ScanHexEscape(prefix:Int, result:CsRef<Int>):Bool
+    private function ScanHexEscape(prefix:Int, result:Null<Int>):Bool
     {
         var code:Int = Char.MinValue;
         var len:Int = (prefix == 117) ? 4 : 2;
@@ -292,56 +292,56 @@ class JavaScriptParser
                 }
                 else
                 {
-                    result.Value = Char.MinValue;
+                    result = Char.MinValue;
                     return false;
                 }
                 ++i;
             }
         } //end for
-        result.Value = code;
+        result = code;
         return true;
     }
     private function GetEscapedIdentifier():String
     {
-        var ch:CsRef<Int> = new CsRef<Int>(jint.parser.ParserExtensions.CharCodeAt(_source, _index++));
-        var id:system.text.StringBuilder = new system.text.StringBuilder(Cs2Hx.CharToString(ch.Value));
-        if (ch.Value == 92)
+        var ch:Null<Int> = jint.parser.ParserExtensions.CharCodeAt(_source, _index++);
+        var id:system.text.StringBuilder = new system.text.StringBuilder(Cs2Hx.CharToString(ch));
+        if (ch == 92)
         {
             if (jint.parser.ParserExtensions.CharCodeAt(_source, _index) != 117)
             {
                 ThrowError(null, jint.parser.Messages.UnexpectedToken, [ "ILLEGAL" ]);
             }
             ++_index;
-            if (!ScanHexEscape(117, ch) || ch.Value == 92 || !IsIdentifierStart(ch.Value))
+            if (!ScanHexEscape(117, ch) || ch == 92 || !IsIdentifierStart(ch))
             {
                 ThrowError(null, jint.parser.Messages.UnexpectedToken, [ "ILLEGAL" ]);
             }
-            id = new system.text.StringBuilder(Cs2Hx.CharToString(ch.Value));
+            id = new system.text.StringBuilder(Cs2Hx.CharToString(ch));
         }
         while (_index < _length)
         {
-            ch.Value = jint.parser.ParserExtensions.CharCodeAt(_source, _index);
-            if (!IsIdentifierPart(ch.Value))
+            ch = jint.parser.ParserExtensions.CharCodeAt(_source, _index);
+            if (!IsIdentifierPart(ch))
             {
                 break;
             }
             ++_index;
-            if (ch.Value == 92)
+            if (ch == 92)
             {
                 if (jint.parser.ParserExtensions.CharCodeAt(_source, _index) != 117)
                 {
                     ThrowError(null, jint.parser.Messages.UnexpectedToken, [ "ILLEGAL" ]);
                 }
                 ++_index;
-                if (!ScanHexEscape(117, ch) || ch.Value == 92 || !IsIdentifierPart(ch.Value))
+                if (!ScanHexEscape(117, ch) || ch == 92 || !IsIdentifierPart(ch))
                 {
                     ThrowError(null, jint.parser.Messages.UnexpectedToken, [ "ILLEGAL" ]);
                 }
-                id.Append_Char(ch.Value);
+                id.Append_Char(ch);
             }
             else
             {
-                id.Append_Char(ch.Value);
+                id.Append_Char(ch);
             }
         }
         return id.toString();
@@ -551,7 +551,7 @@ class JavaScriptParser
         var token:jint.parser.Token = new jint.parser.Token();
         token.Type = jint.parser.Tokens.NumericLiteral;
 		//todo Convert.ToInt64(number, 16);;
-        token.Value = Std.parseFloat(number);
+        token.Value = Ints.parseInt(number,16);
         token.LineNumber = (_lineNumber);
         token.LineStart = _lineStart;
         token.Range = [ start, _index ];
@@ -574,7 +574,8 @@ class JavaScriptParser
         }
         var token:jint.parser.Token = new jint.parser.Token();
         token.Type = jint.parser.Tokens.NumericLiteral;
-        token.Value = system.Convert.ToInt32_String_Int32(number, 8);
+		//todo Convert.ToInt32(number, 8),
+        token.Value =Ints.parseInt(number,8);
         token.Octal = true;
         token.LineNumber = (_lineNumber);
         token.LineStart = _lineStart;
@@ -685,7 +686,8 @@ class JavaScriptParser
         ++_index;
         while (_index < _length)
         {
-            var ch:Int = jint.parser.ParserExtensions.CharCodeAt(_source, _index++);
+            var ch:Int = jint.parser.ParserExtensions.CharCodeAt(_source, _index);
+			_index++;
             if (ch == quote)
             {
                 quote = Char.MinValue;
@@ -693,7 +695,8 @@ class JavaScriptParser
             }
             if (ch == 92)
             {
-                ch = jint.parser.ParserExtensions.CharCodeAt(_source, _index++);
+                ch = jint.parser.ParserExtensions.CharCodeAt(_source, _index);
+				_index++;
                 if (ch ==Char.MinValue || !IsLineTerminator(ch))
                 {
                     switch (ch)
@@ -706,10 +709,10 @@ class JavaScriptParser
                             str.Append_Char(116);
                         case 117, 120:
                             var restore:Int = _index;
-                            var unescaped:CsRef<Int> = new CsRef<Int>(0);
+                            var unescaped:Null<Int> = 0;
                             if (ScanHexEscape(ch, unescaped))
                             {
-                                str.Append_Char(unescaped.Value);
+                                str.Append_Char(unescaped);
                             }
                             else
                             {
@@ -757,14 +760,15 @@ class JavaScriptParser
                     _lineStart = _index;
                 }
             }
-            else if (IsLineTerminator(ch))
-            {
+            else if ( IsLineTerminator(ch)  )
+            { 
                 break;
             }
             else
             {
                 str.Append_Char(ch);
             }
+			  
         }
         if (quote != 0)
         {
@@ -785,40 +789,40 @@ class JavaScriptParser
         var terminated:Bool = false;
         SkipComment();
         var start:Int = _index;
-        var ch:CsRef<Int> = new CsRef<Int>(0);
+        var ch:Null<Int> = 0;
         var str:system.text.StringBuilder = new system.text.StringBuilder(Cs2Hx.CharToString(jint.parser.ParserExtensions.CharCodeAt(_source, _index++)));
         while (_index < _length)
         {
-            ch.Value = jint.parser.ParserExtensions.CharCodeAt(_source, _index++);
-            str.Append_Char(ch.Value);
-            if (ch.Value == 92)
+            ch = jint.parser.ParserExtensions.CharCodeAt(_source, _index++);
+            str.Append_Char(ch);
+            if (ch == 92)
             {
-                ch.Value = jint.parser.ParserExtensions.CharCodeAt(_source, _index++);
-                if (IsLineTerminator(ch.Value))
+                ch = jint.parser.ParserExtensions.CharCodeAt(_source, _index++);
+                if (IsLineTerminator(ch))
                 {
                     ThrowError(null, jint.parser.Messages.UnterminatedRegExp);
                 }
-                str.Append_Char(ch.Value);
+                str.Append_Char(ch);
             }
-            else if (IsLineTerminator(ch.Value))
+            else if (IsLineTerminator(ch))
             {
                 ThrowError(null, jint.parser.Messages.UnterminatedRegExp);
             }
             else if (classMarker)
             {
-                if (ch.Value == 93)
+                if (ch == 93)
                 {
                     classMarker = false;
                 }
             }
             else
             {
-                if (ch.Value == 47)
+                if (ch == 47)
                 {
                     terminated = true;
                     break;
                 }
-                if (ch.Value == 91)
+                if (ch == 91)
                 {
                     classMarker = true;
                 }
@@ -832,22 +836,22 @@ class JavaScriptParser
         var flags:String = "";
         while (_index < _length)
         {
-            ch.Value = jint.parser.ParserExtensions.CharCodeAt(_source, _index);
-            if (!IsIdentifierPart(ch.Value))
+            ch = jint.parser.ParserExtensions.CharCodeAt(_source, _index);
+            if (!IsIdentifierPart(ch))
             {
                 break;
             }
             ++_index;
-            if (ch.Value == 92 && _index < _length)
+            if (ch == 92 && _index < _length)
             {
-                ch.Value = jint.parser.ParserExtensions.CharCodeAt(_source, _index);
-                if (ch.Value == 117)
+                ch = jint.parser.ParserExtensions.CharCodeAt(_source, _index);
+                if (ch == 117)
                 {
                     ++_index;
                     var restore:Int = _index;
                     if (ScanHexEscape(117, ch))
                     {
-                        flags += Cs2Hx.CharToString(ch.Value);
+                        flags += Cs2Hx.CharToString(ch);
                         { //for
                             str.Append("\\u");
                             while (restore < _index)
@@ -871,8 +875,8 @@ class JavaScriptParser
             }
             else
             {
-                flags += Cs2Hx.CharToString(ch.Value);
-                str.Append(Cs2Hx.CharToString(ch.Value));
+                flags += Cs2Hx.CharToString(ch);
+                str.Append(Cs2Hx.CharToString(ch));
             }
         }
         Peek();

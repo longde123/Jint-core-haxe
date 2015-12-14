@@ -82,7 +82,7 @@ import test.parser.JavascriptParserTests;
 
 class Main 
 {
-	
+	 
 	static function main() 
 	{
 		var stage = Lib.current.stage;
@@ -103,11 +103,20 @@ class Main
 		Messages.cctor();
 		Token.cctor();
 		
+		
+		 
+		//var javascriptParserTests:JavascriptParserTests =new JavascriptParserTests();
+
+		//javascriptParserTests.testShouldProvideLocationForMultiLinesStringLiterals();
+	 	//return;
+
 		   var r = new haxe.unit.TestRunner();
 			r.add(new JavascriptParserTests());
 			// add other TestCases here
 
 			// finally, run the tests
+			
+			
 			r.run();
 	}
 	
