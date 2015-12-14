@@ -74,6 +74,7 @@ import jint.parser.State;
 import jint.parser.Token;
 import jint.parser.Tokens;
 import jint.parser.VariableScope; 
+import test.parser.JavascriptParserTests;
 /**
  * ...
  * @author paling
@@ -98,9 +99,16 @@ class Main
 		node2.Declarations;
 			 
 		JavaScriptParser.cctor();
-		//JavaScriptParser_Regexes.cctor();
+		JavaScriptParser_Regexes.cctor();
 		Messages.cctor();
 		Token.cctor();
+		
+		   var r = new haxe.unit.TestRunner();
+			r.add(new JavascriptParserTests());
+			// add other TestCases here
+
+			// finally, run the tests
+			r.run();
 	}
 	
 }

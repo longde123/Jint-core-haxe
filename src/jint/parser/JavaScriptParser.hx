@@ -1080,18 +1080,25 @@ class JavaScriptParser
         return assignmentExpression;
     }
     public function CreateBinaryExpression(op:String, left:jint.parser.ast.Expression, right:jint.parser.ast.Expression):jint.parser.ast.Expression
-    {
-        var logicalExpression:jint.parser.ast.LogicalExpression = new jint.parser.ast.LogicalExpression();
-        logicalExpression.Type = jint.parser.ast.SyntaxNodes.LogicalExpression;
-        logicalExpression.Operator = jint.parser.ast.LogicalExpression.ParseLogicalOperator(op);
-        logicalExpression.Left = left;
-        logicalExpression.Right = right;
-        var binaryExpression:jint.parser.ast.BinaryExpression = new jint.parser.ast.BinaryExpression();
-        binaryExpression.Type = jint.parser.ast.SyntaxNodes.BinaryExpression;
-        binaryExpression.Operator = jint.parser.ast.BinaryExpression.ParseBinaryOperator(op);
-        binaryExpression.Left = left;
-        binaryExpression.Right = right;
-        return (op == "||" || op == "&&") ? cast(logicalExpression, jint.parser.ast.Expression) : binaryExpression;
+    { 
+       
+		if ((op == "||" || op == "&&") )
+		{
+			var logicalExpression:jint.parser.ast.LogicalExpression = new jint.parser.ast.LogicalExpression();
+			logicalExpression.Type = jint.parser.ast.SyntaxNodes.LogicalExpression;
+			logicalExpression.Operator = jint.parser.ast.LogicalExpression.ParseLogicalOperator(op);
+			logicalExpression.Left = left;
+			logicalExpression.Right = right;			
+			return  cast(logicalExpression, jint.parser.ast.Expression) ;
+		}
+		
+		var binaryExpression:jint.parser.ast.BinaryExpression = new jint.parser.ast.BinaryExpression();
+		binaryExpression.Type = jint.parser.ast.SyntaxNodes.BinaryExpression;
+		binaryExpression.Operator = jint.parser.ast.BinaryExpression.ParseBinaryOperator(op);
+		binaryExpression.Left = left;
+		binaryExpression.Right = right;
+	
+        return   binaryExpression;
     }
     public function CreateBlockStatement(body:Array<jint.parser.ast.Statement>):jint.parser.ast.BlockStatement
     {
@@ -1516,7 +1523,7 @@ class JavaScriptParser
     }
     private function MatchKeyword(keyword:Dynamic):Bool
     {
-        return _lookahead.Type == jint.parser.Tokens.Keyword && keyword.Equals(_lookahead.Value);
+        return _lookahead.Type == jint.parser.Tokens.Keyword && system.Cs2Hx.Equals_String(keyword,_lookahead.Value);
     }
     private function MatchAssign():Bool
     {
@@ -2004,7 +2011,7 @@ class JavaScriptParser
         Lex();
         var markers:Array<jint.parser.JavaScriptParser_LocationMarker> = new Array<jint.parser.JavaScriptParser_LocationMarker>();
         var right:jint.parser.ast.Expression = ParseUnaryExpression();
-        var stack:Array<Dynamic> = new Array<Dynamic>();
+        var stack:Array<Dynamic> = [left, token, right];
         while ((prec = binaryPrecedence(_lookahead, _state.AllowIn)) > 0)
         {
             while ((stack.length > 2) && (prec <= (stack[stack.length - 2]).Precedence))
@@ -2065,6 +2072,7 @@ class JavaScriptParser
         {
             MarkEnd(new jint.parser.ast.SyntaxNode());
         }
+ 
         return expr;
     }
     private function ParseAssignmentExpression():jint.parser.ast.Expression

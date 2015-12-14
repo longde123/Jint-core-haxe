@@ -18,11 +18,8 @@ class ParserExtensions
         return source.charCodeAt(index);
     }
     public static function Pop<T>(list:Array<T>):T
-    {
-        var lastIndex:Int = list.length - 1;
-        var last:T = list[lastIndex];
-        list.splice(lastIndex, 1);
-        return last;
+    { 
+        return list.pop();
     }
     public static function Push<T>(list:Array<T>, item:T):Void
     {
