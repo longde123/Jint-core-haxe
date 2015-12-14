@@ -1,58 +1,7 @@
 package jint.parser;
 using StringTools;
 import haxe.ds.StringMap.StringMap;
-import jint.parser.ast.ArrayExpression;
-import jint.parser.ast.AssignmentExpression;
-import jint.parser.ast.AssignmentOperator;
-import jint.parser.ast.BinaryExpression;
-import jint.parser.ast.BinaryOperator;
-import jint.parser.ast.BlockStatement;
-import jint.parser.ast.BreakStatement;
-import jint.parser.ast.CallExpression;
-import jint.parser.ast.CatchClause;
-import jint.parser.ast.ConditionalExpression;
-import jint.parser.ast.ContinueStatement;
-import jint.parser.ast.DebuggerStatement;
-import jint.parser.ast.DoWhileStatement;
-import jint.parser.ast.EmptyStatement;
-import jint.parser.ast.Expression;
-import jint.parser.ast.ExpressionStatement;
-import jint.parser.ast.ForInStatement;
-import jint.parser.ast.ForStatement;
-import jint.parser.ast.FunctionDeclaration;
-import jint.parser.ast.FunctionExpression;
-import jint.parser.ast.Identifier;
-import jint.parser.ast.IfStatement;
-import jint.parser.ast.IPropertyKeyExpression;
-import jint.parser.ast.LabelledStatement;
-import jint.parser.ast.Literal;
-import jint.parser.ast.LogicalExpression;
-import jint.parser.ast.LogicalOperator;
-import jint.parser.ast.MemberExpression;
-import jint.parser.ast.NewExpression;
-import jint.parser.ast.ObjectExpression;
-import jint.parser.ast.Program;
-import jint.parser.ast.Property;
-import jint.parser.ast.PropertyKind;
-import jint.parser.ast.RegExpLiteral;
-import jint.parser.ast.ReturnStatement;
-import jint.parser.ast.SequenceExpression;
-import jint.parser.ast.Statement;
-import jint.parser.ast.SwitchCase;
-import jint.parser.ast.SwitchStatement;
-import jint.parser.ast.SyntaxNode;
-import jint.parser.ast.SyntaxNodes;
-import jint.parser.ast.ThisExpression;
-import jint.parser.ast.ThrowStatement;
-import jint.parser.ast.TryStatement;
-import jint.parser.ast.UnaryExpression;
-import jint.parser.ast.UnaryOperator;
-import jint.parser.ast.UpdateExpression;
-import jint.parser.ast.VariableDeclaration;
-import jint.parser.ast.VariableDeclarator;
-import jint.parser.ast.WhileStatement;
-import jint.parser.ast.WithStatement;
-
+import jint.parser.ast.*; 
 import system.*;
 import anonymoustypes.*;
  
@@ -113,12 +62,14 @@ class JavaScriptParser
     }
     private static function IsIdentifierStart(ch:Int):Bool
     {
-        return (ch == 36) || (ch == 95) || (ch >= 65 && ch <= 90) || (ch >= 97 && ch <= 122) || (ch == 92) || ((ch >= 0x80) && jint.parser.JavaScriptParser_Regexes.NonAsciiIdentifierStart.IsMatch(Cs2Hx.CharToString(ch)));
+        return (ch == 36) || (ch == 95) || (ch >= 65 && ch <= 90) || (ch >= 97 && ch <= 122) || (ch == 92) || ((ch >= 0x80) && jint.parser.JavaScriptParser_Regexes.NonAsciiIdentifierStart.match(Cs2Hx.CharToString(ch)));
     }
     private static function IsIdentifierPart(ch:Int):Bool
     {
-        return (ch == 36) || (ch == 95) || (ch >= 65 && ch <= 90) || (ch >= 97 && ch <= 122) || (ch >= 48 && ch <= 57) || (ch == 92) || ((ch >= 0x80) && jint.parser.JavaScriptParser_Regexes.NonAsciiIdentifierPart.IsMatch(Cs2Hx.CharToString(ch)));
+        return (ch == 36) || (ch == 95) || (ch >= 65 && ch <= 90) || (ch >= 97 && ch <= 122) || (ch >= 48 && ch <= 57) || (ch == 92) || ((ch >= 0x80) && jint.parser.JavaScriptParser_Regexes.NonAsciiIdentifierPart.match(Cs2Hx.CharToString(ch)));
     }
+	
+	
     private static function IsFutureReservedWord(id:String):Bool
     {
         return system.Cs2Hx.Contains(FutureReservedWords, id);
@@ -445,7 +396,7 @@ class JavaScriptParser
         var token:jint.parser.Token = new jint.parser.Token();
         token.Type = type;
         token.Value = id;
-        token.LineNumber = new Nullable_Int(_lineNumber);
+        token.LineNumber = _lineNumber;
         token.LineStart = _lineStart;
         token.Range = [ start, _index ];
         return token;
@@ -463,7 +414,7 @@ class JavaScriptParser
                     var token:jint.parser.Token = new jint.parser.Token();
                     token.Type = jint.parser.Tokens.Punctuator;
                     token.Value = Cs2Hx.CharToString(code);
-                    token.LineNumber = new Nullable_Int(_lineNumber);
+                    token.LineNumber = (_lineNumber);
                     token.LineStart = _lineStart;
                     token.Range = [ start, _index ];
                     return token;
@@ -480,7 +431,7 @@ class JavaScriptParser
                                 var token:jint.parser.Token = new jint.parser.Token();
                                 token.Type = jint.parser.Tokens.Punctuator;
                                 token.Value = Cs2Hx.CharToString(code) + Cs2Hx.CharToString(code2);
-                                token.LineNumber = new Nullable_Int(_lineNumber);
+                                token.LineNumber = (_lineNumber);
                                 token.LineStart = _lineStart;
                                 token.Range = [ start, _index ];
                                 return token;
@@ -495,7 +446,7 @@ class JavaScriptParser
                                 var token:jint.parser.Token = new jint.parser.Token();
                                 token.Type = jint.parser.Tokens.Punctuator;
                                 token.Value = jint.parser.ParserExtensions.Slice(_source, start, _index);
-                                token.LineNumber = new Nullable_Int(_lineNumber);
+                                token.LineNumber = (_lineNumber);
                                 token.LineStart = _lineStart;
                                 token.Range = [ start, _index ];
                                 return token;
@@ -514,7 +465,7 @@ class JavaScriptParser
                 var token:jint.parser.Token = new jint.parser.Token();
                 token.Type = jint.parser.Tokens.Punctuator;
                 token.Value = ">>>=";
-                token.LineNumber = new Nullable_Int(_lineNumber);
+                token.LineNumber = (_lineNumber);
                 token.LineStart = _lineStart;
                 token.Range = [ start, _index ];
                 return token;
@@ -526,7 +477,7 @@ class JavaScriptParser
             var token:jint.parser.Token = new jint.parser.Token();
             token.Type = jint.parser.Tokens.Punctuator;
             token.Value = ">>>";
-            token.LineNumber = new Nullable_Int(_lineNumber);
+            token.LineNumber = (_lineNumber);
             token.LineStart = _lineStart;
             token.Range = [ start, _index ];
             return token;
@@ -537,7 +488,7 @@ class JavaScriptParser
             var token:jint.parser.Token = new jint.parser.Token();
             token.Type = jint.parser.Tokens.Punctuator;
             token.Value = "<<=";
-            token.LineNumber = new Nullable_Int(_lineNumber);
+            token.LineNumber = (_lineNumber);
             token.LineStart = _lineStart;
             token.Range = [ start, _index ];
             return token;
@@ -548,7 +499,7 @@ class JavaScriptParser
             var token:jint.parser.Token = new jint.parser.Token();
             token.Type = jint.parser.Tokens.Punctuator;
             token.Value = ">>=";
-            token.LineNumber = new Nullable_Int(_lineNumber);
+            token.LineNumber = (_lineNumber);
             token.LineStart = _lineStart;
             token.Range = [ start, _index ];
             return token;
@@ -559,7 +510,7 @@ class JavaScriptParser
             var token:jint.parser.Token = new jint.parser.Token();
             token.Type = jint.parser.Tokens.Punctuator;
             token.Value = Cs2Hx.CharToString(ch1) + Cs2Hx.CharToString(ch2);
-            token.LineNumber = new Nullable_Int(_lineNumber);
+            token.LineNumber = (_lineNumber);
             token.LineStart = _lineStart;
             token.Range = [ start, _index ];
             return token;
@@ -570,7 +521,7 @@ class JavaScriptParser
             var token:jint.parser.Token = new jint.parser.Token();
             token.Type = jint.parser.Tokens.Punctuator;
             token.Value = Cs2Hx.CharToString(ch1);
-            token.LineNumber = new Nullable_Int(_lineNumber);
+            token.LineNumber = (_lineNumber);
             token.LineStart = _lineStart;
             token.Range = [ start, _index ];
             return token;
@@ -601,7 +552,7 @@ class JavaScriptParser
         token.Type = jint.parser.Tokens.NumericLiteral;
 		//todo Convert.ToInt64(number, 16);;
         token.Value = Std.parseFloat(number);
-        token.LineNumber = new Nullable_Int(_lineNumber);
+        token.LineNumber = (_lineNumber);
         token.LineStart = _lineStart;
         token.Range = [ start, _index ];
         return token;
@@ -625,7 +576,7 @@ class JavaScriptParser
         token.Type = jint.parser.Tokens.NumericLiteral;
         token.Value = system.Convert.ToInt32_String_Int32(number, 8);
         token.Octal = true;
-        token.LineNumber = new Nullable_Int(_lineNumber);
+        token.LineNumber = (_lineNumber);
         token.LineStart = _lineStart;
         token.Range = [ start, _index ];
         return token;
@@ -718,7 +669,7 @@ class JavaScriptParser
         var token:jint.parser.Token = new jint.parser.Token();
         token.Type = jint.parser.Tokens.NumericLiteral;
         token.Value = n;
-        token.LineNumber = new Nullable_Int(_lineNumber);
+        token.LineNumber = (_lineNumber);
         token.LineStart = _lineStart;
         token.Range = [ start, _index ];
         return token;
@@ -823,7 +774,7 @@ class JavaScriptParser
         token.Type = jint.parser.Tokens.StringLiteral;
         token.Value = str.toString();
         token.Octal = octal;
-        token.LineNumber = new Nullable_Int(_lineNumber);
+        token.LineNumber = (_lineNumber);
         token.LineStart = _lineStart;
         token.Range = [ start, _index ];
         return token;
@@ -974,7 +925,7 @@ class JavaScriptParser
         {
             var token:jint.parser.Token = new jint.parser.Token();
             token.Type = jint.parser.Tokens.EOF;
-            token.LineNumber = new Nullable_Int(_lineNumber);
+            token.LineNumber = (_lineNumber);
             token.LineStart = _lineStart;
             token.Range = [ _index, _index ];
             return token;
@@ -1034,11 +985,11 @@ class JavaScriptParser
     {
         var token:jint.parser.Token = _lookahead;
         _index = token.Range[1];
-        _lineNumber = token.LineNumber.HasValue ? token.LineNumber.Value : 0;
+        _lineNumber = token.LineNumber!=null ? token.LineNumber : 0;
         _lineStart = token.LineStart;
         _lookahead = (_extra.Tokens != null) ? CollectToken() : Advance();
         _index = token.Range[1];
-        _lineNumber = token.LineNumber.HasValue ? token.LineNumber.Value : 0;
+        _lineNumber = token.LineNumber!=null ? token.LineNumber : 0;
         _lineStart = token.LineStart;
         return token;
     }
@@ -1481,7 +1432,7 @@ class JavaScriptParser
     {
         var exception:jint.parser.ParserException;
         var msg:String = Std.string(arguments);
-        if (token != null && token.LineNumber.HasValue)
+        if (token != null && token.LineNumber!=null)
         {
             exception = new jint.parser.ParserException("Line " + token.LineNumber + ": " + msg);
         }

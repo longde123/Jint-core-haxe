@@ -10,9 +10,12 @@ class Cs2Hx
 	{
 		return a==b;
 	}
-	public static function CharToString(ch:Int):String
-	{
-		return "";
+	public static function CharToString(cp:Int):String
+	{ 
+		if (cp <= 0xFFFF) { return String.fromCharCode(cp); }
+		var cu1 = String.fromCharCode(Math.floor((cp - 0x10000) / 0x400) + 0xD800);
+		var cu2 = String.fromCharCode(((cp - 0x10000) % 0x400) + 0xDC00);
+		return cu1 + cu2; 
 	}
 	public static function Remove_Int32_Int32(s:String, startIndex:Int, count:Int):String
 	{
