@@ -352,7 +352,7 @@ class StringPrototype extends jint.native.string.StringInstance
         var thisString:String = jint.runtime.TypeConverter.toString(thisObj);
         var searchValue:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 0);
         var replaceValue:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 1);
-        var replaceFunction:jint.native.function.FunctionInstance = replaceValue.TryCast();
+        var replaceFunction:jint.native.functions.FunctionInstance = replaceValue.TryCast();
         if (replaceFunction == null)
         {
             replaceFunction = new jint.runtime.interop.ClrFunctionInstance(Engine, function (self:jint.native.JsValue, args:Array<jint.native.JsValue>):jint.native.JsValue

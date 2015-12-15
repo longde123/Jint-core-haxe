@@ -3,6 +3,30 @@ package ;
 import flash.display.StageAlign;
 import flash.display.StageScaleMode;
 import flash.Lib;
+ 
+import jint.native.number.dtoa.CachedPowers;
+import jint.native.number.dtoa.CachedPowers_CachedPower;
+import jint.native.number.dtoa.DiyFp;
+import jint.native.number.dtoa.DoubleHelper;
+import jint.native.number.dtoa.FastDtoa;
+import jint.native.number.dtoa.FastDtoaBuilder;
+import jint.native.number.dtoa.NumberExtensions;
+import jint.native.number.NumberConstructor;
+import jint.native.number.NumberInstance;
+import jint.native.number.NumberPrototype;
+import jint.native.object.ObjectConstructor;
+import jint.native.object.ObjectInstance;
+import jint.native.object.ObjectPrototype;
+import jint.native.regexp.RegExpConstructor;
+import jint.native.regexp.RegExpInstance;
+import jint.native.regexp.RegExpPrototype;
+import jint.native.string.StringConstructor;
+import jint.native.string.StringInstance;
+import jint.native.string.StringPrototype;
+import jint.native.Undefined;
+
+
+
 import jint.parser.ast.ArrayExpression;
 import jint.parser.ast.AssignmentExpression;
 import jint.parser.ast.AssignmentOperator;
@@ -75,6 +99,9 @@ import jint.parser.Token;
 import jint.parser.Tokens;
 import jint.parser.VariableScope; 
 import test.parser.JavascriptParserTests;
+
+
+
 /**
  * ...
  * @author paling
@@ -88,31 +115,7 @@ class Main
 		var stage = Lib.current.stage;
 		stage.scaleMode = StageScaleMode.NO_SCALE;
 		stage.align = StageAlign.TOP_LEFT;
-		
-		// entry point
-		
-		trace(Char.MaxValue);
-		trace(Char.MinValue);
-		
-		var node :SyntaxNode= new VariableDeclaration();
-		var node2 = node.As(VariableDeclaration);
-		node2.Declarations;
-			 
-		JavaScriptParser.cctor();
-		JavaScriptParser_Regexes.cctor();
-		Messages.cctor();
-		Token.cctor();
-		
-		
-		 var s = "a
-a
-a";
-trace(s);
-		//var javascriptParserTests:JavascriptParserTests =new JavascriptParserTests();
-
-		//javascriptParserTests.testShouldProvideLocationForMultiLinesStringLiterals();
-	 	//return;
-
+	 
 		   var r = new haxe.unit.TestRunner();
 			r.add(new JavascriptParserTests());
 			// add other TestCases here

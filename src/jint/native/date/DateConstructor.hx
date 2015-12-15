@@ -3,7 +3,7 @@ using StringTools;
 import system.*;
 import anonymoustypes.*;
 
-class DateConstructor extends jint.native.function.FunctionInstance implements jint.native.IConstructor
+class DateConstructor extends jint.native.functions.FunctionInstance implements jint.native.IConstructor
 {
     public static var Epoch:system.DateTime;
     public function new(engine:jint.Engine)

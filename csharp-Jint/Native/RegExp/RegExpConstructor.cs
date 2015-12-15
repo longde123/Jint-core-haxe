@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using Jint.Native.Function;
+using Jint.Native.Functions;
 using Jint.Native.Object;
 using Jint.Runtime;
 

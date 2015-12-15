@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Jint.Native.Function;
+using Jint.Native.Functions;
 using Jint.Native.String;
 using Jint.Runtime;
 using Jint.Runtime.Descriptors;

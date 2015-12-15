@@ -2,7 +2,7 @@
 using Jint.Native.Object;
 using Jint.Runtime;
 
-namespace Jint.Native.Function
+namespace Jint.Native.Functions
 {
     public class BindFunctionInstance : FunctionInstance, IConstructor
     {

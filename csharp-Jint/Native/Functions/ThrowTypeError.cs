@@ -1,7 +1,7 @@
 ﻿using Jint.Runtime;
 using Jint.Runtime.Descriptors;
 
-namespace Jint.Native.Function
+namespace Jint.Native.Functions
 {
     public sealed class ThrowTypeError : FunctionInstance
     {

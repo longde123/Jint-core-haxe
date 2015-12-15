@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using Jint.Native;
-using Jint.Native.Function;
+using Jint.Native.Functions;
 
 namespace Jint.Runtime.Interop
 {

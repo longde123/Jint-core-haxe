@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Jint.Native.Array;
-using Jint.Native.Function;
+using Jint.Native.Functions;
 using Jint.Native.Object;
 using Jint.Native.RegExp;
 using Jint.Runtime;

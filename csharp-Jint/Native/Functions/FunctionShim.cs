@@ -1,6 +1,6 @@
 ﻿using Jint.Runtime.Environments;
 
-namespace Jint.Native.Function
+namespace Jint.Native.Functions
 {
     public sealed class FunctionShim : FunctionInstance
     {

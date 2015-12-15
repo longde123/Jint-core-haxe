@@ -233,7 +233,7 @@ class ExpressionInterpreter
             case jint.parser.ast.BinaryOperator.UnsignedRightShift:
                 return jint.runtime.TypeConverter.ToInt32(left) >> (jint.runtime.TypeConverter.ToUint32(right) & 0x1F);
             case jint.parser.ast.BinaryOperator.InstanceOf:
-                var f:jint.native.function.FunctionInstance = right.TryCast();
+                var f:jint.native.functions.FunctionInstance = right.TryCast();
                 if (f == null)
                 {
                     return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.TypeError, "instanceof can only be used with a function object");
@@ -504,9 +504,9 @@ class ExpressionInterpreter
                     {
                         return throw new jint.runtime.JavaScriptException().Creator(_engine.SyntaxError);
                     }
-                    var get:jint.native.function.ScriptFunctionInstance = null;
+                    var get:jint.native.functions.ScriptFunctionInstance = null;
                     var strictModeScope:jint.StrictModeScope = (new jint.StrictModeScope(getter.Strict));
-                    get = new jint.native.function.ScriptFunctionInstance(_engine, getter, _engine.ExecutionContext.LexicalEnvironment, jint.StrictModeScope.IsStrictModeCode);
+                    get = new jint.native.functions.ScriptFunctionInstance(_engine, getter, _engine.ExecutionContext.LexicalEnvironment, jint.StrictModeScope.IsStrictModeCode);
                     propDesc = new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(get, new Nullable_Bool(), new Nullable_Bool(true), new Nullable_Bool(true));
                 case jint.parser.ast.PropertyKind.Set:
                     var setter:jint.parser.ast.FunctionExpression = cast(property.Value, jint.parser.ast.FunctionExpression);
@@ -514,9 +514,9 @@ class ExpressionInterpreter
                     {
                         return throw new jint.runtime.JavaScriptException().Creator(_engine.SyntaxError);
                     }
-                    var set:jint.native.function.ScriptFunctionInstance;
+                    var set:jint.native.functions.ScriptFunctionInstance;
                     var strictModeScope_:jint.StrictModeScope = (new jint.StrictModeScope(setter.Strict));
-                    set = new jint.native.function.ScriptFunctionInstance(_engine, setter, _engine.ExecutionContext.LexicalEnvironment, jint.StrictModeScope.IsStrictModeCode);
+                    set = new jint.native.functions.ScriptFunctionInstance(_engine, setter, _engine.ExecutionContext.LexicalEnvironment, jint.StrictModeScope.IsStrictModeCode);
                     propDesc = new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(null, set, new Nullable_Bool(true), new Nullable_Bool(true));
                 default:
                     return throw new system.ArgumentOutOfRangeException();
@@ -577,7 +577,7 @@ class ExpressionInterpreter
         {
             envRec.CreateMutableBinding(functionExpression.Id.Name);
         }
-        var closure:jint.native.function.ScriptFunctionInstance = new jint.native.function.ScriptFunctionInstance(_engine, functionExpression, funcEnv, functionExpression.Strict);
+        var closure:jint.native.functions.ScriptFunctionInstance = new jint.native.functions.ScriptFunctionInstance(_engine, functionExpression, funcEnv, functionExpression.Strict);
         if (functionExpression.Id != null && !system.Cs2Hx.IsNullOrEmpty(functionExpression.Id.Name))
         {
             envRec.InitializeImmutableBinding(functionExpression.Id.Name, closure);
@@ -635,9 +635,9 @@ class ExpressionInterpreter
         {
             thisObject = jint.native.Undefined.Instance;
         }
-        if (r != null && r.GetReferencedName() == "eval" && Std.is(callable, jint.native.function.EvalFunctionInstance))
+        if (r != null && r.GetReferencedName() == "eval" && Std.is(callable, jint.native.functions.EvalFunctionInstance))
         {
-            return (cast(callable, jint.native.function.EvalFunctionInstance)).Call_JsValue__Boolean(thisObject, arguments, true);
+            return (cast(callable, jint.native.functions.EvalFunctionInstance)).Call_JsValue__Boolean(thisObject, arguments, true);
         }
         var result:jint.native.JsValue = callable.Call(thisObject, arguments);
         if (_engine.Options.IsDebugMode())

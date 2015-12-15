@@ -4,7 +4,7 @@ using System.Diagnostics;
 using Jint.Native.Array;
 using Jint.Native.Boolean;
 using Jint.Native.Date;
-using Jint.Native.Function;
+using Jint.Native.Functions;
 using Jint.Native.Number;
 using Jint.Native.Object;
 using Jint.Native.RegExp;

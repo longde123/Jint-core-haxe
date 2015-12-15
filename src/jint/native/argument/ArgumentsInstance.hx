@@ -10,7 +10,7 @@ class ArgumentsInstance extends jint.native.object.ObjectInstance
         super(engine);
     }
     public var Strict:Bool;
-    public static function CreateArgumentsObject(engine:jint.Engine, func:jint.native.function.FunctionInstance, names:Array<String>, args:Array<jint.native.JsValue>, env:jint.runtime.environments.EnvironmentRecord, strict:Bool):jint.native.argument.ArgumentsInstance
+    public static function CreateArgumentsObject(engine:jint.Engine, func:jint.native.functions.FunctionInstance, names:Array<String>, args:Array<jint.native.JsValue>, env:jint.runtime.environments.EnvironmentRecord, strict:Bool):jint.native.argument.ArgumentsInstance
     {
         var len:Int = args.length;
         var obj:jint.native.argument.ArgumentsInstance = new jint.native.argument.ArgumentsInstance(engine);
@@ -49,7 +49,7 @@ class ArgumentsInstance extends jint.native.object.ObjectInstance
         }
         else
         {
-            var thrower:jint.native.function.FunctionInstance = engine.Function.ThrowTypeError;
+            var thrower:jint.native.functions.FunctionInstance = engine.Function.ThrowTypeError;
             obj.DefineOwnProperty("caller", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(thrower, thrower, new Nullable_Bool(false), new Nullable_Bool(false)), false);
             obj.DefineOwnProperty("callee", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(thrower, thrower, new Nullable_Bool(false), new Nullable_Bool(false)), false);
         }

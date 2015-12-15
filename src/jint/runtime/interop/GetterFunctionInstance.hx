@@ -3,7 +3,7 @@ using StringTools;
 import system.*;
 import anonymoustypes.*;
 
-class GetterFunctionInstance extends jint.native.function.FunctionInstance
+class GetterFunctionInstance extends jint.native.functions.FunctionInstance
 {
     private var _getter:(jint.native.JsValue -> jint.native.JsValue);
     public function new(engine:jint.Engine, getter:(jint.native.JsValue -> jint.native.JsValue))

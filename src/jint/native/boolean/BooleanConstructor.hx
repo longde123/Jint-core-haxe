@@ -3,7 +3,7 @@ using StringTools;
 import system.*;
 import anonymoustypes.*;
 
-class BooleanConstructor extends jint.native.function.FunctionInstance implements jint.native.IConstructor
+class BooleanConstructor extends jint.native.functions.FunctionInstance implements jint.native.IConstructor
 {
     public function new(engine:jint.Engine)
     {

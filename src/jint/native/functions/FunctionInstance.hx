@@ -1,4 +1,4 @@
-package jint.native.function;
+package jint.native.functions;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
@@ -59,7 +59,7 @@ class FunctionInstance extends jint.native.object.ObjectInstance implements jint
     override public function Get(propertyName:String):jint.native.JsValue
     {
         var v:jint.native.JsValue = super.Get(propertyName);
-        var f:jint.native.function.FunctionInstance = v.As();
+        var f:jint.native.functions.FunctionInstance = v.As();
         if (propertyName == "caller" && f != null && f.Strict)
         {
             return throw new jint.runtime.JavaScriptException().Creator(_engine.TypeError);

@@ -3,7 +3,7 @@ using StringTools;
 import system.*;
 import anonymoustypes.*;
 
-class TypeReference extends jint.native.function.FunctionInstance implements jint.native.IConstructor implements jint.runtime.interop.IObjectWrapper
+class TypeReference extends jint.native.functions.FunctionInstance implements jint.native.IConstructor implements jint.runtime.interop.IObjectWrapper
 {
     public function new(engine:jint.Engine)
     {

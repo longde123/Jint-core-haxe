@@ -5,7 +5,7 @@ using Jint.Runtime;
 using Jint.Runtime.Descriptors;
 using Jint.Runtime.Interop;
 
-namespace Jint.Native.Function
+namespace Jint.Native.Functions
 {
     /// <summary>
     ///     http://www.ecma-international.org/ecma-262/5.1/#sec-15.3.4

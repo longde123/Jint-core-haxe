@@ -1,9 +1,9 @@
-package jint.native.function;
+package jint.native.functions;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
 
-class FunctionShim extends jint.native.function.FunctionInstance
+class FunctionShim extends jint.native.functions.FunctionInstance
 {
     public function new(engine:jint.Engine, parameters:Array<String>, scope:jint.runtime.environments.LexicalEnvironment)
     {

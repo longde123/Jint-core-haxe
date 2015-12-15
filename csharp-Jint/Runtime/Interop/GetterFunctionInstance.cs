@@ -1,6 +1,6 @@
 ﻿using System;
 using Jint.Native;
-using Jint.Native.Function;
+using Jint.Native.Functions;
 
 namespace Jint.Runtime.Interop
 {

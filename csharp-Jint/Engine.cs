@@ -7,7 +7,7 @@ using Jint.Native.Array;
 using Jint.Native.Boolean;
 using Jint.Native.Date;
 using Jint.Native.Error;
-using Jint.Native.Function;
+using Jint.Native.Functions;
 using Jint.Native.Global;
 using Jint.Native.Json;
 using Jint.Native.Math;

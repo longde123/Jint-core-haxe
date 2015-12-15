@@ -1,9 +1,9 @@
-package jint.native.function;
+package jint.native.functions;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
 
-class BindFunctionInstance extends jint.native.function.FunctionInstance implements jint.native.IConstructor
+class BindFunctionInstance extends jint.native.functions.FunctionInstance implements jint.native.IConstructor
 {
     public function new(engine:jint.Engine)
     {
@@ -14,7 +14,7 @@ class BindFunctionInstance extends jint.native.function.FunctionInstance impleme
     public var BoundArgs:Array<jint.native.JsValue>;
     override public function Call(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
-        var f:jint.native.function.FunctionInstance = TargetFunction.TryCast(function (x:jint.native.JsValue):Void
+        var f:jint.native.functions.FunctionInstance = TargetFunction.TryCast(function (x:jint.native.JsValue):Void
         {
             throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
         }
@@ -32,7 +32,7 @@ class BindFunctionInstance extends jint.native.function.FunctionInstance impleme
     }
     override public function HasInstance(v:jint.native.JsValue):Bool
     {
-        var f:jint.native.function.FunctionInstance = TargetFunction.TryCast(function (x:jint.native.JsValue):Void
+        var f:jint.native.functions.FunctionInstance = TargetFunction.TryCast(function (x:jint.native.JsValue):Void
         {
             throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
         }

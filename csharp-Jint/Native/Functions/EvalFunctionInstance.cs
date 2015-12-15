@@ -2,7 +2,7 @@
 using Jint.Runtime;
 using Jint.Runtime.Environments;
 
-namespace Jint.Native.Function
+namespace Jint.Native.Functions
 {
     public class EvalFunctionInstance : FunctionInstance
     {

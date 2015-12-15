@@ -358,10 +358,10 @@ class JsValue implements system.IEquatable<jint.native.JsValue>
                             return booleanInstance.PrimitiveValue.AsBoolean();
                         }
                     case "Function":
-                        var function:jint.native.function.FunctionInstance = _object;
+                        var function:jint.native.functions.FunctionInstance = _object;
                         if (function != null)
                         {
-                            return jint.native.function.FunctionInstance.op_Explicit_(jint_native_JsValue -> Array(function.Call);
+                            return jint.native.functions.FunctionInstance.op_Explicit_(jint_native_JsValue -> Array(function.Call);
                         }
                     case "Number":
                         var numberInstance:jint.native.number.NumberInstance = _object;

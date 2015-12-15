@@ -1,9 +1,9 @@
-package jint.native.function;
+package jint.native.functions;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
 
-class ScriptFunctionInstance extends jint.native.function.FunctionInstance implements jint.native.IConstructor
+class ScriptFunctionInstance extends jint.native.functions.FunctionInstance implements jint.native.IConstructor
 {
     private var _functionDeclaration:jint.parser.IFunctionDeclaration;
     public function new(engine:jint.Engine, functionDeclaration:jint.parser.IFunctionDeclaration, scope:jint.runtime.environments.LexicalEnvironment, strict:Bool)
@@ -23,7 +23,7 @@ class ScriptFunctionInstance extends jint.native.function.FunctionInstance imple
         }
         if (strict)
         {
-            var thrower:jint.native.function.FunctionInstance = engine.Function.ThrowTypeError;
+            var thrower:jint.native.functions.FunctionInstance = engine.Function.ThrowTypeError;
             DefineOwnProperty("caller", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(thrower, thrower, new Nullable_Bool(false), new Nullable_Bool(false)), false);
             DefineOwnProperty("arguments", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(thrower, thrower, new Nullable_Bool(false), new Nullable_Bool(false)), false);
         }

@@ -32,7 +32,7 @@ class Engine
         _executionContexts = new Array<jint.runtime.environments.ExecutionContext>();
         Global = jint.native.global.GlobalObject.CreateGlobalObject(this);
         Object = jint.native.object.ObjectConstructor.CreateObjectConstructor(this);
-        Function = jint.native.function.FunctionConstructor.CreateFunctionConstructor(this);
+        Function = jint.native.functions.FunctionConstructor.CreateFunctionConstructor(this);
         Array = jint.native.array.ArrayConstructor.CreateArrayConstructor(this);
         String = jint.native.string.StringConstructor.CreateStringConstructor(this);
         RegExp = jint.native.regexp.RegExpConstructor.CreateRegExpConstructor(this);
@@ -76,7 +76,7 @@ class Engine
         {
             options(Options);
         }
-        Eval = new jint.native.function.EvalFunctionInstance(this, [  ], jint.runtime.environments.LexicalEnvironment.NewDeclarativeEnvironment(this, ExecutionContext.LexicalEnvironment), jint.StrictModeScope.IsStrictModeCode);
+        Eval = new jint.native.functions.EvalFunctionInstance(this, [  ], jint.runtime.environments.LexicalEnvironment.NewDeclarativeEnvironment(this, ExecutionContext.LexicalEnvironment), jint.StrictModeScope.IsStrictModeCode);
         Global.FastAddProperty("eval", Eval, true, false, true);
         _statements = new jint.runtime.StatementInterpreter(this);
         _expressions = new jint.runtime.ExpressionInterpreter(this);
@@ -97,7 +97,7 @@ class Engine
     public var GlobalEnvironment:jint.runtime.environments.LexicalEnvironment;
     public var Global:jint.native.global.GlobalObject;
     public var Object:jint.native.object.ObjectConstructor;
-    public var Function:jint.native.function.FunctionConstructor;
+    public var Function:jint.native.functions.FunctionConstructor;
     public var Array:jint.native.array.ArrayConstructor;
     public var String:jint.native.string.StringConstructor;
     public var RegExp:jint.native.regexp.RegExpConstructor;
@@ -106,7 +106,7 @@ class Engine
     public var Date:jint.native.date.DateConstructor;
     public var Math:jint.native.math.MathInstance;
     public var Json:jint.native.json.JsonInstance;
-    public var Eval:jint.native.function.EvalFunctionInstance;
+    public var Eval:jint.native.functions.EvalFunctionInstance;
     public var Error:jint.native.error.ErrorConstructor;
     public var EvalError:jint.native.error.ErrorConstructor;
     public var SyntaxError:jint.native.error.ErrorConstructor;
@@ -485,7 +485,7 @@ class Engine
         var reference:jint.runtime.references.Reference = new jint.runtime.references.Reference(scope, propertyName, Options.IsStrict());
         return GetValue(reference);
     }
-    public function DeclarationBindingInstantiation(declarationBindingType:Int, functionDeclarations:Array<jint.parser.ast.FunctionDeclaration>, variableDeclarations:Array<jint.parser.ast.VariableDeclaration>, functionInstance:jint.native.function.FunctionInstance, arguments:Array<jint.native.JsValue>):Void
+    public function DeclarationBindingInstantiation(declarationBindingType:Int, functionDeclarations:Array<jint.parser.ast.FunctionDeclaration>, variableDeclarations:Array<jint.parser.ast.VariableDeclaration>, functionInstance:jint.native.functions.FunctionInstance, arguments:Array<jint.native.JsValue>):Void
     {
         var env:jint.runtime.environments.EnvironmentRecord = ExecutionContext.VariableEnvironment.Record;
         var configurableBindings:Bool = declarationBindingType == jint.DeclarationBindingType.EvalCode;
@@ -509,7 +509,7 @@ class Engine
         for (f in functionDeclarations)
         {
             var fn:String = f.Id.Name;
-            var fo:jint.native.function.FunctionInstance = Function.CreateFunctionObject(f);
+            var fo:jint.native.functions.FunctionInstance = Function.CreateFunctionObject(f);
             var funcAlreadyDeclared:Bool = env.HasBinding(fn);
             if (!funcAlreadyDeclared)
             {

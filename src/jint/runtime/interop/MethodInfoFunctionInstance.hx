@@ -3,7 +3,7 @@ using StringTools;
 import system.*;
 import anonymoustypes.*;
 
-class MethodInfoFunctionInstance extends jint.native.function.FunctionInstance
+class MethodInfoFunctionInstance extends jint.native.functions.FunctionInstance
 {
     private var _methods:Array<system.reflection.MethodInfo>;
     public function new(engine:jint.Engine, methods:Array<system.reflection.MethodInfo>)

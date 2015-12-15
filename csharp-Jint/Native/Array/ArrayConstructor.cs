@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using Jint.Native.Function;
+using Jint.Native.Functions;
 using Jint.Native.Object;
 using Jint.Runtime;
 using Jint.Runtime.Interop;

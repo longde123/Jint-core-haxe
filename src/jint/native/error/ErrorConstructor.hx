@@ -3,7 +3,7 @@ using StringTools;
 import system.*;
 import anonymoustypes.*;
 
-class ErrorConstructor extends jint.native.function.FunctionInstance implements jint.native.IConstructor
+class ErrorConstructor extends jint.native.functions.FunctionInstance implements jint.native.IConstructor
 {
     private var _name:String;
     public function new(engine:jint.Engine)

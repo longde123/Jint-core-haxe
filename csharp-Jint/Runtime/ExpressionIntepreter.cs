@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Jint.Native;
-using Jint.Native.Function;
+using Jint.Native.Functions;
 using Jint.Native.Number;
 using Jint.Parser.Ast;
 using Jint.Runtime.Descriptors;

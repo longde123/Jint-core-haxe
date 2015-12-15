@@ -3,7 +3,7 @@ using StringTools;
 import system.*;
 import anonymoustypes.*;
 
-class ClrFunctionInstance extends jint.native.function.FunctionInstance
+class ClrFunctionInstance extends jint.native.functions.FunctionInstance
 {
     private var _func:(jint.native.JsValue -> Array<jint.native.JsValue> -> jint.native.JsValue);
     public function new(engine:jint.Engine, func:(jint.native.JsValue -> Array<jint.native.JsValue> -> jint.native.JsValue), length:Int = 0)

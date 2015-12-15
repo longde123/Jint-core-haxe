@@ -61,9 +61,9 @@ class JavascriptParserTests extends TestCase
 		for (  source in stream)
 		{
 					var parser = new JavaScriptParser();
-					var program = parser.Parse(source);
-					//trace("Parsed {0} {1} ({3} KB) in {2} ms", file, version, sw.ElapsedMilliseconds, (int)source.Length/1024);
-						assertTrue(program!=null);
+					var program = parser.Parse(source); 
+					trace(program.Body.length);
+					assertTrue(program!=null);
 		}
 	}
 	public  function  testShouldParseThis()

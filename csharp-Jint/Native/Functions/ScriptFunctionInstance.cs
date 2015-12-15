@@ -5,7 +5,7 @@ using Jint.Runtime;
 using Jint.Runtime.Descriptors;
 using Jint.Runtime.Environments;
 
-namespace Jint.Native.Function
+namespace Jint.Native.Functions
 {
     /// <summary>
     /// 

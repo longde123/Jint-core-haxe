@@ -1,19 +1,19 @@
-package jint.native.function;
+package jint.native.functions;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
 
-class FunctionConstructor extends jint.native.function.FunctionInstance implements jint.native.IConstructor
+class FunctionConstructor extends jint.native.functions.FunctionInstance implements jint.native.IConstructor
 {
     public function new(engine:jint.Engine)
     {
         super(engine, null, null, false);
     }
-    public static function CreateFunctionConstructor(engine:jint.Engine):jint.native.function.FunctionConstructor
+    public static function CreateFunctionConstructor(engine:jint.Engine):jint.native.functions.FunctionConstructor
     {
-        var obj:jint.native.function.FunctionConstructor = new jint.native.function.FunctionConstructor(engine);
+        var obj:jint.native.functions.FunctionConstructor = new jint.native.functions.FunctionConstructor(engine);
         obj.Extensible = true;
-        obj.PrototypeObject = jint.native.function.FunctionPrototype.CreatePrototypeObject(engine);
+        obj.PrototypeObject = jint.native.functions.FunctionPrototype.CreatePrototypeObject(engine);
         obj.Prototype = obj.PrototypeObject;
         obj.FastAddProperty("prototype", obj.PrototypeObject, false, false, false);
         obj.FastAddProperty("length", 1, false, false, false);
@@ -22,7 +22,7 @@ class FunctionConstructor extends jint.native.function.FunctionInstance implemen
     public function Configure():Void
     {
     }
-    public var PrototypeObject:jint.native.function.FunctionPrototype;
+    public var PrototypeObject:jint.native.functions.FunctionPrototype;
     override public function Call(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         return Construct(arguments);
@@ -93,24 +93,24 @@ class FunctionConstructor extends jint.native.function.FunctionInstance implemen
         ));
         functionDeclaration.FunctionDeclarations = function.FunctionDeclarations;
         functionDeclaration.VariableDeclarations = function.VariableDeclarations;
-        var functionObject:jint.native.function.ScriptFunctionInstance = new jint.native.function.ScriptFunctionInstance(Engine, functionDeclaration, jint.runtime.environments.LexicalEnvironment.NewDeclarativeEnvironment(Engine, Engine.ExecutionContext.LexicalEnvironment), function.Strict);
+        var functionObject:jint.native.functions.ScriptFunctionInstance = new jint.native.functions.ScriptFunctionInstance(Engine, functionDeclaration, jint.runtime.environments.LexicalEnvironment.NewDeclarativeEnvironment(Engine, Engine.ExecutionContext.LexicalEnvironment), function.Strict);
         functionObject.Extensible = true;
         return functionObject;
     }
-    public function CreateFunctionObject(functionDeclaration:jint.parser.ast.FunctionDeclaration):jint.native.function.FunctionInstance
+    public function CreateFunctionObject(functionDeclaration:jint.parser.ast.FunctionDeclaration):jint.native.functions.FunctionInstance
     {
-        var functionObject:jint.native.function.ScriptFunctionInstance = new jint.native.function.ScriptFunctionInstance(Engine, functionDeclaration, jint.runtime.environments.LexicalEnvironment.NewDeclarativeEnvironment(Engine, Engine.ExecutionContext.LexicalEnvironment), functionDeclaration.Strict);
+        var functionObject:jint.native.functions.ScriptFunctionInstance = new jint.native.functions.ScriptFunctionInstance(Engine, functionDeclaration, jint.runtime.environments.LexicalEnvironment.NewDeclarativeEnvironment(Engine, Engine.ExecutionContext.LexicalEnvironment), functionDeclaration.Strict);
         return functionObject;
     }
-    private var _throwTypeError:jint.native.function.FunctionInstance;
-    public var ThrowTypeError(get_ThrowTypeError, never):jint.native.function.FunctionInstance;
-    public function get_ThrowTypeError():jint.native.function.FunctionInstance
+    private var _throwTypeError:jint.native.functions.FunctionInstance;
+    public var ThrowTypeError(get_ThrowTypeError, never):jint.native.functions.FunctionInstance;
+    public function get_ThrowTypeError():jint.native.functions.FunctionInstance
     {
         if (_throwTypeError != null)
         {
             return _throwTypeError;
         }
-        _throwTypeError = new jint.native.function.ThrowTypeError(Engine);
+        _throwTypeError = new jint.native.functions.ThrowTypeError(Engine);
         return _throwTypeError;
     }
 

@@ -1,9 +1,9 @@
-package jint.native.function;
+package jint.native.functions;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
 
-class ThrowTypeError extends jint.native.function.FunctionInstance
+class ThrowTypeError extends jint.native.functions.FunctionInstance
 {
     private var _engine:jint.Engine;
     public function new(engine:jint.Engine)
