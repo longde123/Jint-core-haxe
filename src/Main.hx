@@ -7,7 +7,8 @@ import flash.Lib;
 
  
 import test.parser.JavascriptParserTests;
-
+import jint.parser.*;
+import jint.parser.ast.*;
 
 
 /**
@@ -23,7 +24,14 @@ class Main
 		var stage = Lib.current.stage;
 		stage.scaleMode = StageScaleMode.NO_SCALE;
 		stage.align = StageAlign.TOP_LEFT;
-	 Constructors.init();
+		
+		
+		JavaScriptParser.cctor();
+		JavaScriptParser_Regexes.cctor();
+		Messages.cctor();
+		Token.cctor();
+	 
+		//	Constructors.init();
 		   var r = new haxe.unit.TestRunner();
 			r.add(new JavascriptParserTests());
 			// add other TestCases here

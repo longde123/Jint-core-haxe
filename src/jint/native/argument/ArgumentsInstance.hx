@@ -33,7 +33,7 @@ class ArgumentsInstance extends jint.native.object.ObjectInstance
                 {
                     mappedNamed.push(name);
                     var g:(jint.native.JsValue -> jint.native.JsValue) = function (n:jint.native.JsValue):jint.native.JsValue { return env.GetBindingValue(name, false); } ;
-                    var p:(jint.native.JsValue -> jint.native.JsValue -> Void) = new (jint.native.JsValue -> jint.native.JsValue -> Void)(function (n:jint.native.JsValue, o:jint.native.JsValue):Void { env.SetMutableBinding(name, o, true); } );
+                    var p:(jint.native.JsValue -> jint.native.JsValue -> Void) =  function (n:jint.native.JsValue, o:jint.native.JsValue):Void { env.SetMutableBinding(name, o, true); } ;
                     map.DefineOwnProperty(indxStr, new jint.runtime.descriptors.specialized.ClrAccessDescriptor(engine, g, p), false);
                 }
             }

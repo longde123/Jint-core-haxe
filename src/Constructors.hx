@@ -10,8 +10,7 @@ This file serves two purposes:
         Constructors.init(), all static constructors will be called 
         at once.
 */
-package ;
-import consoleapplication1.Program;
+package ; 
 import EnumExtensions;
 import jint.DeclarationBindingType;
 import jint.Engine;

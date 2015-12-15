@@ -396,7 +396,7 @@ class DatePrototype extends jint.native.date.DateInstance
     private function SetFullYear(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var thisTime:Float = EnsureDateInstance(thisObj).PrimitiveValue;
-        var t:Float = Cs2Hx.IsNaN(thisTime) ? +0 : LocalTime(thisTime);
+        var t:Float = Cs2Hx.IsNaN(thisTime) ? 0 : LocalTime(thisTime);
         var y:Float = jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 0));
         var m:Float = arguments.length <= 1 ? MonthFromTime(t) : jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 1));
         var dt:Float = arguments.length <= 2 ? DateFromTime(t) : jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 2));
@@ -408,7 +408,7 @@ class DatePrototype extends jint.native.date.DateInstance
     private function SetYear(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var thisTime:Float = EnsureDateInstance(thisObj).PrimitiveValue;
-        var t:Float = Cs2Hx.IsNaN(thisTime) ? +0 : LocalTime(thisTime);
+        var t:Float = Cs2Hx.IsNaN(thisTime) ? 0 : LocalTime(thisTime);
         var y:Float = jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 0));
         if (Cs2Hx.IsNaN(y))
         {
@@ -428,7 +428,7 @@ class DatePrototype extends jint.native.date.DateInstance
     private function SetUTCFullYear(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var thisTime:Float = EnsureDateInstance(thisObj).PrimitiveValue;
-        var t:Float = Cs2Hx.IsNaN(thisTime) ? +0 : thisTime;
+        var t:Float = Cs2Hx.IsNaN(thisTime) ? 0 : thisTime;
         var y:Float = jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 0));
         var m:Float = arguments.length <= 1 ? MonthFromTime(t) : jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 1));
         var dt:Float = arguments.length <= 2 ? DateFromTime(t) : jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 2));
