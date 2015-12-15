@@ -306,17 +306,17 @@ namespace Jint.Runtime
 
             if (value.IsBoolean())
             {
-                return engine.Boolean.Construct(value.AsBoolean());
+                return engine.JBoolean.Construct(value.AsBoolean());
             }
 
             if (value.IsNumber())
             {
-                return engine.Number.Construct(value.AsNumber());
+                return engine.JNumber.Construct(value.AsNumber());
             }
 
             if (value.IsString())
             {
-                return engine.String.Construct(value.AsString());
+                return engine.JString.Construct(value.AsString());
             }
 
             throw new JavaScriptException().Creator(engine.TypeError);

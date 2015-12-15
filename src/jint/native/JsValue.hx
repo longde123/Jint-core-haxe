@@ -224,7 +224,7 @@ class JsValue implements system.IEquatable<jint.native.JsValue>
             case system.TypeCode.Char:
                 return new jint.native.JsValue().Creator_String(value.toString());
             case system.TypeCode.DateTime:
-                return engine.Date.Construct_DateTime(value);
+                return engine.JDate.Construct_DateTime(value);
             case system.TypeCode.Decimal:
                 return new jint.native.JsValue().Creator_Double(cast(value, Float));
             case system.TypeCode.Double:
@@ -254,7 +254,7 @@ class JsValue implements system.IEquatable<jint.native.JsValue>
         }
         if (Std.is(value, system.DateTimeOffset))
         {
-            return engine.Date.Construct_DateTimeOffset(value);
+            return engine.JDate.Construct_DateTimeOffset(value);
         }
         var instance:jint.native.object.ObjectInstance = (Std.is(value, jint.native.object.ObjectInstance) ? cast(value, jint.native.object.ObjectInstance) : null);
         if (instance != null)
@@ -268,18 +268,18 @@ class JsValue implements system.IEquatable<jint.native.JsValue>
         var array = cast(value);
         if (array != null)
         {
-            var jsArray:jint.native.object.ObjectInstance = engine.Array.Construct(jint.runtime.Arguments.Empty);
+            var jsArray:jint.native.object.ObjectInstance = engine.JArray.Construct(jint.runtime.Arguments.Empty);
             for (item in array)
             {
                 var jsItem:jint.native.JsValue = FromObject(engine, item);
-                engine.Array.PrototypeObject.Push(jsArray, jint.runtime.Arguments.From([ jsItem ]));
+                engine.JArray.PrototypeObject.Push(jsArray, jint.runtime.Arguments.From([ jsItem ]));
             }
             return jsArray;
         }
         var regex:system.text.regularexpressions.Regex = value;
         if (regex != null)
         {
-            var jsRegex:jint.native.regexp.RegExpInstance = engine.RegExp.Construct_String(system.Cs2Hx.Trim_(regex.toString(), [ 47 ]));
+            var jsRegex:jint.native.regexp.RegExpInstance = engine.JRegExp.Construct_String(system.Cs2Hx.Trim_(regex.toString(), [ 47 ]));
             return jsRegex;
         }
         var d:system.Delegate = value;
@@ -358,10 +358,10 @@ class JsValue implements system.IEquatable<jint.native.JsValue>
                             return booleanInstance.PrimitiveValue.AsBoolean();
                         }
                     case "Function":
-                        var function:jint.native.functions.FunctionInstance = _object;
-                        if (function != null)
+                        var function_:jint.native.functions.FunctionInstance = _object;
+                        if (function_ != null)
                         {
-                            return jint.native.functions.FunctionInstance.op_Explicit_(jint_native_JsValue -> Array(function.Call);
+                            return jint.native.functions.FunctionInstance.op_Explicit_(jint_native_JsValue -> Array(function_.Call);
                         }
                     case "Number":
                         var numberInstance:jint.native.number.NumberInstance = _object;

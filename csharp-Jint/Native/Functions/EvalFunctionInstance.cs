@@ -12,7 +12,7 @@ namespace Jint.Native.Functions
             : base(engine, parameters, scope, strict)
         {
             _engine = engine;
-            Prototype = Engine.Function.PrototypeObject;
+            Prototype = Engine.JFunction.PrototypeObject;
             FastAddProperty("length", 1, false, false, false);
         }
 

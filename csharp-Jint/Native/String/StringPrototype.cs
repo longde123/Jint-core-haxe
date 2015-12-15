@@ -27,7 +27,7 @@ namespace Jint.Native.String
         public static StringPrototype CreatePrototypeObject(Engine engine, StringConstructor stringConstructor)
         {
             var obj = new StringPrototype(engine);
-            obj.Prototype = engine.Object.PrototypeObject;
+            obj.Prototype = engine.JObject.PrototypeObject;
             obj.PrimitiveValue = "";
             obj.Extensible = true;
             obj.FastAddProperty("length", 0, false, false, false); 
@@ -225,7 +225,7 @@ namespace Jint.Native.String
 
             // Coerce into a number, true will become 1 
             var l = arguments.At(1);
-            var a = (ArrayInstance) Engine.Array.Construct(Arguments.Empty);
+            var a = (ArrayInstance) Engine.JArray.Construct(Arguments.Empty);
             var limit = l.Equals( Undefined.Instance) ? UInt32.MaxValue : TypeConverter.ToUint32(l);
             var len = s.Length;
             
@@ -240,7 +240,7 @@ namespace Jint.Native.String
             }
             else if (separator.Equals( Undefined.Instance))
             {
-                return (ArrayInstance)Engine.Array.Construct(Arguments.From(s));
+                return (ArrayInstance)Engine.JArray.Construct(Arguments.From(s));
             }
             else
             {
@@ -386,7 +386,7 @@ namespace Jint.Native.String
                 regex = Null.Text;
             }
 
-            var rx = (RegExpInstance) TypeConverter.ToObject(Engine, regex) ?? (RegExpInstance)Engine.RegExp.Construct(new[] { regex });
+            var rx = (RegExpInstance) TypeConverter.ToObject(Engine, regex) ?? (RegExpInstance)Engine.JRegExp.Construct(new[] { regex });
             var match = rx.Value.Match(s);
             if (!match.Success)
             {
@@ -560,23 +560,23 @@ namespace Jint.Native.String
             var regex = arguments.At(0);
             var rx = regex.TryCast<RegExpInstance>();
 
-            rx = rx ?? (RegExpInstance) Engine.RegExp.Construct(new[] {regex});
+            rx = rx ?? (RegExpInstance) Engine.JRegExp.Construct(new[] {regex});
 
             var global = rx.Get("global").AsBoolean();
             if (!global)
             {
-                return Engine.RegExp.PrototypeObject.Exec(rx, Arguments.From(s));
+                return Engine.JRegExp.PrototypeObject.Exec(rx, Arguments.From(s));
             }
             else
             {
                 rx.Put("lastIndex", 0, false);
-                var a = Engine.Array.Construct(Arguments.Empty);
+                var a = Engine.JArray.Construct(Arguments.Empty);
                 double previousLastIndex = 0;
                 var n = 0;
                 var lastMatch = true;
                 while (lastMatch)
                 {
-                    var result = Engine.RegExp.PrototypeObject.Exec(rx, Arguments.From(s)).TryCast<ObjectInstance>();
+                    var result = Engine.JRegExp.PrototypeObject.Exec(rx, Arguments.From(s)).TryCast<ObjectInstance>();
                     if (result == null)
                     {
                         lastMatch = false;

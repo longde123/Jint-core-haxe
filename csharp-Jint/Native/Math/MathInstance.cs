@@ -26,7 +26,7 @@ namespace Jint.Native.Math
         {
             var math = new MathInstance(engine);
             math.Extensible = true;
-            math.Prototype = engine.Object.PrototypeObject;
+            math.Prototype = engine.JObject.PrototypeObject;
 
             
             return math;

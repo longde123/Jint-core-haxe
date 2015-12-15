@@ -15,7 +15,7 @@ namespace Jint.Runtime.Interop
             : base(engine, null, null, false)
         {
             _func = func;
-            Prototype = engine.Function.PrototypeObject; 
+            Prototype = engine.JFunction.PrototypeObject; 
             FastAddProperty("length", length, false, false, false);
             Extensible = true;
         }

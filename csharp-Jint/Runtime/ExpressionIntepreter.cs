@@ -624,7 +624,7 @@ namespace Jint.Runtime
         {
             if (literal.Type == SyntaxNodes.RegularExpressionLiteral)
             {
-                return _engine.RegExp.Construct(literal.Raw);
+                return _engine.JRegExp.Construct(literal.Raw);
             }
 
             return JsValue.FromObject(_engine, literal.Value);
@@ -634,7 +634,7 @@ namespace Jint.Runtime
         {
             // http://www.ecma-international.org/ecma-262/5.1/#sec-11.1.5
 
-            var obj = _engine.Object.Construct(Arguments.Empty);
+            var obj = _engine.JObject.Construct(Arguments.Empty);
             
             foreach (var property in objectExpression.Properties)
             {
@@ -962,7 +962,7 @@ namespace Jint.Runtime
 
         public JsValue EvaluateArrayExpression(ArrayExpression arrayExpression)
         {
-            var a = _engine.Array.Construct(new JsValue[] { arrayExpression.Elements.Count() });
+            var a = _engine.JArray.Construct(new JsValue[] { arrayExpression.Elements.Count() });
             var n = 0;
             foreach (var expr in arrayExpression.Elements)
             {

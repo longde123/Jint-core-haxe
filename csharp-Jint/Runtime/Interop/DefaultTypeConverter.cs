@@ -58,7 +58,7 @@ namespace Jint.Runtime.Interop
             // is the javascript value an ICallable instance ?
             if (valueType == typeof(Func<JsValue, JsValue[], JsValue>))
             {
-                var function = (Func<JsValue, JsValue[], JsValue>)value;
+                var function_ = (Func<JsValue, JsValue[], JsValue>)value;
 
                 if (type.IsGenericType)
                 {
@@ -92,8 +92,8 @@ namespace Jint.Runtime.Interop
                         //todo 
 
                         var callExpresionBlock = Expression.Call(
-                                               Expression.Call(Expression.Constant(function.Target),
-                                                   function.Method,
+                                               Expression.Call(Expression.Constant(function_.Target),
+                                                   function_.Method,
                                                    Expression.Constant(JsValue.Undefined, typeof(JsValue)),
                                                    @vars),
                                                jsValueToObject);
@@ -137,8 +137,8 @@ namespace Jint.Runtime.Interop
                                                 Expression.Call(null,
                                                     convertChangeType,
                                                     Expression.Call(
-                                                            Expression.Call(Expression.Constant(function.Target),
-                                                                    function.Method,
+                                                            Expression.Call(Expression.Constant(function_.Target),
+                                                                    function_.Method,
                                                                     Expression.Constant(JsValue.Undefined, typeof(JsValue)),
                                                                     @vars),
                                                             jsValueToObject),
@@ -155,7 +155,7 @@ namespace Jint.Runtime.Interop
                 {
                     if (type == typeof(Action))
                     {
-                        return (Action)(() => function(JsValue.Undefined, new JsValue[0]));
+                        return (Action)(() => function_(JsValue.Undefined, new JsValue[0]));
                     }
                     else if (type.IsSubclassOf(typeof(System.MulticastDelegate)))
                     {
@@ -172,8 +172,8 @@ namespace Jint.Runtime.Interop
                         var @vars = Expression.NewArrayInit(typeof(JsValue), tmpVars);
 
                         var callExpresionBlock = Expression.Call(
-                                                  Expression.Call(Expression.Constant(function.Target),
-                                                      function.Method,
+                                                  Expression.Call(Expression.Constant(function_.Target),
+                                                      function_.Method,
                                                       Expression.Constant(JsValue.Undefined, typeof(JsValue)),
                                                       @vars),
                                                   typeof(JsValue).GetMethod("ToObject"));

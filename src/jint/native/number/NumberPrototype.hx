@@ -12,7 +12,7 @@ class NumberPrototype extends jint.native.number.NumberInstance
     public static function CreatePrototypeObject(engine:jint.Engine, numberConstructor:jint.native.number.NumberConstructor):jint.native.number.NumberPrototype
     {
         var obj:jint.native.number.NumberPrototype = new jint.native.number.NumberPrototype(engine);
-        obj.Prototype = engine.Object.PrototypeObject;
+        obj.Prototype = engine.JObject.PrototypeObject;
         obj.PrimitiveValue = 0;
         obj.Extensible = true;
         obj.FastAddProperty("constructor", numberConstructor, true, false, true);

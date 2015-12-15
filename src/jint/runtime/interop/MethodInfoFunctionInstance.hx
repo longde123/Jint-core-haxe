@@ -10,7 +10,7 @@ class MethodInfoFunctionInstance extends jint.native.functions.FunctionInstance
     {
         super(engine, null, null, false);
         _methods = methods;
-        Prototype = engine.Function.PrototypeObject;
+        Prototype = engine.JFunction.PrototypeObject;
     }
     override public function Call(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
@@ -96,8 +96,8 @@ class MethodInfoFunctionInstance extends jint.native.functions.FunctionInstance
             {
                 continue;
             }
-            var jsArray:jint.native.object.ObjectInstance = Engine.Array.Construct(jint.runtime.Arguments.Empty);
-            Engine.Array.PrototypeObject.Push(jsArray, system.Cs2Hx.ToArray(argsToTransform));
+            var jsArray:jint.native.object.ObjectInstance = Engine.JArray.Construct(jint.runtime.Arguments.Empty);
+            Engine.JArray.PrototypeObject.Push(jsArray, system.Cs2Hx.ToArray(argsToTransform));
             newArgumentsCollection.push(new jint.native.JsValue().Creator_ObjectInstance(jsArray));
             return system.Cs2Hx.ToArray(newArgumentsCollection);
         }

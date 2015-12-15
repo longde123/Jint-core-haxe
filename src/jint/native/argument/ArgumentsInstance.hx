@@ -14,11 +14,11 @@ class ArgumentsInstance extends jint.native.object.ObjectInstance
     {
         var len:Int = args.length;
         var obj:jint.native.argument.ArgumentsInstance = new jint.native.argument.ArgumentsInstance(engine);
-        obj.Prototype = engine.Object.PrototypeObject;
+        obj.Prototype = engine.JObject.PrototypeObject;
         obj.Extensible = true;
         obj.FastAddProperty("length", len, true, false, true);
         obj.Strict = strict;
-        var map:jint.native.object.ObjectInstance = engine.Object.Construct(jint.runtime.Arguments.Empty);
+        var map:jint.native.object.ObjectInstance = engine.JObject.Construct(jint.runtime.Arguments.Empty);
         var mappedNamed:Array<String> = new Array<String>();
         var indx:Int = 0;
         while (indx <= len - 1)
@@ -49,7 +49,7 @@ class ArgumentsInstance extends jint.native.object.ObjectInstance
         }
         else
         {
-            var thrower:jint.native.functions.FunctionInstance = engine.Function.ThrowTypeError;
+            var thrower:jint.native.functions.FunctionInstance = engine.JFunction.ThrowTypeError;
             obj.DefineOwnProperty("caller", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(thrower, thrower, new Nullable_Bool(false), new Nullable_Bool(false)), false);
             obj.DefineOwnProperty("callee", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(thrower, thrower, new Nullable_Bool(false), new Nullable_Bool(false)), false);
         }

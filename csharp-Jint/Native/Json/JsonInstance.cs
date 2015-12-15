@@ -25,7 +25,7 @@ namespace Jint.Native.Json
         public static JsonInstance CreateJsonObject(Engine engine)
         {
             var json = new JsonInstance(engine);
-            json.Prototype = engine.Object.PrototypeObject;
+            json.Prototype = engine.JObject.PrototypeObject;
             return json;
         }
 

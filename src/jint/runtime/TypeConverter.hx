@@ -201,15 +201,15 @@ class TypeConverter
         }
         if (value.IsBoolean())
         {
-            return engine.Boolean.Construct_Boolean(value.AsBoolean());
+            return engine.JBoolean.Construct_Boolean(value.AsBoolean());
         }
         if (value.IsNumber())
         {
-            return engine.Number.Construct_Double(value.AsNumber());
+            return engine.JNumber.Construct_Double(value.AsNumber());
         }
         if (value.IsString())
         {
-            return engine.String.Construct_String(value.AsString());
+            return engine.JString.Construct_String(value.AsString());
         }
         return throw new jint.runtime.JavaScriptException().Creator(engine.TypeError);
     }

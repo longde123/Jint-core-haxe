@@ -22,7 +22,7 @@ namespace Jint.Native.Functions
             obj.Extensible = true;
 
             // The value of the [[Prototype]] internal property of the Function prototype object is the standard built-in Object prototype object
-            obj.Prototype = engine.Object.PrototypeObject;
+            obj.Prototype = engine.JObject.PrototypeObject;
 
             obj.FastAddProperty("length", 0, false, false, false);
 
@@ -31,7 +31,7 @@ namespace Jint.Native.Functions
 
         public void Configure()
         {
-            FastAddProperty("constructor", Engine.Function, true, false, true);
+            FastAddProperty("constructor", Engine.JFunction, true, false, true);
             FastAddProperty("toString", new ClrFunctionInstance(Engine, ToString), true, false, true);
             FastAddProperty("apply", new ClrFunctionInstance(Engine, Apply, 2), true, false, true);
             FastAddProperty("call", new ClrFunctionInstance(Engine, CallImpl, 1), true, false, true);
@@ -50,7 +50,7 @@ namespace Jint.Native.Functions
             f.TargetFunction = thisObj;
             f.BoundThis = thisArg;
             f.BoundArgs = arguments.Skip(1).ToArray();
-            f.Prototype = Engine.Function.PrototypeObject;
+            f.Prototype = Engine.JFunction.PrototypeObject;
 
             var o = target as FunctionInstance;
             if (o != null)
@@ -64,7 +64,7 @@ namespace Jint.Native.Functions
             }
             
 
-            var thrower = Engine.Function.ThrowTypeError;
+            var thrower = Engine.JFunction.ThrowTypeError;
             f.DefineOwnProperty("caller", new PropertyDescriptor().Creator(thrower, thrower, false, false), false);
             f.DefineOwnProperty("arguments", new PropertyDescriptor().Creator(thrower, thrower, false, false), false);
 

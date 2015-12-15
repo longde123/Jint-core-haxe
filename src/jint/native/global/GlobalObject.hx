@@ -18,16 +18,16 @@ class GlobalObject extends jint.native.object.ObjectInstance
     }
     public function Configure():Void
     {
-        Prototype = Engine.Object.PrototypeObject;
-        FastAddProperty("Object", Engine.Object, true, false, true);
-        FastAddProperty("Function", Engine.Function, true, false, true);
-        FastAddProperty("Array", Engine.Array, true, false, true);
-        FastAddProperty("String", Engine.String, true, false, true);
-        FastAddProperty("RegExp", Engine.RegExp, true, false, true);
-        FastAddProperty("Number", Engine.Number, true, false, true);
-        FastAddProperty("Boolean", Engine.Boolean, true, false, true);
-        FastAddProperty("Date", Engine.Date, true, false, true);
-        FastAddProperty("Math", Engine.Math, true, false, true);
+        Prototype = Engine.JObject.PrototypeObject;
+        FastAddProperty("Object", Engine.JObject, true, false, true);
+        FastAddProperty("Function", Engine.JFunction, true, false, true);
+        FastAddProperty("Array", Engine.JArray, true, false, true);
+        FastAddProperty("String", Engine.JString, true, false, true);
+        FastAddProperty("RegExp", Engine.JRegExp, true, false, true);
+        FastAddProperty("Number", Engine.JNumber, true, false, true);
+        FastAddProperty("Boolean", Engine.JBoolean, true, false, true);
+        FastAddProperty("Date", Engine.JDate, true, false, true);
+        FastAddProperty("Math", Engine.JMath, true, false, true);
         FastAddProperty("JSON", Engine.Json, true, false, true);
         FastAddProperty("Error", Engine.Error, true, false, true);
         FastAddProperty("EvalError", Engine.EvalError, true, false, true);

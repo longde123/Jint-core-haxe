@@ -171,7 +171,7 @@ namespace Jint.Runtime.Descriptors
                 return Native.Undefined.Instance;
             }
 
-            var obj = engine.Object.Construct(Arguments.Empty);
+            var obj = engine.JObject.Construct(Arguments.Empty);
 
             if (desc.IsDataDescriptor())
             {

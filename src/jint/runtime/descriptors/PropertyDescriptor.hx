@@ -142,7 +142,7 @@ class PropertyDescriptor
         {
             return jint.native.Undefined.Instance;
         }
-        var obj:jint.native.object.ObjectInstance = engine.Object.Construct(jint.runtime.Arguments.Empty);
+        var obj:jint.native.object.ObjectInstance = engine.JObject.Construct(jint.runtime.Arguments.Empty);
         if (desc.IsDataDescriptor())
         {
             obj.DefineOwnProperty("value", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(desc.Value != null ? desc.Value : jint.native.Undefined.Instance, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), false);

@@ -12,7 +12,7 @@ class BooleanPrototype extends jint.native.boolean.BooleanInstance
     public static function CreatePrototypeObject(engine:jint.Engine, booleanConstructor:jint.native.boolean.BooleanConstructor):jint.native.boolean.BooleanPrototype
     {
         var obj:jint.native.boolean.BooleanPrototype = new jint.native.boolean.BooleanPrototype(engine);
-        obj.Prototype = engine.Object.PrototypeObject;
+        obj.Prototype = engine.JObject.PrototypeObject;
         obj.PrimitiveValue = false;
         obj.Extensible = true;
         obj.FastAddProperty("constructor", booleanConstructor, true, false, true);

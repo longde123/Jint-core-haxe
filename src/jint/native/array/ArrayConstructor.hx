@@ -14,7 +14,7 @@ class ArrayConstructor extends jint.native.functions.FunctionInstance implements
     {
         var obj:jint.native.array.ArrayConstructor = new jint.native.array.ArrayConstructor(engine);
         obj.Extensible = true;
-        obj.Prototype = engine.Function.PrototypeObject;
+        obj.Prototype = engine.JFunction.PrototypeObject;
         obj.PrototypeObject = jint.native.array.ArrayPrototype.CreatePrototypeObject(engine, obj);
         obj.FastAddProperty("length", 1, false, false, false);
         obj.FastAddProperty("prototype", obj.PrototypeObject, false, false, false);
@@ -56,11 +56,11 @@ class ArrayConstructor extends jint.native.functions.FunctionInstance implements
             var enumerable:Array = jint.runtime.Arguments.At(arguments, 0).As().Target;
             if (enumerable != null)
             {
-                var jsArray:jint.native.object.ObjectInstance = Engine.Array.Construct(jint.runtime.Arguments.Empty);
+                var jsArray:jint.native.object.ObjectInstance = Engine.JArray.Construct(jint.runtime.Arguments.Empty);
                 for (item in enumerable)
                 {
                     var jsItem:jint.native.JsValue = jint.native.JsValue.FromObject(Engine, item);
-                    Engine.Array.PrototypeObject.Push(jsArray, jint.runtime.Arguments.From([ jsItem ]));
+                    Engine.JArray.PrototypeObject.Push(jsArray, jint.runtime.Arguments.From([ jsItem ]));
                 }
                 return jsArray;
             }

@@ -19,7 +19,7 @@ namespace Jint.Native.RegExp
             obj.Extensible = true;
 
             // The value of the [[Prototype]] internal property of the RegExp constructor is the Function prototype object 
-            obj.Prototype = engine.Function.PrototypeObject;
+            obj.Prototype = engine.JFunction.PrototypeObject;
             obj.PrototypeObject = RegExpPrototype.CreatePrototypeObject(engine, obj);
 
             obj.FastAddProperty("length", 2, false, false, false);

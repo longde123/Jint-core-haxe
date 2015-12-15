@@ -28,11 +28,11 @@ namespace Jint.Native.Functions
 
             Engine = engine;
             Extensible = true;
-            Prototype = engine.Function.PrototypeObject;
+            Prototype = engine.JFunction.PrototypeObject;
 
             DefineOwnProperty("length", new PropertyDescriptor().Creator(new JsValue().Creator(FormalParameters.Length), false, false, false), false);
 
-            var proto = engine.Object.Construct(Arguments.Empty);
+            var proto = engine.JObject.Construct(Arguments.Empty);
             proto.DefineOwnProperty("constructor", new PropertyDescriptor().Creator(this, true, false, true), false);
             DefineOwnProperty("prototype", new PropertyDescriptor().Creator(proto, true, false, false), false);
             if (_functionDeclaration.Id != null)
@@ -42,7 +42,7 @@ namespace Jint.Native.Functions
 
             if (strict)
             {
-                var thrower = engine.Function.ThrowTypeError;
+                var thrower = engine.JFunction.ThrowTypeError;
                 DefineOwnProperty("caller", new PropertyDescriptor().Creator(thrower, thrower, false, false), false);
                 DefineOwnProperty("arguments", new PropertyDescriptor().Creator(thrower, thrower, false, false), false);
             }
@@ -120,7 +120,7 @@ namespace Jint.Native.Functions
             var proto = Get("prototype").TryCast<ObjectInstance>();
             var obj = new ObjectInstance(Engine);
             obj.Extensible = true;
-            obj.Prototype = proto ?? Engine.Object.PrototypeObject;
+            obj.Prototype = proto ?? Engine.JObject.PrototypeObject;
 
             var result = Call(obj, arguments).TryCast<ObjectInstance>();
             if (result != null)

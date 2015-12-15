@@ -20,7 +20,7 @@ namespace Jint.Native.Array
             obj.Extensible = true;
 
             // The value of the [[Prototype]] internal property of the Array constructor is the Function prototype object 
-            obj.Prototype = engine.Function.PrototypeObject;
+            obj.Prototype = engine.JFunction.PrototypeObject;
             obj.PrototypeObject = ArrayPrototype.CreatePrototypeObject(engine, obj);
 
             obj.FastAddProperty("length", 1, false, false, false);
@@ -75,11 +75,11 @@ namespace Jint.Native.Array
 
                 if (enumerable != null)
                 {
-                    var jsArray = Engine.Array.Construct(Arguments.Empty);
+                    var jsArray = Engine.JArray.Construct(Arguments.Empty);
                     foreach (var item in enumerable)
                     {
                         var jsItem = JsValue.FromObject(Engine, item);
-                        Engine.Array.PrototypeObject.Push(jsArray, Arguments.From(jsItem));
+                        Engine.JArray.PrototypeObject.Push(jsArray, Arguments.From(jsItem));
                     }
 
                     return jsArray;

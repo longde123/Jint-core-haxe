@@ -31,15 +31,15 @@ class Engine
     {
         _executionContexts = new Array<jint.runtime.environments.ExecutionContext>();
         Global = jint.native.global.GlobalObject.CreateGlobalObject(this);
-        Object = jint.native.object.ObjectConstructor.CreateObjectConstructor(this);
-        Function = jint.native.functions.FunctionConstructor.CreateFunctionConstructor(this);
-        Array = jint.native.array.ArrayConstructor.CreateArrayConstructor(this);
-        String = jint.native.string.StringConstructor.CreateStringConstructor(this);
-        RegExp = jint.native.regexp.RegExpConstructor.CreateRegExpConstructor(this);
-        Number = jint.native.number.NumberConstructor.CreateNumberConstructor(this);
-        Boolean = jint.native.boolean.BooleanConstructor.CreateBooleanConstructor(this);
-        Date = jint.native.date.DateConstructor.CreateDateConstructor(this);
-        Math = jint.native.math.MathInstance.CreateMathObject(this);
+        JObject = jint.native.object.ObjectConstructor.CreateObjectConstructor(this);
+        JFunction = jint.native.functions.FunctionConstructor.CreateFunctionConstructor(this);
+        JArray = jint.native.array.ArrayConstructor.CreateArrayConstructor(this);
+        JString = jint.native.string.StringConstructor.CreateStringConstructor(this);
+        JRegExp = jint.native.regexp.RegExpConstructor.CreateRegExpConstructor(this);
+        JNumber = jint.native.number.NumberConstructor.CreateNumberConstructor(this);
+        JBoolean = jint.native.boolean.BooleanConstructor.CreateBooleanConstructor(this);
+        JDate = jint.native.date.DateConstructor.CreateDateConstructor(this);
+        JMath = jint.native.math.MathInstance.CreateMathObject(this);
         Json = jint.native.json.JsonInstance.CreateJsonObject(this);
         Error = jint.native.error.ErrorConstructor.CreateErrorConstructor(this, "Error");
         EvalError = jint.native.error.ErrorConstructor.CreateErrorConstructor(this, "EvalError");
@@ -49,23 +49,23 @@ class Engine
         TypeError = jint.native.error.ErrorConstructor.CreateErrorConstructor(this, "TypeError");
         UriError = jint.native.error.ErrorConstructor.CreateErrorConstructor(this, "URIError");
         Global.Configure();
-        Object.Configure();
-        Object.PrototypeObject.Configure();
-        Function.Configure();
-        Function.PrototypeObject.Configure();
-        Array.Configure();
-        Array.PrototypeObject.Configure();
-        String.Configure();
-        String.PrototypeObject.Configure();
-        RegExp.Configure();
-        RegExp.PrototypeObject.Configure();
-        Number.Configure();
-        Number.PrototypeObject.Configure();
-        Boolean.Configure();
-        Boolean.PrototypeObject.Configure();
-        Date.Configure();
-        Date.PrototypeObject.Configure();
-        Math.Configure();
+        JObject.Configure();
+        JObject.PrototypeObject.Configure();
+        JFunction.Configure();
+        JFunction.PrototypeObject.Configure();
+        JArray.Configure();
+        JArray.PrototypeObject.Configure();
+        JString.Configure();
+        JString.PrototypeObject.Configure();
+        JRegExp.Configure();
+        JRegExp.PrototypeObject.Configure();
+        JNumber.Configure();
+        JNumber.PrototypeObject.Configure();
+        JBoolean.Configure();
+        JBoolean.PrototypeObject.Configure();
+        JDate.Configure();
+        JDate.PrototypeObject.Configure();
+        JMath.Configure();
         Json.Configure();
         Error.Configure();
         Error.PrototypeObject.Configure();
@@ -96,15 +96,15 @@ class Engine
     }
     public var GlobalEnvironment:jint.runtime.environments.LexicalEnvironment;
     public var Global:jint.native.global.GlobalObject;
-    public var Object:jint.native.object.ObjectConstructor;
-    public var Function:jint.native.functions.FunctionConstructor;
-    public var Array:jint.native.array.ArrayConstructor;
-    public var String:jint.native.string.StringConstructor;
-    public var RegExp:jint.native.regexp.RegExpConstructor;
-    public var Boolean:jint.native.boolean.BooleanConstructor;
-    public var Number:jint.native.number.NumberConstructor;
-    public var Date:jint.native.date.DateConstructor;
-    public var Math:jint.native.math.MathInstance;
+    public var JObject:jint.native.object.ObjectConstructor;
+    public var JFunction:jint.native.functions.FunctionConstructor;
+    public var JArray:jint.native.array.ArrayConstructor;
+    public var JString:jint.native.string.StringConstructor;
+    public var JRegExp:jint.native.regexp.RegExpConstructor;
+    public var JBoolean:jint.native.boolean.BooleanConstructor;
+    public var JNumber:jint.native.number.NumberConstructor;
+    public var JDate:jint.native.date.DateConstructor;
+    public var JMath:jint.native.math.MathInstance;
     public var Json:jint.native.json.JsonInstance;
     public var Eval:jint.native.functions.EvalFunctionInstance;
     public var Error:jint.native.error.ErrorConstructor;
@@ -509,7 +509,7 @@ class Engine
         for (f in functionDeclarations)
         {
             var fn:String = f.Id.Name;
-            var fo:jint.native.functions.FunctionInstance = Function.CreateFunctionObject(f);
+            var fo:jint.native.functions.FunctionInstance = JFunction.CreateFunctionObject(f);
             var funcAlreadyDeclared:Bool = env.HasBinding(fn);
             if (!funcAlreadyDeclared)
             {

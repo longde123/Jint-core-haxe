@@ -26,12 +26,12 @@ namespace Jint.Runtime.Interop
             obj.Type = type;
 
             // The value of the [[Prototype]] internal property of the TypeReference constructor is the Function prototype object 
-            obj.Prototype = engine.Function.PrototypeObject;
+            obj.Prototype = engine.JFunction.PrototypeObject;
 
             obj.FastAddProperty("length", 0, false, false, false);
 
             // The initial value of Boolean.prototype is the Boolean prototype object
-            obj.FastAddProperty("prototype", engine.Object.PrototypeObject, false, false, false);
+            obj.FastAddProperty("prototype", engine.JObject.PrototypeObject, false, false, false);
 
             return obj;
         }

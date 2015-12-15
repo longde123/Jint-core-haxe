@@ -13,7 +13,7 @@ class RegExpConstructor extends jint.native.functions.FunctionInstance implement
     {
         var obj:jint.native.regexp.RegExpConstructor = new jint.native.regexp.RegExpConstructor(engine);
         obj.Extensible = true;
-        obj.Prototype = engine.Function.PrototypeObject;
+        obj.Prototype = engine.JFunction.PrototypeObject;
         obj.PrototypeObject = jint.native.regexp.RegExpPrototype.CreatePrototypeObject(engine, obj);
         obj.FastAddProperty("length", 2, false, false, false);
         obj.FastAddProperty("prototype", obj.PrototypeObject, false, false, false);

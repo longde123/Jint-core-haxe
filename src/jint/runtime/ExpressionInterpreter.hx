@@ -480,13 +480,13 @@ class ExpressionInterpreter
     {
         if (literal.Type == jint.parser.ast.SyntaxNodes.RegularExpressionLiteral)
         {
-            return _engine.RegExp.Construct_String(literal.Raw);
+            return _engine.JRegExp.Construct_String(literal.Raw);
         }
         return jint.native.JsValue.FromObject(_engine, literal.Value);
     }
     public function EvaluateObjectExpression(objectExpression:jint.parser.ast.ObjectExpression):jint.native.JsValue
     {
-        var obj:jint.native.object.ObjectInstance = _engine.Object.Construct(jint.runtime.Arguments.Empty);
+        var obj:jint.native.object.ObjectInstance = _engine.JObject.Construct(jint.runtime.Arguments.Empty);
         for (property in objectExpression.Properties)
         {
             var propName:String = property.Key.GetKey();
@@ -706,7 +706,7 @@ class ExpressionInterpreter
     }
     public function EvaluateArrayExpression(arrayExpression:jint.parser.ast.ArrayExpression):jint.native.JsValue
     {
-        var a:jint.native.object.ObjectInstance = _engine.Array.Construct([ system.linq.Enumerable.Count(arrayExpression.Elements) ]);
+        var a:jint.native.object.ObjectInstance = _engine.JArray.Construct([ system.linq.Enumerable.Count(arrayExpression.Elements) ]);
         var n:Int = 0;
         for (expr in arrayExpression.Elements)
         {

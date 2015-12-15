@@ -10,7 +10,7 @@ class EvalFunctionInstance extends jint.native.functions.FunctionInstance
     {
         super(engine, parameters, scope, strict);
         _engine = engine;
-        Prototype = Engine.Function.PrototypeObject;
+        Prototype = Engine.JFunction.PrototypeObject;
         FastAddProperty("length", 1, false, false, false);
     }
     override public function Call(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue

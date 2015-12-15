@@ -20,7 +20,7 @@ class JsonInstance extends jint.native.object.ObjectInstance
     public static function CreateJsonObject(engine:jint.Engine):jint.native.json.JsonInstance
     {
         var json:jint.native.json.JsonInstance = new jint.native.json.JsonInstance(engine);
-        json.Prototype = engine.Object.PrototypeObject;
+        json.Prototype = engine.JObject.PrototypeObject;
         return json;
     }
     public function Configure():Void

@@ -15,9 +15,9 @@ class TypeReference extends jint.native.functions.FunctionInstance implements ji
         var obj:jint.runtime.interop.TypeReference = new jint.runtime.interop.TypeReference(engine);
         obj.Extensible = false;
         obj.Type = type;
-        obj.Prototype = engine.Function.PrototypeObject;
+        obj.Prototype = engine.JFunction.PrototypeObject;
         obj.FastAddProperty("length", 0, false, false, false);
-        obj.FastAddProperty("prototype", engine.Object.PrototypeObject, false, false, false);
+        obj.FastAddProperty("prototype", engine.JObject.PrototypeObject, false, false, false);
         return obj;
     }
     override public function Call(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue

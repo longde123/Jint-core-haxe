@@ -26,7 +26,7 @@ namespace Jint.Native.Error
             }
             else
             {
-                obj.Prototype = engine.Object.PrototypeObject;
+                obj.Prototype = engine.JObject.PrototypeObject;
             }
 
             return obj;

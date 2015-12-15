@@ -56,16 +56,16 @@ namespace Jint
 
             Global = GlobalObject.CreateGlobalObject(this);
 
-            Object = ObjectConstructor.CreateObjectConstructor(this);
-            Function = FunctionConstructor.CreateFunctionConstructor(this);
+            JObject = ObjectConstructor.CreateObjectConstructor(this);
+            JFunction = FunctionConstructor.CreateFunctionConstructor(this);
 
-            Array = ArrayConstructor.CreateArrayConstructor(this);
-            String = StringConstructor.CreateStringConstructor(this);
-            RegExp = RegExpConstructor.CreateRegExpConstructor(this);
-            Number = NumberConstructor.CreateNumberConstructor(this);
-            Boolean = BooleanConstructor.CreateBooleanConstructor(this);
-            Date = DateConstructor.CreateDateConstructor(this);
-            Math = MathInstance.CreateMathObject(this);
+            JArray = ArrayConstructor.CreateArrayConstructor(this);
+            JString = StringConstructor.CreateStringConstructor(this);
+            JRegExp = RegExpConstructor.CreateRegExpConstructor(this);
+            JNumber = NumberConstructor.CreateNumberConstructor(this);
+            JBoolean = BooleanConstructor.CreateBooleanConstructor(this);
+            JDate = DateConstructor.CreateDateConstructor(this);
+            JMath = MathInstance.CreateMathObject(this);
             Json = JsonInstance.CreateJsonObject(this);
 
             Error = ErrorConstructor.CreateErrorConstructor(this, "Error");
@@ -81,31 +81,31 @@ namespace Jint
 
             Global.Configure();
 
-            Object.Configure();
-            Object.PrototypeObject.Configure();
+            JObject.Configure();
+            JObject.PrototypeObject.Configure();
 
-            Function.Configure();
-            Function.PrototypeObject.Configure();
+            JFunction.Configure();
+            JFunction.PrototypeObject.Configure();
 
-            Array.Configure();
-            Array.PrototypeObject.Configure();
+            JArray.Configure();
+            JArray.PrototypeObject.Configure();
 
-            String.Configure();
-            String.PrototypeObject.Configure();
+            JString.Configure();
+            JString.PrototypeObject.Configure();
 
-            RegExp.Configure();
-            RegExp.PrototypeObject.Configure();
+            JRegExp.Configure();
+            JRegExp.PrototypeObject.Configure();
 
-            Number.Configure();
-            Number.PrototypeObject.Configure();
+            JNumber.Configure();
+            JNumber.PrototypeObject.Configure();
 
-            Boolean.Configure();
-            Boolean.PrototypeObject.Configure();
+            JBoolean.Configure();
+            JBoolean.PrototypeObject.Configure();
 
-            Date.Configure();
-            Date.PrototypeObject.Configure();
+            JDate.Configure();
+            JDate.PrototypeObject.Configure();
 
-            Math.Configure();
+            JMath.Configure();
             Json.Configure();
 
             Error.Configure();
@@ -149,15 +149,15 @@ namespace Jint
         public LexicalEnvironment GlobalEnvironment;
 
         public GlobalObject Global { get; private set; }
-        public ObjectConstructor Object { get; private set; }
-        public FunctionConstructor Function { get; private set; }
-        public ArrayConstructor Array { get; private set; }
-        public StringConstructor String { get; private set; }
-        public RegExpConstructor RegExp { get; private set; }
-        public BooleanConstructor Boolean { get; private set; }
-        public NumberConstructor Number { get; private set; }
-        public DateConstructor Date { get; private set; }
-        public MathInstance Math { get; private set; }
+        public ObjectConstructor JObject { get; private set; }
+        public FunctionConstructor JFunction { get; private set; }
+        public ArrayConstructor JArray { get; private set; }
+        public StringConstructor JString { get; private set; }
+        public RegExpConstructor JRegExp { get; private set; }
+        public BooleanConstructor JBoolean { get; private set; }
+        public NumberConstructor JNumber { get; private set; }
+        public DateConstructor JDate { get; private set; }
+        public MathInstance JMath { get; private set; }
         public JsonInstance Json { get; private set; }
         public EvalFunctionInstance Eval { get; private set; }
 
@@ -724,7 +724,7 @@ namespace Jint
             foreach (var f in functionDeclarations)
             {
                 var fn = f.Id.Name;
-                var fo = Function.CreateFunctionObject(f);
+                var fo = JFunction.CreateFunctionObject(f);
                 var funcAlreadyDeclared = env.HasBinding(fn);
                 if (!funcAlreadyDeclared)
                 {

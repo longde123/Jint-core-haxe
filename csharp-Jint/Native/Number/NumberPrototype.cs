@@ -20,7 +20,7 @@ namespace Jint.Native.Number
         public static NumberPrototype CreatePrototypeObject(Engine engine, NumberConstructor numberConstructor)
         {
             var obj = new NumberPrototype(engine);
-            obj.Prototype = engine.Object.PrototypeObject;
+            obj.Prototype = engine.JObject.PrototypeObject;
             obj.PrimitiveValue = 0;
             obj.Extensible = true;
 

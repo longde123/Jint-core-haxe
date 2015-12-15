@@ -13,7 +13,7 @@ class BooleanConstructor extends jint.native.functions.FunctionInstance implemen
     {
         var obj:jint.native.boolean.BooleanConstructor = new jint.native.boolean.BooleanConstructor(engine);
         obj.Extensible = true;
-        obj.Prototype = engine.Function.PrototypeObject;
+        obj.Prototype = engine.JFunction.PrototypeObject;
         obj.PrototypeObject = jint.native.boolean.BooleanPrototype.CreatePrototypeObject(engine, obj);
         obj.FastAddProperty("length", 1, false, false, false);
         obj.FastAddProperty("prototype", obj.PrototypeObject, false, false, false);

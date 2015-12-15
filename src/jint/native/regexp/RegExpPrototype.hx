@@ -12,7 +12,7 @@ class RegExpPrototype extends jint.native.regexp.RegExpInstance
     public static function CreatePrototypeObject(engine:jint.Engine, regExpConstructor:jint.native.regexp.RegExpConstructor):jint.native.regexp.RegExpPrototype
     {
         var obj:jint.native.regexp.RegExpPrototype = new jint.native.regexp.RegExpPrototype(engine);
-        obj.Prototype = engine.Object.PrototypeObject;
+        obj.Prototype = engine.JObject.PrototypeObject;
         obj.Extensible = true;
         obj.FastAddProperty("constructor", regExpConstructor, true, false, true);
         return obj;
@@ -61,7 +61,7 @@ class RegExpPrototype extends jint.native.regexp.RegExpInstance
         }
         if (R.Source == "(?:)")
         {
-            var aa:jint.native.object.ObjectInstance = InitReturnValueArray(Engine.Array.Construct(jint.runtime.Arguments.Empty), s, 1, 0);
+            var aa:jint.native.object.ObjectInstance = InitReturnValueArray(Engine.JArray.Construct(jint.runtime.Arguments.Empty), s, 1, 0);
             aa.DefineOwnProperty("0", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean("", new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), true);
             return aa;
         }
@@ -84,7 +84,7 @@ class RegExpPrototype extends jint.native.regexp.RegExpInstance
         }
         var n:Int = r.Groups.Count;
         var matchIndex:Int = r.Index;
-        var a:jint.native.object.ObjectInstance = InitReturnValueArray(Engine.Array.Construct(jint.runtime.Arguments.Empty), s, n, matchIndex);
+        var a:jint.native.object.ObjectInstance = InitReturnValueArray(Engine.JArray.Construct(jint.runtime.Arguments.Empty), s, n, matchIndex);
         { //for
             var k:Int = 0;
             while (k < n)

@@ -13,13 +13,13 @@ class FunctionPrototype extends jint.native.functions.FunctionInstance
     {
         var obj:jint.native.functions.FunctionPrototype = new jint.native.functions.FunctionPrototype(engine);
         obj.Extensible = true;
-        obj.Prototype = engine.Object.PrototypeObject;
+        obj.Prototype = engine.JObject.PrototypeObject;
         obj.FastAddProperty("length", 0, false, false, false);
         return obj;
     }
     public function Configure():Void
     {
-        FastAddProperty("constructor", Engine.Function, true, false, true);
+        FastAddProperty("constructor", Engine.JFunction, true, false, true);
         FastAddProperty("toString", new jint.runtime.interop.ClrFunctionInstance(Engine, ToString), true, false, true);
         FastAddProperty("apply", new jint.runtime.interop.ClrFunctionInstance(Engine, Apply, 2), true, false, true);
         FastAddProperty("call", new jint.runtime.interop.ClrFunctionInstance(Engine, CallImpl, 1), true, false, true);
@@ -37,7 +37,7 @@ class FunctionPrototype extends jint.native.functions.FunctionInstance
         f.TargetFunction = thisObj;
         f.BoundThis = thisArg;
         f.BoundArgs = system.linq.Enumerable.ToArray(system.linq.Enumerable.Skip(arguments, 1));
-        f.Prototype = Engine.Function.PrototypeObject;
+        f.Prototype = Engine.JFunction.PrototypeObject;
         var o:jint.native.functions.FunctionInstance = (Std.is(target, jint.native.functions.FunctionInstance) ? cast(target, jint.native.functions.FunctionInstance) : null);
         if (o != null)
         {
@@ -48,7 +48,7 @@ class FunctionPrototype extends jint.native.functions.FunctionInstance
         {
             f.FastAddProperty("length", 0, false, false, false);
         }
-        var thrower:jint.native.functions.FunctionInstance = Engine.Function.ThrowTypeError;
+        var thrower:jint.native.functions.FunctionInstance = Engine.JFunction.ThrowTypeError;
         f.DefineOwnProperty("caller", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(thrower, thrower, new Nullable_Bool(false), new Nullable_Bool(false)), false);
         f.DefineOwnProperty("arguments", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(thrower, thrower, new Nullable_Bool(false), new Nullable_Bool(false)), false);
         return f;

@@ -10,7 +10,7 @@ class ClrFunctionInstance extends jint.native.functions.FunctionInstance
     {
         super(engine, null, null, false);
         _func = func;
-        Prototype = engine.Function.PrototypeObject;
+        Prototype = engine.JFunction.PrototypeObject;
         FastAddProperty("length", length, false, false, false);
         Extensible = true;
     }

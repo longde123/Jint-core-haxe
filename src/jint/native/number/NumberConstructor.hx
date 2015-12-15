@@ -13,7 +13,7 @@ class NumberConstructor extends jint.native.functions.FunctionInstance implement
     {
         var obj:jint.native.number.NumberConstructor = new jint.native.number.NumberConstructor(engine);
         obj.Extensible = true;
-        obj.Prototype = engine.Function.PrototypeObject;
+        obj.Prototype = engine.JFunction.PrototypeObject;
         obj.PrototypeObject = jint.native.number.NumberPrototype.CreatePrototypeObject(engine, obj);
         obj.FastAddProperty("length", 1, false, false, false);
         obj.FastAddProperty("prototype", obj.PrototypeObject, false, false, false);

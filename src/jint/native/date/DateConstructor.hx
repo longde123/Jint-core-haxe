@@ -14,7 +14,7 @@ class DateConstructor extends jint.native.functions.FunctionInstance implements 
     {
         var obj:jint.native.date.DateConstructor = new jint.native.date.DateConstructor(engine);
         obj.Extensible = true;
-        obj.Prototype = engine.Function.PrototypeObject;
+        obj.Prototype = engine.JFunction.PrototypeObject;
         obj.PrototypeObject = jint.native.date.DatePrototype.CreatePrototypeObject(engine, obj);
         obj.FastAddProperty("length", 7, false, false, false);
         obj.FastAddProperty("prototype", obj.PrototypeObject, false, false, false);

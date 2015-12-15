@@ -15,7 +15,7 @@ class ErrorConstructor extends jint.native.functions.FunctionInstance implements
         var obj:jint.native.error.ErrorConstructor = new jint.native.error.ErrorConstructor(engine);
         obj.Extensible = true;
         obj._name = name;
-        obj.Prototype = engine.Function.PrototypeObject;
+        obj.Prototype = engine.JFunction.PrototypeObject;
         obj.PrototypeObject = jint.native.error.ErrorPrototype.CreatePrototypeObject(engine, obj, name);
         obj.FastAddProperty("length", 1, false, false, false);
         obj.FastAddProperty("prototype", obj.PrototypeObject, false, false, false);

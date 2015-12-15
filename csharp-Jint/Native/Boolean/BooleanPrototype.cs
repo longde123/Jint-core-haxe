@@ -15,7 +15,7 @@ namespace Jint.Native.Boolean
         public static BooleanPrototype CreatePrototypeObject(Engine engine, BooleanConstructor booleanConstructor)
         {
             var obj = new BooleanPrototype(engine);
-            obj.Prototype = engine.Object.PrototypeObject;
+            obj.Prototype = engine.JObject.PrototypeObject;
             obj.PrimitiveValue = false;
             obj.Extensible = true;
 

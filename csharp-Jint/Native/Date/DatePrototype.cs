@@ -19,7 +19,7 @@ namespace Jint.Native.Date
         {
             var obj = new DatePrototype(engine)
             {
-                Prototype = engine.Object.PrototypeObject, 
+                Prototype = engine.JObject.PrototypeObject, 
                 Extensible = true,
                 PrimitiveValue = double.NaN
             };

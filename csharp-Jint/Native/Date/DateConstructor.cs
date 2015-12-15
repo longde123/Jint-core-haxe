@@ -21,7 +21,7 @@ namespace Jint.Native.Date
             obj.Extensible = true;
 
             // The value of the [[Prototype]] internal property of the Date constructor is the Function prototype object 
-            obj.Prototype = engine.Function.PrototypeObject;
+            obj.Prototype = engine.JFunction.PrototypeObject;
             obj.PrototypeObject = DatePrototype.CreatePrototypeObject(engine, obj);
 
             obj.FastAddProperty("length", 7, false, false, false);

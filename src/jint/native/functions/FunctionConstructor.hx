@@ -67,11 +67,11 @@ class FunctionConstructor extends jint.native.functions.FunctionInstance impleme
         }
         var parameters:Array<String> = this.ParseArgumentNames(p);
         var parser:jint.parser.JavaScriptParser = new jint.parser.JavaScriptParser();
-        var function:jint.parser.ast.FunctionExpression;
+        var function_:jint.parser.ast.FunctionExpression;
         try
         {
             var functionExpression:String = "function(" + p + ") { " + body + "}";
-            function = parser.ParseFunctionExpression_String(functionExpression);
+            function_ = parser.ParseFunctionExpression_String(functionExpression);
         }
         catch (__ex:jint.parser.ParserException)
         {
@@ -81,7 +81,7 @@ class FunctionConstructor extends jint.native.functions.FunctionInstance impleme
         functionDeclaration.Type = jint.parser.ast.SyntaxNodes.FunctionDeclaration;
         var blockStatement:jint.parser.ast.BlockStatement = new jint.parser.ast.BlockStatement();
         blockStatement.Type = jint.parser.ast.SyntaxNodes.BlockStatement;
-        blockStatement.Body = [ function.Body ];
+        blockStatement.Body = [ function_.Body ];
         functionDeclaration.Body = blockStatement;
         functionDeclaration.Parameters = system.linq.Enumerable.ToArray(system.linq.Enumerable.Select(parameters, function (x:String):jint.parser.ast.Identifier
         {
@@ -91,9 +91,9 @@ class FunctionConstructor extends jint.native.functions.FunctionInstance impleme
             return identifier;
         }
         ));
-        functionDeclaration.FunctionDeclarations = function.FunctionDeclarations;
-        functionDeclaration.VariableDeclarations = function.VariableDeclarations;
-        var functionObject:jint.native.functions.ScriptFunctionInstance = new jint.native.functions.ScriptFunctionInstance(Engine, functionDeclaration, jint.runtime.environments.LexicalEnvironment.NewDeclarativeEnvironment(Engine, Engine.ExecutionContext.LexicalEnvironment), function.Strict);
+        functionDeclaration.FunctionDeclarations = function_.FunctionDeclarations;
+        functionDeclaration.VariableDeclarations = function_.VariableDeclarations;
+        var functionObject:jint.native.functions.ScriptFunctionInstance = new jint.native.functions.ScriptFunctionInstance(Engine, functionDeclaration, jint.runtime.environments.LexicalEnvironment.NewDeclarativeEnvironment(Engine, Engine.ExecutionContext.LexicalEnvironment), function_.Strict);
         functionObject.Extensible = true;
         return functionObject;
     }

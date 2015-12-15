@@ -83,11 +83,11 @@ namespace Jint.Native.Functions
 
             var parameters = this.ParseArgumentNames(p);
             var parser = new JavaScriptParser();
-            FunctionExpression function;
+            FunctionExpression function_;
             try
             {
                 var functionExpression = "function(" + p + ") { " + body + "}";
-                function = parser.ParseFunctionExpression(functionExpression);
+                function_ = parser.ParseFunctionExpression(functionExpression);
             }
             catch (ParserException)
             {
@@ -105,7 +105,7 @@ namespace Jint.Native.Functions
             var blockStatement = new BlockStatement();
 
             blockStatement.Type = SyntaxNodes.BlockStatement;
-            blockStatement.Body = new[] { function.Body };
+            blockStatement.Body = new[] { function_.Body };
             functionDeclaration.Body = blockStatement;
             functionDeclaration.Parameters = parameters.Select(x =>
             { 
@@ -114,13 +114,13 @@ namespace Jint.Native.Functions
                 identifier.Name = x;
                 return identifier;
             }).ToArray();
-            functionDeclaration.FunctionDeclarations = function.FunctionDeclarations;
-            functionDeclaration.VariableDeclarations = function.VariableDeclarations;
+            functionDeclaration.FunctionDeclarations = function_.FunctionDeclarations;
+            functionDeclaration.VariableDeclarations = function_.VariableDeclarations;
 
             var functionObject = new ScriptFunctionInstance(
                 Engine, functionDeclaration,
                 LexicalEnvironment.NewDeclarativeEnvironment(Engine, Engine.ExecutionContext.LexicalEnvironment),
-                function.Strict
+                function_.Strict
                 );
             
             functionObject.Extensible = true;

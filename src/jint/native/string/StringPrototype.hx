@@ -12,7 +12,7 @@ class StringPrototype extends jint.native.string.StringInstance
     public static function CreatePrototypeObject(engine:jint.Engine, stringConstructor:jint.native.string.StringConstructor):jint.native.string.StringPrototype
     {
         var obj:jint.native.string.StringPrototype = new jint.native.string.StringPrototype(engine);
-        obj.Prototype = engine.Object.PrototypeObject;
+        obj.Prototype = engine.JObject.PrototypeObject;
         obj.PrimitiveValue = "";
         obj.Extensible = true;
         obj.FastAddProperty("length", 0, false, false, false);
@@ -200,7 +200,7 @@ class StringPrototype extends jint.native.string.StringInstance
         var s:String = jint.runtime.TypeConverter.toString(thisObj);
         var separator:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 0);
         var l:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 1);
-        var a:jint.native.array.ArrayInstance = cast(Engine.Array.Construct(jint.runtime.Arguments.Empty), jint.native.array.ArrayInstance);
+        var a:jint.native.array.ArrayInstance = cast(Engine.JArray.Construct(jint.runtime.Arguments.Empty), jint.native.array.ArrayInstance);
         var limit:Int = l.Equals(jint.native.Undefined.Instance) ? system.UInt32.MaxValue : jint.runtime.TypeConverter.ToUint32(l);
         var len:Int = s.length;
         if (limit == 0)
@@ -213,7 +213,7 @@ class StringPrototype extends jint.native.string.StringInstance
         }
         else if (separator.Equals(jint.native.Undefined.Instance))
         {
-            return jint.native.JsValue.op_Explicit_jint_native_array_ArrayInstance(Engine.Array.Construct(jint.runtime.Arguments.From([ s ])));
+            return jint.native.JsValue.op_Explicit_jint_native_array_ArrayInstance(Engine.JArray.Construct(jint.runtime.Arguments.From([ s ])));
         }
         else
         {
@@ -338,7 +338,7 @@ class StringPrototype extends jint.native.string.StringInstance
         {
             regex = jint.native.Null.Text;
         }
-        var rx:jint.native.regexp.RegExpInstance = Cs2Hx.Coalesce(cast(jint.runtime.TypeConverter.ToObject(Engine, regex), jint.native.regexp.RegExpInstance), cast(Engine.RegExp.Construct([ regex ]), jint.native.regexp.RegExpInstance));
+        var rx:jint.native.regexp.RegExpInstance = Cs2Hx.Coalesce(cast(jint.runtime.TypeConverter.ToObject(Engine, regex), jint.native.regexp.RegExpInstance), cast(Engine.JRegExp.Construct([ regex ]), jint.native.regexp.RegExpInstance));
         var match:system.text.regularexpressions.Match = rx.Value.Match(s);
         if (!match.Success)
         {
@@ -488,22 +488,22 @@ class StringPrototype extends jint.native.string.StringInstance
         var s:String = jint.runtime.TypeConverter.toString(thisObj);
         var regex:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 0);
         var rx:jint.native.regexp.RegExpInstance = regex.TryCast();
-        rx = Cs2Hx.Coalesce(rx, cast(Engine.RegExp.Construct([ regex ]), jint.native.regexp.RegExpInstance));
+        rx = Cs2Hx.Coalesce(rx, cast(Engine.JRegExp.Construct([ regex ]), jint.native.regexp.RegExpInstance));
         var global:Bool = rx.Get("global").AsBoolean();
         if (!global)
         {
-            return Engine.RegExp.PrototypeObject.Exec(rx, jint.runtime.Arguments.From([ s ]));
+            return Engine.JRegExp.PrototypeObject.Exec(rx, jint.runtime.Arguments.From([ s ]));
         }
         else
         {
             rx.Put("lastIndex", 0, false);
-            var a:jint.native.object.ObjectInstance = Engine.Array.Construct(jint.runtime.Arguments.Empty);
+            var a:jint.native.object.ObjectInstance = Engine.JArray.Construct(jint.runtime.Arguments.Empty);
             var previousLastIndex:Float = 0;
             var n:Int = 0;
             var lastMatch:Bool = true;
             while (lastMatch)
             {
-                var result:jint.native.object.ObjectInstance = Engine.RegExp.PrototypeObject.Exec(rx, jint.runtime.Arguments.From([ s ])).TryCast();
+                var result:jint.native.object.ObjectInstance = Engine.JRegExp.PrototypeObject.Exec(rx, jint.runtime.Arguments.From([ s ])).TryCast();
                 if (result == null)
                 {
                     lastMatch = false;

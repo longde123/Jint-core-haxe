@@ -19,7 +19,7 @@ class MathInstance extends jint.native.object.ObjectInstance
     {
         var math:jint.native.math.MathInstance = new jint.native.math.MathInstance(engine);
         math.Extensible = true;
-        math.Prototype = engine.Object.PrototypeObject;
+        math.Prototype = engine.JObject.PrototypeObject;
         return math;
     }
     public function Configure():Void

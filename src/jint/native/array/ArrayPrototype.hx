@@ -13,7 +13,7 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
     {
         var obj:jint.native.array.ArrayPrototype = new jint.native.array.ArrayPrototype(engine);
         obj.Extensible = true;
-        obj.Prototype = engine.Object.PrototypeObject;
+        obj.Prototype = engine.JObject.PrototypeObject;
         obj.FastAddProperty("length", 0, true, false, false);
         obj.FastAddProperty("constructor", arrayConstructor, true, false, true);
         return obj;
@@ -146,7 +146,7 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
             throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(Engine.TypeError, "Argument must be callable");
         }
         );
-        var a:jint.native.array.ArrayInstance = cast(Engine.Array.Construct(jint.runtime.Arguments.Empty), jint.native.array.ArrayInstance);
+        var a:jint.native.array.ArrayInstance = cast(Engine.JArray.Construct(jint.runtime.Arguments.Empty), jint.native.array.ArrayInstance);
         var to:Int = 0;
         { //for
             var k:Int = 0;
@@ -181,7 +181,7 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
             throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(Engine.TypeError, "Argument must be callable");
         }
         );
-        var a:jint.native.object.ObjectInstance = Engine.Array.Construct([ len ]);
+        var a:jint.native.object.ObjectInstance = Engine.JArray.Construct([ len ]);
         { //for
             var k:Int = 0;
             while (k < len)
@@ -343,7 +343,7 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
         var start:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 0);
         var deleteCount:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 1);
         var o:jint.native.object.ObjectInstance = jint.runtime.TypeConverter.ToObject(Engine, thisObj);
-        var a:jint.native.object.ObjectInstance = Engine.Array.Construct(jint.runtime.Arguments.Empty);
+        var a:jint.native.object.ObjectInstance = Engine.JArray.Construct(jint.runtime.Arguments.Empty);
         var lenVal:jint.native.JsValue = o.Get("length");
         var len:Int = jint.runtime.TypeConverter.ToUint32(lenVal);
         var relativeStart:Float = jint.runtime.TypeConverter.ToInteger(start);
@@ -548,7 +548,7 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
         var start:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 0);
         var end:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 1);
         var o:jint.native.object.ObjectInstance = jint.runtime.TypeConverter.ToObject(Engine, thisObj);
-        var a:jint.native.object.ObjectInstance = Engine.Array.Construct(jint.runtime.Arguments.Empty);
+        var a:jint.native.object.ObjectInstance = Engine.JArray.Construct(jint.runtime.Arguments.Empty);
         var lenVal:jint.native.JsValue = o.Get("length");
         var len:Int = jint.runtime.TypeConverter.ToUint32(lenVal);
         var relativeStart:Float = jint.runtime.TypeConverter.ToInteger(start);
@@ -749,7 +749,7 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
     private function Concat(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var o:jint.native.object.ObjectInstance = jint.runtime.TypeConverter.ToObject(Engine, thisObj);
-        var a:jint.native.object.ObjectInstance = Engine.Array.Construct(jint.runtime.Arguments.Empty);
+        var a:jint.native.object.ObjectInstance = Engine.JArray.Construct(jint.runtime.Arguments.Empty);
         var n:Int = 0;
         var items:Array<jint.native.JsValue> = new Array<jint.native.JsValue>();
         system.Cs2Hx.AddRange(items, arguments);
@@ -790,7 +790,7 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
         var func:jint.native.ICallable;
         func = array.Get("join").TryCast(function (x:jint.native.JsValue):Void
         {
-            func = Engine.Object.PrototypeObject.Get("toString").TryCast(function (y:jint.native.JsValue):Void
+            func = Engine.JObject.PrototypeObject.Get("toString").TryCast(function (y:jint.native.JsValue):Void
             {
                 throw new system.ArgumentException();
             }

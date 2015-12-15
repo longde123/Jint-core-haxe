@@ -15,7 +15,7 @@ namespace Jint.Native.RegExp
         public static RegExpPrototype CreatePrototypeObject(Engine engine, RegExpConstructor regExpConstructor)
         {
             var obj = new RegExpPrototype(engine);
-            obj.Prototype = engine.Object.PrototypeObject;
+            obj.Prototype = engine.JObject.PrototypeObject;
             obj.Extensible = true;
 
             obj.FastAddProperty("constructor", regExpConstructor, true, false, true);
@@ -80,7 +80,7 @@ namespace Jint.Native.RegExp
             if (R.Source == "(?:)")  // Reg Exp is really ""
             {
                 // "aaa".match() => [ '', index: 0, input: 'aaa' ]
-                var aa = InitReturnValueArray(Engine.Array.Construct(Arguments.Empty), s, 1, 0);
+                var aa = InitReturnValueArray(Engine.JArray.Construct(Arguments.Empty), s, 1, 0);
                 aa.DefineOwnProperty("0", new PropertyDescriptor().Creator("", true, true, true), true);
                 return aa;
             }
@@ -109,7 +109,7 @@ namespace Jint.Native.RegExp
             var n = r.Groups.Count;
             var matchIndex = r.Index;
 
-            var a = InitReturnValueArray(Engine.Array.Construct(Arguments.Empty), s, n, matchIndex);
+            var a = InitReturnValueArray(Engine.JArray.Construct(Arguments.Empty), s, n, matchIndex);
             
             for (var k = 0; k < n; k++)
             {

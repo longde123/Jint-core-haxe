@@ -308,7 +308,7 @@ namespace Jint.Native
                 case TypeCode.Char:
                     return new JsValue().Creator(value.ToString());
                 case TypeCode.DateTime:
-                    return engine.Date.Construct((DateTime)value);
+                    return engine.JDate.Construct((DateTime)value);
                 case TypeCode.Decimal:
                     return new JsValue().Creator((double)(decimal)value);
                 case TypeCode.Double:
@@ -341,7 +341,7 @@ namespace Jint.Native
 
             if (value is DateTimeOffset)
             {
-                return engine.Date.Construct((DateTimeOffset)value);
+                return engine.JDate.Construct((DateTimeOffset)value);
             }
 
             // if an ObjectInstance is passed directly, use it as is
@@ -360,11 +360,11 @@ namespace Jint.Native
             var array = (System.Array) value;
             if (array != null)
             {
-                var jsArray = engine.Array.Construct(Arguments.Empty);
+                var jsArray = engine.JArray.Construct(Arguments.Empty);
                 foreach (var item in array)
                 {
                     var jsItem = FromObject(engine, item);
-                    engine.Array.PrototypeObject.Push(jsArray, Arguments.From(jsItem));
+                    engine.JArray.PrototypeObject.Push(jsArray, Arguments.From(jsItem));
                 }
 
                 return jsArray;
@@ -373,7 +373,7 @@ namespace Jint.Native
             var regex = (System.Text.RegularExpressions.Regex)value;
             if (regex != null)
             {
-                var jsRegex = engine.RegExp.Construct(regex.ToString().Trim('/'));
+                var jsRegex = engine.JRegExp.Construct(regex.ToString().Trim('/'));
                 return jsRegex;
             }
 
@@ -471,10 +471,10 @@ namespace Jint.Native
                             break;
 
                         case "Function":
-                            var function = (FunctionInstance)_object;
-                            if (function != null)
+                            var function_ = (FunctionInstance)_object;
+                            if (function_ != null)
                             {
-                                return (Func<JsValue, JsValue[], JsValue>)function.Call;
+                                return (Func<JsValue, JsValue[], JsValue>)function_.Call;
                             }
 
                             break;

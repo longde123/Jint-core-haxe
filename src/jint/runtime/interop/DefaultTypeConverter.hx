@@ -41,7 +41,7 @@ class DefaultTypeConverter implements jint.runtime.interop.ITypeConverter
         var valueType:system.TypeCS = system.Cs2Hx.GetType(value);
         if (valueType == typeof((jint.native.JsValue -> Array<jint.native.JsValue> -> jint.native.JsValue)))
         {
-            var function:(jint.native.JsValue -> Array<jint.native.JsValue> -> jint.native.JsValue) = value;
+            var function_:(jint.native.JsValue -> Array<jint.native.JsValue> -> jint.native.JsValue) = value;
             if (type.IsGenericType)
             {
                 var genericType:system.TypeCS = type.GetGenericTypeDefinition();
@@ -76,7 +76,7 @@ class DefaultTypeConverter implements jint.runtime.interop.ITypeConverter
                         }
                     } //end for
                     var vars:system.linq.expressions.NewArrayExpression = system.linq.expressions.Expression.NewArrayInit(typeof(jint.native.JsValue), tmpVars);
-                    var callExpresionBlock:system.linq.expressions.MethodCallExpression = system.linq.expressions.Expression.Call_Expression_MethodInfo(system.linq.expressions.Expression.Call_Expression_MethodInfo_Expression_Expression(system.linq.expressions.Expression.Constant(function.Target), function.Method, system.linq.expressions.Expression.Constant_Object_Type(jint.native.JsValue.Undefined, typeof(jint.native.JsValue)), @vars), jsValueToObject);
+                    var callExpresionBlock:system.linq.expressions.MethodCallExpression = system.linq.expressions.Expression.Call_Expression_MethodInfo(system.linq.expressions.Expression.Call_Expression_MethodInfo_Expression_Expression(system.linq.expressions.Expression.Constant(function_.Target), function_.Method, system.linq.expressions.Expression.Constant_Object_Type(jint.native.JsValue.Undefined, typeof(jint.native.JsValue)), @vars), jsValueToObject);
                     return system.linq.expressions.Expression.Lambda_Expression_(callExpresionBlock, @params);
                 }
                 else if (system.Cs2Hx.StartsWith(genericType.Name, "Func"))
@@ -99,7 +99,7 @@ class DefaultTypeConverter implements jint.runtime.interop.ITypeConverter
                     }
                     ));
                     var vars:system.linq.expressions.NewArrayExpression = system.linq.expressions.Expression.NewArrayInit(typeof(jint.native.JsValue), tmpVars);
-                    var callExpresion:system.linq.expressions.UnaryExpression = system.linq.expressions.Expression.Convert(system.linq.expressions.Expression.Call_Expression_MethodInfo_Expression_Expression_Expression(null, convertChangeType, system.linq.expressions.Expression.Call_Expression_MethodInfo(system.linq.expressions.Expression.Call_Expression_MethodInfo_Expression_Expression(system.linq.expressions.Expression.Constant(function.Target), function.Method, system.linq.expressions.Expression.Constant_Object_Type(jint.native.JsValue.Undefined, typeof(jint.native.JsValue)), @vars), jsValueToObject), system.linq.expressions.Expression.Constant_Object_Type(returnType, typeof(system.TypeCS)), system.linq.expressions.Expression.Constant_Object_Type(system.globalization.CultureInfo.InvariantCulture, typeof(system.IFormatProvider))), returnType);
+                    var callExpresion:system.linq.expressions.UnaryExpression = system.linq.expressions.Expression.Convert(system.linq.expressions.Expression.Call_Expression_MethodInfo_Expression_Expression_Expression(null, convertChangeType, system.linq.expressions.Expression.Call_Expression_MethodInfo(system.linq.expressions.Expression.Call_Expression_MethodInfo_Expression_Expression(system.linq.expressions.Expression.Constant(function_.Target), function_.Method, system.linq.expressions.Expression.Constant_Object_Type(jint.native.JsValue.Undefined, typeof(jint.native.JsValue)), @vars), jsValueToObject), system.linq.expressions.Expression.Constant_Object_Type(returnType, typeof(system.TypeCS)), system.linq.expressions.Expression.Constant_Object_Type(system.globalization.CultureInfo.InvariantCulture, typeof(system.IFormatProvider))), returnType);
                     return system.linq.expressions.Expression.Lambda_Expression_(callExpresion, @params);
                 }
             }
@@ -107,7 +107,7 @@ class DefaultTypeConverter implements jint.runtime.interop.ITypeConverter
             {
                 if (type == typeof((Void -> Void)))
                 {
-                    return (function ():Void { function(jint.native.JsValue.Undefined, [  ]); } );
+                    return (function ():Void { function_(jint.native.JsValue.Undefined, [  ]); } );
                 }
                 else if (type.IsSubclassOf(typeof(Dynamic)))
                 {
@@ -124,7 +124,7 @@ class DefaultTypeConverter implements jint.runtime.interop.ITypeConverter
                     } //end for
                     var tmpVars:Array<system.linq.expressions.MethodCallExpression> = system.linq.Enumerable.ToArray(system.linq.Enumerable.Select(@params, function (p:system.linq.expressions.ParameterExpression):system.linq.expressions.MethodCallExpression { return system.linq.expressions.Expression.Call_Expression_MethodInfo_Expression_Expression(null, typeof(jint.native.JsValue).GetMethod("FromObject"), system.linq.expressions.Expression.Constant_Object_Type(_engine, typeof(jint.Engine)), p); } ));
                     var vars:system.linq.expressions.NewArrayExpression = system.linq.expressions.Expression.NewArrayInit(typeof(jint.native.JsValue), tmpVars);
-                    var callExpresionBlock:system.linq.expressions.MethodCallExpression = system.linq.expressions.Expression.Call_Expression_MethodInfo(system.linq.expressions.Expression.Call_Expression_MethodInfo_Expression_Expression(system.linq.expressions.Expression.Constant(function.Target), function.Method, system.linq.expressions.Expression.Constant_Object_Type(jint.native.JsValue.Undefined, typeof(jint.native.JsValue)), @vars), typeof(jint.native.JsValue).GetMethod("ToObject"));
+                    var callExpresionBlock:system.linq.expressions.MethodCallExpression = system.linq.expressions.Expression.Call_Expression_MethodInfo(system.linq.expressions.Expression.Call_Expression_MethodInfo_Expression_Expression(system.linq.expressions.Expression.Constant(function_.Target), function_.Method, system.linq.expressions.Expression.Constant_Object_Type(jint.native.JsValue.Undefined, typeof(jint.native.JsValue)), @vars), typeof(jint.native.JsValue).GetMethod("ToObject"));
                     var lambdaExpression:system.linq.expressions.LambdaExpression = system.linq.expressions.Expression.Lambda_Expression_(callExpresionBlock, @params);
                     var dynamicExpression:system.linq.expressions.InvocationExpression = system.linq.expressions.Expression.Invoke(lambdaExpression, @params);
                     return system.linq.expressions.Expression.Lambda_Type_Expression_(type, dynamicExpression, @params);

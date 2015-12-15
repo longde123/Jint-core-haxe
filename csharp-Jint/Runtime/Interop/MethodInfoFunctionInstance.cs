@@ -18,7 +18,7 @@ namespace Jint.Runtime.Interop
             : base(engine, null, null, false)
         {
             _methods = methods;
-            Prototype = engine.Function.PrototypeObject;
+            Prototype = engine.JFunction.PrototypeObject;
         }
 
         public override JsValue Call(JsValue thisObject, JsValue[] arguments)
@@ -117,8 +117,8 @@ namespace Jint.Runtime.Interop
                 if (argsToTransform.Count == 1 && argsToTransform.FirstOrDefault().IsArray())
                     continue;
 
-                var jsArray = Engine.Array.Construct(Arguments.Empty);
-                Engine.Array.PrototypeObject.Push(jsArray, argsToTransform.ToArray());
+                var jsArray = Engine.JArray.Construct(Arguments.Empty);
+                Engine.JArray.PrototypeObject.Push(jsArray, argsToTransform.ToArray());
 
                 newArgumentsCollection.Add(new JsValue().Creator(jsArray));
                 return newArgumentsCollection.ToArray();

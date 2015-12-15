@@ -95,7 +95,7 @@ class JsonSerializer
         {
             _gap = "";
         }
-        var wrapper:jint.native.object.ObjectInstance = _engine.Object.Construct(jint.runtime.Arguments.Empty);
+        var wrapper:jint.native.object.ObjectInstance = _engine.JObject.Construct(jint.runtime.Arguments.Empty);
         wrapper.DefineOwnProperty("", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(value, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), false);
         return Str("", wrapper);
     }

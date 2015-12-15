@@ -21,7 +21,7 @@ namespace Jint.Native.Array
         {
             var obj = new ArrayPrototype(engine);
             obj.Extensible = true;
-            obj.Prototype = engine.Object.PrototypeObject;
+            obj.Prototype = engine.JObject.PrototypeObject;
 
             obj.FastAddProperty("length", 0, true, false, false);
             obj.FastAddProperty("constructor", arrayConstructor, true, false, true);
@@ -166,7 +166,7 @@ namespace Jint.Native.Array
                     "Argument must be callable");
             });
 
-            var a = (ArrayInstance)Engine.Array.Construct(Arguments.Empty);
+            var a = (ArrayInstance)Engine.JArray.Construct(Arguments.Empty);
 
             var to = 0;
             for (var k = 0; k < len; k++)
@@ -202,7 +202,7 @@ namespace Jint.Native.Array
                 throw new JavaScriptException().Creator(Engine.TypeError, "Argument must be callable");
             });
 
-            var a = Engine.Array.Construct(new JsValue[] {len});
+            var a = Engine.JArray.Construct(new JsValue[] {len});
 
             for (var k = 0; k < len; k++)
             {
@@ -363,7 +363,7 @@ namespace Jint.Native.Array
             var deleteCount = arguments.At(1);
 
             var o = TypeConverter.ToObject(Engine, thisObj);
-            var a = Engine.Array.Construct(Arguments.Empty);
+            var a = Engine.JArray.Construct(Arguments.Empty);
             var lenVal = o.Get("length");
             var len = TypeConverter.ToUint32(lenVal);
             var relativeStart = TypeConverter.ToInteger(start);
@@ -561,7 +561,7 @@ namespace Jint.Native.Array
             var end = arguments.At(1);
 
             var o = TypeConverter.ToObject(Engine, thisObj);
-            var a = Engine.Array.Construct(Arguments.Empty);
+            var a = Engine.JArray.Construct(Arguments.Empty);
             var lenVal = o.Get("length");
             var len = TypeConverter.ToUint32(lenVal);
 
@@ -768,7 +768,7 @@ namespace Jint.Native.Array
         private JsValue Concat(JsValue thisObj, JsValue[] arguments)
         {
             var o = TypeConverter.ToObject(Engine, thisObj);
-            var a = Engine.Array.Construct(Arguments.Empty);
+            var a = Engine.JArray.Construct(Arguments.Empty);
             var n = 0;
             var items = new List<JsValue>() {o};
             items.AddRange(arguments);
@@ -811,7 +811,7 @@ namespace Jint.Native.Array
             ICallable func;
             func = array.Get("join").TryCast<ICallable>(x =>
             {
-                func = Engine.Object.PrototypeObject.Get("toString").TryCast<ICallable>(y =>
+                func = Engine.JObject.PrototypeObject.Get("toString").TryCast<ICallable>(y =>
                 {
                     throw new ArgumentException();
                 });

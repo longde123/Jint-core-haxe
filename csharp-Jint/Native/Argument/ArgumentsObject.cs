@@ -25,11 +25,11 @@ namespace Jint.Native.Argument
         {
             var len = args.Length;
             var obj = new ArgumentsInstance(engine);
-            obj.Prototype = engine.Object.PrototypeObject;
+            obj.Prototype = engine.JObject.PrototypeObject;
             obj.Extensible = true;
             obj.FastAddProperty("length", len, true, false, true);
             obj.Strict = strict;
-            var map = engine.Object.Construct(Arguments.Empty);
+            var map = engine.JObject.Construct(Arguments.Empty);
             var mappedNamed = new List<string>();
             var indx = 0;
             while (indx <= len - 1)
@@ -66,7 +66,7 @@ namespace Jint.Native.Argument
             // step 14
             else
             {
-                var thrower = engine.Function.ThrowTypeError;
+                var thrower = engine.JFunction.ThrowTypeError;
                 obj.DefineOwnProperty("caller", new PropertyDescriptor().Creator(get: thrower, set: thrower, enumerable: false, configurable: false), false);
                 obj.DefineOwnProperty("callee", new PropertyDescriptor().Creator(get: thrower, set: thrower, enumerable: false, configurable: false), false);
             }

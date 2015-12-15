@@ -22,7 +22,7 @@ class ObjectConstructor extends jint.native.functions.FunctionInstance implement
     }
     public function Configure():Void
     {
-        Prototype = Engine.Function.PrototypeObject;
+        Prototype = Engine.JFunction.PrototypeObject;
         FastAddProperty("getPrototypeOf", new jint.runtime.interop.ClrFunctionInstance(Engine, GetPrototypeOf, 1), true, false, true);
         FastAddProperty("getOwnPropertyDescriptor", new jint.runtime.interop.ClrFunctionInstance(Engine, GetOwnPropertyDescriptor, 2), true, false, true);
         FastAddProperty("getOwnPropertyNames", new jint.runtime.interop.ClrFunctionInstance(Engine, GetOwnPropertyNames, 1), true, false, true);
@@ -100,7 +100,7 @@ class ObjectConstructor extends jint.native.functions.FunctionInstance implement
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
         }
-        var array:jint.native.object.ObjectInstance = Engine.Array.Construct(jint.runtime.Arguments.Empty);
+        var array:jint.native.object.ObjectInstance = Engine.JArray.Construct(jint.runtime.Arguments.Empty);
         var n:Int = 0;
         var s:jint.native.string.StringInstance = (Std.is(o, jint.native.string.StringInstance) ? cast(o, jint.native.string.StringInstance) : null);
         if (s != null)
@@ -130,7 +130,7 @@ class ObjectConstructor extends jint.native.functions.FunctionInstance implement
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
         }
-        var obj:jint.native.object.ObjectInstance = Engine.Object.Construct(jint.runtime.Arguments.Empty);
+        var obj:jint.native.object.ObjectInstance = Engine.JObject.Construct(jint.runtime.Arguments.Empty);
         obj.Prototype = o;
         var properties:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 1);
         if (!properties.Equals(jint.native.Undefined.Instance))
@@ -309,7 +309,7 @@ class ObjectConstructor extends jint.native.functions.FunctionInstance implement
         }
         var enumerableProperties:Array<system.collections.generic.KeyValuePair<String, jint.runtime.descriptors.PropertyDescriptor>> = system.linq.Enumerable.ToArray(system.linq.Enumerable.Where(o.GetOwnProperties(), function (x:system.collections.generic.KeyValuePair<String, jint.runtime.descriptors.PropertyDescriptor>):Bool { return x.Value.Enumerable.HasValue && x.Value.Enumerable.Value; } ));
         var n:Int = enumerableProperties.length;
-        var array:jint.native.object.ObjectInstance = Engine.Array.Construct([ n ]);
+        var array:jint.native.object.ObjectInstance = Engine.JArray.Construct([ n ]);
         var index:Int = 0;
         for (prop in enumerableProperties)
         {

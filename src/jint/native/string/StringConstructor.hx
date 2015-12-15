@@ -13,7 +13,7 @@ class StringConstructor extends jint.native.functions.FunctionInstance implement
     {
         var obj:jint.native.string.StringConstructor = new jint.native.string.StringConstructor(engine);
         obj.Extensible = true;
-        obj.Prototype = engine.Function.PrototypeObject;
+        obj.Prototype = engine.JFunction.PrototypeObject;
         obj.PrototypeObject = jint.native.string.StringPrototype.CreatePrototypeObject(engine, obj);
         obj.FastAddProperty("length", 1, false, false, false);
         obj.FastAddProperty("prototype", obj.PrototypeObject, false, false, false);

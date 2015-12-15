@@ -112,7 +112,7 @@ namespace Jint.Native.Json
                 _gap = string.Empty;
             }
 
-            var wrapper = _engine.Object.Construct(Arguments.Empty);
+            var wrapper = _engine.JObject.Construct(Arguments.Empty);
             wrapper.DefineOwnProperty("", new PropertyDescriptor().Creator(value, true, true, true), false);
 
             return Str("", wrapper);

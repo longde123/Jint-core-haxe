@@ -607,8 +607,8 @@ namespace Jint.Native.Json
 
         public ObjectInstance CreateArrayInstance(IEnumerable<JsValue> values)
         {
-            var jsArray = _engine.Array.Construct(Arguments.Empty);
-            _engine.Array.PrototypeObject.Push(jsArray, values.ToArray());
+            var jsArray = _engine.JArray.Construct(Arguments.Empty);
+            _engine.JArray.PrototypeObject.Push(jsArray, values.ToArray());
             return jsArray;
         }
 
@@ -718,7 +718,7 @@ namespace Jint.Native.Json
         {
             Expect("{");
 
-            var obj = _engine.Object.Construct(Arguments.Empty);
+            var obj = _engine.JObject.Construct(Arguments.Empty);
 
             while (!Match("}"))
             {

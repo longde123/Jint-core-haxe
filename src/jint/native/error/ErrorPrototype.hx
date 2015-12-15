@@ -20,7 +20,7 @@ class ErrorPrototype extends jint.native.error.ErrorInstance
         }
         else
         {
-            obj.Prototype = engine.Object.PrototypeObject;
+            obj.Prototype = engine.JObject.PrototypeObject;
         }
         return obj;
     }

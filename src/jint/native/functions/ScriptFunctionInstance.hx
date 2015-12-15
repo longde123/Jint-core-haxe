@@ -12,9 +12,9 @@ class ScriptFunctionInstance extends jint.native.functions.FunctionInstance impl
         _functionDeclaration = functionDeclaration;
         Engine = engine;
         Extensible = true;
-        Prototype = engine.Function.PrototypeObject;
+        Prototype = engine.JFunction.PrototypeObject;
         DefineOwnProperty("length", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(new jint.native.JsValue().Creator_Double(FormalParameters.length), new Nullable_Bool(false), new Nullable_Bool(false), new Nullable_Bool(false)), false);
-        var proto:jint.native.object.ObjectInstance = engine.Object.Construct(jint.runtime.Arguments.Empty);
+        var proto:jint.native.object.ObjectInstance = engine.JObject.Construct(jint.runtime.Arguments.Empty);
         proto.DefineOwnProperty("constructor", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(this, new Nullable_Bool(true), new Nullable_Bool(false), new Nullable_Bool(true)), false);
         DefineOwnProperty("prototype", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(proto, new Nullable_Bool(true), new Nullable_Bool(false), new Nullable_Bool(false)), false);
         if (_functionDeclaration.Id != null)
@@ -23,7 +23,7 @@ class ScriptFunctionInstance extends jint.native.functions.FunctionInstance impl
         }
         if (strict)
         {
-            var thrower:jint.native.functions.FunctionInstance = engine.Function.ThrowTypeError;
+            var thrower:jint.native.functions.FunctionInstance = engine.JFunction.ThrowTypeError;
             DefineOwnProperty("caller", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(thrower, thrower, new Nullable_Bool(false), new Nullable_Bool(false)), false);
             DefineOwnProperty("arguments", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(thrower, thrower, new Nullable_Bool(false), new Nullable_Bool(false)), false);
         }
@@ -70,7 +70,7 @@ class ScriptFunctionInstance extends jint.native.functions.FunctionInstance impl
         var proto:jint.native.object.ObjectInstance = Get("prototype").TryCast();
         var obj:jint.native.object.ObjectInstance = new jint.native.object.ObjectInstance(Engine);
         obj.Extensible = true;
-        obj.Prototype = Cs2Hx.Coalesce(proto, Engine.Object.PrototypeObject);
+        obj.Prototype = Cs2Hx.Coalesce(proto, Engine.JObject.PrototypeObject);
         var result:jint.native.object.ObjectInstance = Call(obj, arguments).TryCast();
         if (result != null)
         {

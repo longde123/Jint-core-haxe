@@ -32,7 +32,7 @@ namespace Jint.Native.Object
 
         public void Configure()
         {
-            Prototype = Engine.Function.PrototypeObject;
+            Prototype = Engine.JFunction.PrototypeObject;
 
             FastAddProperty("getPrototypeOf", new ClrFunctionInstance(Engine, GetPrototypeOf, 1), true, false, true);
             FastAddProperty("getOwnPropertyDescriptor", new ClrFunctionInstance(Engine, GetOwnPropertyDescriptor, 2), true, false, true);
@@ -97,7 +97,7 @@ namespace Jint.Native.Object
             var obj = new ObjectInstance(_engine)
                 {
                     Extensible = true,
-                    Prototype = Engine.Object.PrototypeObject
+                    Prototype = Engine.JObject.PrototypeObject
                 };
 
             return obj;
@@ -140,7 +140,7 @@ namespace Jint.Native.Object
                 throw new JavaScriptException().Creator(Engine.TypeError);
             }
 
-            var array = Engine.Array.Construct(Arguments.Empty);
+            var array = Engine.JArray.Construct(Arguments.Empty);
             var n = 0;
 
             var s = o as StringInstance;
@@ -172,7 +172,7 @@ namespace Jint.Native.Object
                 throw new JavaScriptException().Creator(Engine.TypeError);
             }
 
-            var obj = Engine.Object.Construct(Arguments.Empty);
+            var obj = Engine.JObject.Construct(Arguments.Empty);
             obj.Prototype = o;
 
             var properties = arguments.At(1);
@@ -387,7 +387,7 @@ namespace Jint.Native.Object
                 .Where(x => x.Value.Enumerable.HasValue && x.Value.Enumerable.Value)
                 .ToArray();
             var n = enumerableProperties.Length;
-            var array = Engine.Array.Construct(new JsValue[] {n});
+            var array = Engine.JArray.Construct(new JsValue[] {n});
             var index = 0;
             foreach (var prop in enumerableProperties)
             {
