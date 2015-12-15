@@ -19,6 +19,6 @@ Version is still in the development  ,not officially used
 
 Todo List 
 
-Step 1  jint\parser
+Step 1  jint\parser   is ok ~~~
 
-Step 2  jint\runtime   jint\native
+Step 2  jint\runtime   jint\native  to do ...
