@@ -7,11 +7,11 @@ class CallStackElementComparer implements system.collections.generic.IEqualityCo
 {
     public function Equals(x:jint.runtime.CallStackElement, y:jint.runtime.CallStackElement):Bool
     {
-        return x.Function.Equals(y.Function);
+        return x.CallFunction.Equals(y.CallFunction);
     }
     public function GetHashCode(obj:jint.runtime.CallStackElement):Int
     {
-        return obj.Function.GetHashCode();
+        return obj.CallFunction.GetHashCode();
     }
     public function new()
     {

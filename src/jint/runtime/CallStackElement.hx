@@ -10,10 +10,10 @@ class CallStackElement
     {
         _shortDescription = shortDescription;
         CallExpression = callExpression;
-        Function = function;
+        CallFunction = function;
     }
     public var CallExpression:jint.parser.ast.CallExpression;
-    public var Function:jint.native.JsValue;
+    public var CallFunction:jint.native.JsValue;
     public function toString():String
     {
         return _shortDescription;

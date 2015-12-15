@@ -25,21 +25,22 @@ class Main
 		stage.scaleMode = StageScaleMode.NO_SCALE;
 		stage.align = StageAlign.TOP_LEFT;
 		
+		//Constructors.init();
+		//return;
 		
 		JavaScriptParser.cctor();
 		JavaScriptParser_Regexes.cctor();
 		Messages.cctor();
 		Token.cctor();
 	 
-		//	Constructors.init();
-		   var r = new haxe.unit.TestRunner();
-			r.add(new JavascriptParserTests());
-			// add other TestCases here
+		var r = new haxe.unit.TestRunner();
+		r.add(new JavascriptParserTests());
+		// add other TestCases here
 
-			// finally, run the tests
-			
-			
-			r.run();
+		// finally, run the tests
+		
+		
+		r.run();
 	}
 	
 }

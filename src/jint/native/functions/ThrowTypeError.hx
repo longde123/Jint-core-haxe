@@ -5,7 +5,7 @@ import anonymoustypes.*;
 
 class ThrowTypeError extends jint.native.functions.FunctionInstance
 {
-    private var _engine:jint.Engine;
+   
     public function new(engine:jint.Engine)
     {
         super(engine, [  ], engine.GlobalEnvironment, false);

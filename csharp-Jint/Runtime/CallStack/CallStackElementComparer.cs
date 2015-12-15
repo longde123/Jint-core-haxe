@@ -6,12 +6,12 @@
     {
         public bool Equals(CallStackElement x, CallStackElement y)
         {
-            return x.Function.Equals( y.Function);
+            return x.CallFunction.Equals( y.CallFunction);
         }
 
         public int GetHashCode(CallStackElement obj)
         {
-            return obj.Function.GetHashCode();
+            return obj.CallFunction.GetHashCode();
         }
     }
 }

@@ -11,12 +11,12 @@
         {
             _shortDescription = shortDescription;
             CallExpression = callExpression;
-            Function = function;
+            CallFunction = function;
         }
 
         public CallExpression CallExpression { get; private set; }
 
-        public JsValue Function { get; private set; }
+        public JsValue CallFunction { get; private set; }
 
         public override string ToString()
         {
