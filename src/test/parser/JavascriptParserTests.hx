@@ -8,11 +8,64 @@ import jint.parser.ast.BinaryExpression;
  * ...
  * @author paling
  */
+ @:file("Scripts/jQuery.js")
+ class JQuery extends flash.utils.ByteArray
+{
+    
+}
+ @:file("Scripts/underscore.js")
+ class Underscore extends flash.utils.ByteArray
+{
+    
+}
+ @:file("Scripts/backbone.js")
+ class Backbone extends flash.utils.ByteArray
+{
+    
+}
+ @:file("Scripts/mootools.js")
+ class Mootools extends flash.utils.ByteArray
+{
+    
+}
+ @:file("Scripts/angular.js")
+ class Angular extends flash.utils.ByteArray
+{
+    
+}
+ @:file("Scripts/JSXTransformer.js")
+ class JSXTransformer extends flash.utils.ByteArray
+{
+    
+}
+ @:file("Scripts/handlebars.js") 
+ class Handlebars extends flash.utils.ByteArray
+{
+    
+}
 class JavascriptParserTests extends TestCase
 {
 	private   var  _parser:JavaScriptParser = new JavaScriptParser();
 	 
-
+	public function testShouldParseScriptFile( )
+	{
+	  
+		var stream = [
+		new JQuery().toString(),
+        new Underscore().toString(),
+        new Backbone().toString(),
+        new Mootools().toString(),
+        new Angular().toString(),
+        new JSXTransformer().toString(),
+        new Handlebars().toString()];
+		for (  source in stream)
+		{
+					var parser = new JavaScriptParser();
+					var program = parser.Parse(source);
+					//trace("Parsed {0} {1} ({3} KB) in {2} ms", file, version, sw.ElapsedMilliseconds, (int)source.Length/1024);
+						assertTrue(program!=null);
+		}
+	}
 	public  function  testShouldParseThis()
 	{
 		var program:Program = _parser.Parse("this");
@@ -108,7 +161,7 @@ class JavascriptParserTests extends TestCase
 			assertTrue(literal != null); 
             assertEquals(expected,Std.parseFloat(literal.Value));
         }
-			/*
+	 	/*
 		public function  testShouldParseStringLiterals()
         {
 				var Theory:Array<Array<Dynamic>>=[
@@ -131,13 +184,14 @@ class JavascriptParserTests extends TestCase
             var program = _parser.Parse(source);
             var body = program.Body;
 			 
-			//assertTrue(body!=null);
-          //  assertEquals(1, body.length );
-			//literal = body[0].As(ExpressionStatement).Expression.As(Literal);
-			//assertTrue(literal != null); 
-           // assertEquals(expected, literal.Value);
+			assertTrue(body!=null);
+            assertEquals(1, body.length );
+			literal = body[0].As(ExpressionStatement).Expression.As(Literal);
+			assertTrue(literal != null); 
+            assertEquals(expected, literal.Value);
 		 
         }
+	
 		public void ShouldInsertSemicolons(string source)
         {
             var program = _parser.Parse(source);

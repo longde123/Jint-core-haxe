@@ -1,6 +1,6 @@
 package jint.parser;
 using StringTools;
-import haxe.ds.StringMap.StringMap;
+import haxe.ds.StringMap;
 import jint.parser.ast.*; 
 import system.*;
 import anonymoustypes.*;

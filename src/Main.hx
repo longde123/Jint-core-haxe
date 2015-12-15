@@ -104,7 +104,10 @@ class Main
 		Token.cctor();
 		
 		
-		 
+		 var s = "a
+a
+a";
+trace(s);
 		//var javascriptParserTests:JavascriptParserTests =new JavascriptParserTests();
 
 		//javascriptParserTests.testShouldProvideLocationForMultiLinesStringLiterals();
