@@ -67,8 +67,8 @@ namespace Jint.Native.Argument
             else
             {
                 var thrower = engine.JFunction.ThrowTypeError;
-                obj.DefineOwnProperty("caller", new PropertyDescriptor().Creator(get: thrower, set: thrower, enumerable: false, configurable: false), false);
-                obj.DefineOwnProperty("callee", new PropertyDescriptor().Creator(get: thrower, set: thrower, enumerable: false, configurable: false), false);
+                obj.DefineOwnProperty("caller", new PropertyDescriptor().Creator(jget: thrower, jset: thrower, enumerable: false, configurable: false), false);
+                obj.DefineOwnProperty("callee", new PropertyDescriptor().Creator(jget: thrower, jset: thrower, enumerable: false, configurable: false), false);
             }
 
             return obj;
@@ -136,7 +136,7 @@ namespace Jint.Native.Argument
 
             if (desc.IsAccessorDescriptor())
             {
-                var setter = desc.Set.TryCast<ICallable>();
+                var setter = desc.JSet.TryCast<ICallable>();
                 setter.Call(new JsValue().Creator(this), new[] { value });
             }
             else

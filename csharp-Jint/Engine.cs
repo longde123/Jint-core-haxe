@@ -519,7 +519,7 @@ namespace Jint
                         return desc.Value;
                     }
 
-                    var getter = desc.Get;
+                    var getter = desc.JGet;
                     if (getter.Equals(Undefined.Instance))
                     {
                         return Undefined.Instance;
@@ -620,7 +620,7 @@ namespace Jint
 
             if (desc.IsAccessorDescriptor())
             {
-                var setter = (ICallable)desc.Set.AsObject();
+                var setter = (ICallable)desc.JSet.AsObject();
                 setter.Call(b, new[] { value });
             }
             else

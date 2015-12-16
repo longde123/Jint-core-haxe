@@ -37,7 +37,7 @@ class GlobalObject extends jint.native.object.ObjectInstance
         FastAddProperty("TypeError", Engine.TypeError, true, false, true);
         FastAddProperty("URIError", Engine.UriError, true, false, true);
         FastAddProperty("NaN", Math.NaN, false, false, false);
-        FastAddProperty("Infinity",  Math.POSITIVE_INFINITY, false, false, false);
+        FastAddProperty("Infinity", 正无穷大, false, false, false);
         FastAddProperty("undefined", jint.native.Undefined.Instance, false, false, false);
         FastAddProperty("parseInt", new jint.runtime.interop.ClrFunctionInstance(Engine, ParseInt, 2), true, false, true);
         FastAddProperty("parseFloat", new jint.runtime.interop.ClrFunctionInstance(Engine, ParseFloat, 1), true, false, true);
@@ -154,7 +154,7 @@ class GlobalObject extends jint.native.object.ObjectInstance
         }
         if (system.Cs2Hx.StartsWith(trimmedString, "Infinity"))
         {
-            return sign * Math.POSITIVE_INFINITY;
+            return sign * 正无穷大;
         }
         if (system.Cs2Hx.StartsWith(trimmedString, "NaN"))
         {
@@ -193,7 +193,7 @@ class GlobalObject extends jint.native.object.ObjectInstance
                 i++;
             }
         } //end for
-        var pow= 0.1;  //todo  system.Decimal 
+        var pow:system.Decimal = 0.1m;
         if (separator == 46)
         {
             { //for
@@ -205,7 +205,7 @@ class GlobalObject extends jint.native.object.ObjectInstance
                     {
                         isNan = false;
                         number += digit * pow;
-                        pow *= 0.1;
+                        pow *= 0.1m;
                     }
                     else if (c == 101 || c == 69)
                     {

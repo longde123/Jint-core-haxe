@@ -537,11 +537,11 @@ class ExpressionInterpreter
                 }
                 if (previous.IsAccessorDescriptor() && propDesc.IsAccessorDescriptor())
                 {
-                    if (propDesc.Set != null && previous.Set != null)
+                    if (propDesc.JSet != null && previous.JSet != null)
                     {
                         return throw new jint.runtime.JavaScriptException().Creator(_engine.SyntaxError);
                     }
-                    if (propDesc.Get != null && previous.Get != null)
+                    if (propDesc.JGet != null && previous.JGet != null)
                     {
                         return throw new jint.runtime.JavaScriptException().Creator(_engine.SyntaxError);
                     }

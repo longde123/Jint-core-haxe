@@ -39,7 +39,7 @@ class ArrayInstance extends jint.native.object.ObjectInstance
         var desc:jint.runtime.descriptors.PropertyDescriptor = GetProperty(propertyName);
         if (desc.IsAccessorDescriptor())
         {
-            var setter:jint.native.ICallable = desc.Set.TryCast();
+            var setter:jint.native.ICallable = desc.JSet.TryCast();
             setter.Call(new jint.native.JsValue().Creator_ObjectInstance(this), [ value ]);
         }
         else

@@ -32,10 +32,10 @@ namespace Jint.Runtime.Descriptors
             return this;
         }
 
-        public PropertyDescriptor Creator(JsValue get, JsValue set, System.Nullable<bool> enumerable = null, System.Nullable<bool> configurable = null)
+        public PropertyDescriptor Creator(JsValue jget, JsValue jset, System.Nullable<bool> enumerable = null, System.Nullable<bool> configurable = null)
         {
-            Get = get;
-            Set = set;
+            JGet = jget;
+            JSet = jset;
 
             if (enumerable.HasValue)
             {
@@ -51,8 +51,8 @@ namespace Jint.Runtime.Descriptors
 
         public PropertyDescriptor Creator(PropertyDescriptor descriptor)
         {
-            Get = descriptor.Get;
-            Set = descriptor.Set;
+            JGet = descriptor.JGet;
+            JSet = descriptor.JSet;
             Value = descriptor.Value;
             Enumerable = descriptor.Enumerable;
             Configurable = descriptor.Configurable;
@@ -60,8 +60,8 @@ namespace Jint.Runtime.Descriptors
             return this;
         }
 
-        public JsValue Get { get; set; }
-        public JsValue Set { get; set; }
+        public JsValue JGet { get; set; }
+        public JsValue JSet { get; set; }
         public System.Nullable<bool> Enumerable { get; set; }
         public System.Nullable<bool> Writable { get; set; }
         public System.Nullable<bool> Configurable { get; set; }
@@ -69,7 +69,7 @@ namespace Jint.Runtime.Descriptors
         
         public bool IsAccessorDescriptor()
         {
-            if (Get == null && Set == null)
+            if (JGet == null && JSet == null)
             {
                 return false;
             }
@@ -140,7 +140,7 @@ namespace Jint.Runtime.Descriptors
                 {
                     throw new JavaScriptException().Creator(engine.TypeError);
                 }
-                desc.Get = getter;
+                desc.JGet = getter;
             }
 
             if (obj.HasProperty("set"))
@@ -150,10 +150,10 @@ namespace Jint.Runtime.Descriptors
                 {
                     throw new JavaScriptException().Creator(engine.TypeError);
                 }
-                desc.Set = setter;
+                desc.JSet = setter;
             }
 
-            if (desc.Get != null || desc.Get != null)
+            if (desc.JGet != null || desc.JGet != null)
             {
                 if (desc.Value != null || desc.Writable.HasValue)
                 {
@@ -180,8 +180,8 @@ namespace Jint.Runtime.Descriptors
             }
             else
             {
-                obj.DefineOwnProperty("get", new PropertyDescriptor().Creator(desc.Get != null ? desc.Get : Native.Undefined.Instance, writable: true, enumerable: true, configurable: true), false);
-                obj.DefineOwnProperty("set", new PropertyDescriptor().Creator(desc.Set != null ? desc.Set : Native.Undefined.Instance, writable: true, enumerable: true, configurable: true), false);
+                obj.DefineOwnProperty("get", new PropertyDescriptor().Creator(desc.JGet != null ? desc.JGet : Native.Undefined.Instance, writable: true, enumerable: true, configurable: true), false);
+                obj.DefineOwnProperty("set", new PropertyDescriptor().Creator(desc.JSet != null ? desc.JSet : Native.Undefined.Instance, writable: true, enumerable: true, configurable: true), false);
             }
 
             obj.DefineOwnProperty("enumerable", new PropertyDescriptor().Creator(value: desc.Enumerable.HasValue && desc.Enumerable.Value, writable: true, enumerable: true, configurable: true), false);

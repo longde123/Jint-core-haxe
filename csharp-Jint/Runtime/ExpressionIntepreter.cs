@@ -691,7 +691,7 @@ namespace Jint.Runtime
                                 StrictModeScope.IsStrictModeCode
                                 );
                     
-                        propDesc = new PropertyDescriptor().Creator(get: null, set: set, enumerable: true, configurable: true);
+                        propDesc = new PropertyDescriptor().Creator(jget: null, jset: set, enumerable: true, configurable: true);
                         break;
 
                     default:
@@ -717,12 +717,12 @@ namespace Jint.Runtime
 
                     if (previous.IsAccessorDescriptor() && propDesc.IsAccessorDescriptor())
                     {
-                        if (propDesc.Set != null && previous.Set != null)
+                        if (propDesc.JSet != null && previous.JSet != null)
                         {
                             throw new JavaScriptException().Creator(_engine.SyntaxError);
                         }
 
-                        if (propDesc.Get != null && previous.Get != null)
+                        if (propDesc.JGet != null && previous.JGet != null)
                         {
                             throw new JavaScriptException().Creator(_engine.SyntaxError);
                         }

@@ -26,14 +26,14 @@ class PropertyDescriptor
         }
         return this;
     }
-    public function Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(get:jint.native.JsValue, set:jint.native.JsValue, enumerable:Nullable_Bool = null, configurable:Nullable_Bool = null):jint.runtime.descriptors.PropertyDescriptor
+    public function Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(jget:jint.native.JsValue, jset:jint.native.JsValue, enumerable:Nullable_Bool = null, configurable:Nullable_Bool = null):jint.runtime.descriptors.PropertyDescriptor
     {
         if (enumerable == null)
             enumerable = new Nullable_Bool();
         if (configurable == null)
             configurable = new Nullable_Bool();
-        Get = get;
-        Set = set;
+        JGet = jget;
+        JSet = jset;
         if (enumerable.HasValue)
         {
             Enumerable = new Nullable_Bool(enumerable.Value);
@@ -46,23 +46,23 @@ class PropertyDescriptor
     }
     public function Creator(descriptor:jint.runtime.descriptors.PropertyDescriptor):jint.runtime.descriptors.PropertyDescriptor
     {
-        Get = descriptor.Get;
-        Set = descriptor.Set;
+        JGet = descriptor.JGet;
+        JSet = descriptor.JSet;
         Value = descriptor.Value;
         Enumerable = descriptor.Enumerable;
         Configurable = descriptor.Configurable;
         Writable = descriptor.Writable;
         return this;
     }
-    public var Get:jint.native.JsValue;
-    public var Set:jint.native.JsValue;
+    public var JGet:jint.native.JsValue;
+    public var JSet:jint.native.JsValue;
     public var Enumerable:Nullable_Bool;
     public var Writable:Nullable_Bool;
     public var Configurable:Nullable_Bool;
     public var Value:jint.native.JsValue;
     public function IsAccessorDescriptor():Bool
     {
-        if (Get == null && Set == null)
+        if (JGet == null && JSet == null)
         {
             return false;
         }
@@ -116,7 +116,7 @@ class PropertyDescriptor
             {
                 return throw new jint.runtime.JavaScriptException().Creator(engine.TypeError);
             }
-            desc.Get = getter;
+            desc.JGet = getter;
         }
         if (obj.HasProperty("set"))
         {
@@ -125,9 +125,9 @@ class PropertyDescriptor
             {
                 return throw new jint.runtime.JavaScriptException().Creator(engine.TypeError);
             }
-            desc.Set = setter;
+            desc.JSet = setter;
         }
-        if (desc.Get != null || desc.Get != null)
+        if (desc.JGet != null || desc.JGet != null)
         {
             if (desc.Value != null || desc.Writable.HasValue)
             {
@@ -150,8 +150,8 @@ class PropertyDescriptor
         }
         else
         {
-            obj.DefineOwnProperty("get", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(desc.Get != null ? desc.Get : jint.native.Undefined.Instance, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), false);
-            obj.DefineOwnProperty("set", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(desc.Set != null ? desc.Set : jint.native.Undefined.Instance, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), false);
+            obj.DefineOwnProperty("get", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(desc.JGet != null ? desc.JGet : jint.native.Undefined.Instance, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), false);
+            obj.DefineOwnProperty("set", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(desc.JSet != null ? desc.JSet : jint.native.Undefined.Instance, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), false);
         }
         obj.DefineOwnProperty("enumerable", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(desc.Enumerable.HasValue && desc.Enumerable.Value, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), false);
         obj.DefineOwnProperty("configurable", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(desc.Configurable.HasValue && desc.Configurable.Value, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), false);

@@ -368,7 +368,7 @@ class Engine
                 {
                     return desc.Value;
                 }
-                var getter:jint.native.JsValue = desc.Get;
+                var getter:jint.native.JsValue = desc.JGet;
                 if (getter.Equals(jint.native.Undefined.Instance))
                 {
                     return jint.native.Undefined.Instance;
@@ -443,7 +443,7 @@ class Engine
         var desc:jint.runtime.descriptors.PropertyDescriptor = o.GetProperty(name);
         if (desc.IsAccessorDescriptor())
         {
-            var setter:jint.native.ICallable = cast(desc.Set.AsObject(), jint.native.ICallable);
+            var setter:jint.native.ICallable = cast(desc.JSet.AsObject(), jint.native.ICallable);
             setter.Call(b, [ value ]);
         }
         else

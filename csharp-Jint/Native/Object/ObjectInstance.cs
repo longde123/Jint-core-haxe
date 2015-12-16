@@ -72,7 +72,7 @@ namespace Jint.Native.Object
                 return desc.Value != null ? desc.Value : Undefined.Instance;
             }
 
-            var getter = desc.Get != null ? desc.Get : Undefined.Instance;
+            var getter = desc.JGet != null ? desc.JGet : Undefined.Instance;
 
             if (getter.IsUndefined())
             {
@@ -183,7 +183,7 @@ namespace Jint.Native.Object
 
             if (desc.IsAccessorDescriptor())
             {
-                var setter = desc.Set.TryCast<ICallable>();
+                var setter = desc.JSet.TryCast<ICallable>();
                 setter.Call(new JsValue().Creator(this), new [] {value});
             }
             else
@@ -209,7 +209,7 @@ namespace Jint.Native.Object
             {
                 if (desc.IsAccessorDescriptor())
                 {
-                    if (desc.Set == null || desc.Set.IsUndefined())
+                    if (desc.JSet == null || desc.JSet.IsUndefined())
                     {
                         return false;
                     }
@@ -234,7 +234,7 @@ namespace Jint.Native.Object
 
             if (inherited.IsAccessorDescriptor())
             {
-                if (inherited.Set == null || inherited.Set.IsUndefined())
+                if (inherited.JSet == null || inherited.JSet.IsUndefined())
                 {
                     return false;
                 }
@@ -400,8 +400,8 @@ namespace Jint.Native.Object
                     else
                     {
                         SetOwnProperty(propertyName, new PropertyDescriptor().Creator(desc).Creator(     
-                            get : desc.Get,
-                            set: desc.Set,
+                            jget : desc.JGet,
+                            jset: desc.JSet,
                             enumerable : desc.Enumerable.HasValue ? desc.Enumerable : false,
                             configurable :desc.Configurable.HasValue ? desc.Configurable : false
                             ));
@@ -415,8 +415,8 @@ namespace Jint.Native.Object
             if (!current.Configurable.HasValue && 
                 !current.Enumerable.HasValue &&
                 !current.Writable.HasValue &&
-                current.Get == null &&
-                current.Set == null &&
+                current.JGet == null &&
+                current.JSet == null &&
                 current.Value == null)
             {
 
@@ -429,8 +429,8 @@ namespace Jint.Native.Object
                 current.Writable.Value == desc.Writable.Value &&
                 current.Enumerable.Value == desc.Enumerable.Value &&
 
-                ((current.Get == null && desc.Get == null) || (current.Get != null && desc.Get != null && ExpressionInterpreter.SameValue(current.Get, desc.Get))) &&
-                ((current.Set == null && desc.Set == null) || (current.Set != null && desc.Set != null && ExpressionInterpreter.SameValue(current.Set, desc.Set))) &&
+                ((current.JGet == null && desc.JGet == null) || (current.JGet != null && desc.JGet != null && ExpressionInterpreter.SameValue(current.JGet, desc.JGet))) &&
+                ((current.JSet == null && desc.JSet == null) || (current.JSet != null && desc.JSet != null && ExpressionInterpreter.SameValue(current.JSet, desc.JSet))) &&
                 ((current.Value == null && desc.Value == null) || (current.Value != null && desc.Value != null && ExpressionInterpreter.StrictlyEqual(current.Value, desc.Value)))
             ) {
                 return true;
@@ -477,8 +477,8 @@ namespace Jint.Native.Object
                     if (current.IsDataDescriptor())
                     {
                         SetOwnProperty(propertyName, current = new PropertyDescriptor().Creator(
-                            get: Undefined.Instance,
-                            set: Undefined.Instance,
+                            jget: Undefined.Instance,
+                            jset: Undefined.Instance,
                             enumerable: current.Enumerable,
                             configurable: current.Configurable
                             ));
@@ -525,9 +525,9 @@ namespace Jint.Native.Object
                 {
                     if (!current.Configurable.HasValue || !current.Configurable.Value)
                     {
-                        if ((desc.Set != null && !ExpressionInterpreter.SameValue(desc.Set, current.Set != null ? current.Set : Undefined.Instance))
+                        if ((desc.JSet != null && !ExpressionInterpreter.SameValue(desc.JSet, current.JSet != null ? current.JSet : Undefined.Instance))
                             ||
-                            (desc.Get != null && !ExpressionInterpreter.SameValue(desc.Get, current.Get != null ? current.Get : Undefined.Instance)))
+                            (desc.JGet != null && !ExpressionInterpreter.SameValue(desc.JGet, current.JGet != null ? current.JGet : Undefined.Instance)))
                         {
                             if (throwOnError)
                             {
@@ -560,14 +560,14 @@ namespace Jint.Native.Object
                 current.Configurable = desc.Configurable;
             }
 
-            if (desc.Get != null)
+            if (desc.JGet != null)
             {
-                current.Get = desc.Get;
+                current.JGet = desc.JGet;
             }
 
-            if (desc.Set != null)
+            if (desc.JSet != null)
             {
-                current.Set = desc.Set;
+                current.JSet = desc.JSet;
             }
 
             return true;

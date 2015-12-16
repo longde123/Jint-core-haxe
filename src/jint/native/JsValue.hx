@@ -3,17 +3,12 @@ using StringTools;
 import system.*;
 import anonymoustypes.*;
 
-abstract  JsValue  
+class JsValue implements system.IEquatable<jint.native.JsValue>
 {
     public static var Undefined:jint.native.JsValue;
     public static var Null:jint.native.JsValue;
     public static var False:jint.native.JsValue;
     public static var True:jint.native.JsValue;
-	public function new()
-    {
-        _double = 0;
-        _type = 0;
-    }
     public function Creator(value:Bool):jint.native.JsValue
     {
         _double = value ? 1.0 : 0.0;
@@ -199,7 +194,7 @@ abstract  JsValue
                 return throw new system.ArgumentOutOfRangeException();
         }
     }
-    public var Type(get, never):Int;
+    public var Type(get_Type, never):Int;
     public function get_Type():Int
     {
         return _type;
@@ -366,7 +361,7 @@ abstract  JsValue
                         var function_:jint.native.functions.FunctionInstance = _object;
                         if (function_ != null)
                         {
-                            return function_.Call ;
+                            return jint.native.functions.FunctionInstance.op_Explicit_(jint_native_JsValue -> Array(function_.Call);
                         }
                     case "Number":
                         var numberInstance:jint.native.number.NumberInstance = _object;
@@ -430,23 +425,19 @@ abstract  JsValue
                 return "";
         }
     }
-	@:from 
-    public static function op_Explicit_Creator_Double(value:Float):jint.native.JsValue
+    public static function op_Explicit_jint.native.JsValue(value:Float):jint.native.JsValue
     {
         return new jint.native.JsValue().Creator_Double(value);
     }
-	@:from
-    public static function op_Explicit_Creator(value:Bool):jint.native.JsValue
+    public static function op_Explicit_jint.native.JsValue(value:Bool):jint.native.JsValue
     {
         return new jint.native.JsValue().Creator(value);
     }
-	@:from
-    public static function op_Explicit_Creator_String(value:String):jint.native.JsValue
+    public static function op_Explicit_jint.native.JsValue(value:String):jint.native.JsValue
     {
         return new jint.native.JsValue().Creator_String(value);
     }
-	@:from
-    public static function op_Explicit_Creator_ObjectInstance(value:jint.native.object.ObjectInstance):jint.native.JsValue
+    public static function op_Explicit_jint.native.JsValue(value:jint.native.object.ObjectInstance):jint.native.JsValue
     {
         return new jint.native.JsValue().Creator_ObjectInstance(value);
     }
@@ -473,5 +464,9 @@ abstract  JsValue
         False = new jint.native.JsValue().Creator(false);
         True = new jint.native.JsValue().Creator(true);
     }
-   
+    public function new()
+    {
+        _double = 0;
+        _type = 0;
+    }
 }
