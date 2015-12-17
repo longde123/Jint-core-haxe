@@ -2,110 +2,93 @@ package jint.runtime;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
-class MruPropertyCache<TKey, TValue: ()> implements system.collections.generic.IDictionary<TKey, TValue>
+import haxe.ds.HashMap;
+class MruPropertyCache<TKey:{ function hashCode():Int; },TValue>   
 {
-    private var _dictionary:system.collections.generic.IDictionary<TKey, TValue>;
+    private var _dictionary : HashMap<TKey, TValue > ;
     private var _set:Bool;
     private var _key:TKey;
     private var _value:TValue;
+	 
+	/**
+		See `Map.toString`
+	**/
+	public function toString() : String return "" ;
     public function new()
     {
-        _dictionary = new system.collections.generic.Dictionary<TKey, TValue>();
+        _dictionary = new HashMap<TKey, TValue >();
         _set = false;
+		 
     }
-    public var Count(get_Count, never):Int;
+	public inline function iterator() : HashMap<TKey, TValue >{
+		return _dictionary;
+	}
+    public var Count(get, never):Int;
     public function get_Count():Int
     {
-        return _dictionary.Count;
+		var Count = 0;
+		for ( v in _dictionary ) Count++;
+        return Count;
     }
 
-    public var IsReadOnly(get_IsReadOnly, never):Bool;
-    public function get_IsReadOnly():Bool
+    public var IsReadOnly:Bool;
+
+    public var Keys(get, never):Iterator<TKey>;
+    public function get_Keys():Iterator<TKey>
     {
-        return _dictionary.IsReadOnly;
+        return _dictionary.keys();
     }
 
-    public var Keys(get_Keys, never):Array<TKey>;
-    public function get_Keys():Array<TKey>
+    public var Values(get_Values, never):Iterator<TValue>;
+    public function get_Values():Iterator<TValue>
     {
-        return _dictionary.Keys;
+        return _dictionary.iterator() ;
     }
 
-    public var Values(get_Values, never):Array<TValue>;
-    public function get_Values():Array<TValue>
-    {
-        return _dictionary.Values;
-    }
-
-    public function Add(item:system.collections.generic.KeyValuePair<TKey, TValue>):Void
-    {
-        _set = true;
-        _key = item.Key;
-        _value = item.Value;
-        _dictionary.Add(item);
-    }
-    public function Add_TKey_TValue(key:TKey, value:TValue):Void
+ 
+    public function Add(key:TKey, value:TValue):Void
     {
         _set = true;
         _key = key;
         _value = value;
-        _dictionary.Add(key, value);
+        _dictionary.set(key, value);
     }
     public function Clear():Void
     {
         _set = false;
         _key = null;
         _value = null;
-        _dictionary.Clear();
+        _dictionary=   new HashMap<TKey, TValue >();
     }
-    public function Contains(item:system.collections.generic.KeyValuePair<TKey, TValue>):Bool
+   
+    public function Contains(key:TKey):Bool
     {
-        if (_set && item.Key.Equals(_key))
+        if (_set && key==(_key))
         {
             return true;
         }
-        return _dictionary.Contains(item);
+        return _dictionary.exists(key);
     }
-    public function ContainsKey(key:TKey):Bool
+ 
+ 
+    public function Remove(key:TKey):Bool
     {
-        if (_set && key.Equals(_key))
-        {
-            return true;
-        }
-        return _dictionary.ContainsKey(key);
-    }
-    public function CopyTo(array:Array<system.collections.generic.KeyValuePair<TKey, TValue>>, arrayIndex:Int):Void
-    {
-        _dictionary.CopyTo(array, arrayIndex);
-    }
-    public function Remove(item:system.collections.generic.KeyValuePair<TKey, TValue>):Bool
-    {
-        if (_set && item.Key.Equals(_key))
+        if (_set && key==(_key))
         {
             _set = false;
             _key = null;
             _value = null;
         }
-        return _dictionary.Remove(item);
+        return _dictionary.remove(key);
     }
-    public function Remove_TKey(key:TKey):Bool
+    public function TryGetValue(key:TKey, value:TValue):Bool
     {
-        if (_set && key.Equals(_key))
+        if (_set && key==(_key))
         {
-            _set = false;
-            _key = null;
-            _value = null;
-        }
-        return _dictionary.Remove(key);
-    }
-    public function TryGetValue(key:TKey, value:CsRef<TValue>):Bool
-    {
-        if (_set && key.Equals(_key))
-        {
-            value.Value = _value;
+            value = _value;
             return true;
         }
-        return _dictionary.TryGetValue(key, value);
+         value = _dictionary.get(key);
+		 return true;
     }
 }

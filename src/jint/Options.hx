@@ -13,13 +13,16 @@ class Options
     private var _objectConverters:Array<jint.runtime.interop.IObjectConverter>;
     private var _maxStatements:Int;
     private var _maxRecursionDepth:Int;
-    private var _timeoutInterval:system.TimeSpan;
-    private var _culture:system.globalization.CultureInfo;
-    private var _localTimeZone:system.TimeZone;
-    private var _lookupAssemblies:Array<system.reflection.Assembly>;
+    private var _timeoutInterval:Date;
+    private var _culture:Date;
+    private var _localTimeZone:Date;
+    private var _lookupAssemblies:Array<Dynamic>;
     public function DiscardGlobal(discard:Bool = true):jint.Options
     {
+	 
         _discardGlobal = discard;
+		
+		 
         return this;
     }
     public function Strict(strict:Bool = true):jint.Options
@@ -42,11 +45,10 @@ class Options
         _objectConverters.push(objectConverter);
         return this;
     }
-    public function AllowClr(assemblies:Array<system.reflection.Assembly>):jint.Options
+    public function AllowClr(assemblies:Array<Dynamic>):jint.Options
     {
         _allowClr = true;
-        system.Cs2Hx.AddRange(_lookupAssemblies, assemblies);
-        _lookupAssemblies = system.linq.Enumerable.ToList(system.linq.Enumerable.Distinct(_lookupAssemblies));
+		_lookupAssemblies=_lookupAssemblies.concat(assemblies);
         return this;
     }
     public function MaxStatements(maxStatements:Int = 0):jint.Options
@@ -64,12 +66,12 @@ class Options
         _maxRecursionDepth = maxRecursionDepth;
         return this;
     }
-    public function Culture(cultureInfo:system.globalization.CultureInfo):jint.Options
+    public function Culture(cultureInfo:Date):jint.Options
     {
         _culture = cultureInfo;
         return this;
     }
-    public function LocalTimeZone(timeZoneInfo:system.TimeZone):jint.Options
+    public function LocalTimeZone(timeZoneInfo:Date):jint.Options
     {
         _localTimeZone = timeZoneInfo;
         return this;
@@ -94,7 +96,7 @@ class Options
     {
         return _allowClr;
     }
-    public function GetLookupAssemblies():Array<system.reflection.Assembly>
+    public function GetLookupAssemblies():Array<Dynamic>
     {
         return _lookupAssemblies;
     }
@@ -110,22 +112,32 @@ class Options
     {
         return _maxRecursionDepth;
     }
-    public function GetTimeoutInterval():system.TimeSpan
+    public function GetTimeoutInterval():Date
     {
         return _timeoutInterval;
     }
-    public function GetCulture():system.globalization.CultureInfo
+    public function GetCulture():Date
     {
         return _culture;
     }
-    public function IsDaylightSavingTime(dateTime:system.DateTime):Bool
+    public function IsDaylightSavingTime(dateTime:Date):Bool
     {
-        return _localTimeZone.IsDaylightSavingTime(dateTime);
+        return __IsDaylightSavingTime(_localTimeZone,dateTime);
     }
-    public function GetBaseUtcOffset():system.TimeSpan
+	function __IsDaylightSavingTime(_localTimeZone:Date, dateTime:Date):Bool
+	{
+		//todo
+		return false;
+	}
+    public function GetBaseUtcOffset():Date
     {
-        return _localTimeZone.GetUtcOffset(system.DateTime.Now);
+        return __GetUtcOffset(_localTimeZone,Date.now());
     }
+	function __GetUtcOffset(_localTimeZone:Date, dateTime:Date):Date
+	{
+		//todo
+		return null;
+	}
     public function new()
     {
         _discardGlobal = false;
@@ -136,9 +148,10 @@ class Options
         _objectConverters = new Array<jint.runtime.interop.IObjectConverter>();
         _maxStatements = 0;
         _maxRecursionDepth = -1;
-        _timeoutInterval = new system.TimeSpan();
-        _culture = system.globalization.CultureInfo.CurrentCulture;
-        _localTimeZone = system.TimeZone.CurrentTimeZone;
-        _lookupAssemblies = new Array<system.reflection.Assembly>();
+        _timeoutInterval = new Date();
+		//todo
+        _culture = new Date();
+        _localTimeZone = new Date();
+        _lookupAssemblies = new Array<Dynamic>();
     }
 }

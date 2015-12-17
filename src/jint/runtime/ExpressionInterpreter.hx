@@ -133,9 +133,9 @@ class ExpressionInterpreter
             {
                 if (jint.native.number.NumberInstance.IsNegativeZero(rN))
                 {
-                    return lN > 0 ? -正无穷大 : -负无穷大;
+                    return lN > 0 ? -Math.POSITIVE_INFINITY : -Math.NEGATIVE_INFINITY;
                 }
-                return lN > 0 ? 正无穷大 : 负无穷大;
+                return lN > 0 ? Math.POSITIVE_INFINITY : Math.NEGATIVE_INFINITY;
             }
             return lN / rN;
         }

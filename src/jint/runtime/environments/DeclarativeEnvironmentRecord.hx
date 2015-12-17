@@ -2,20 +2,20 @@ package jint.runtime.environments;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+import haxe.ds.StringMap;
 class DeclarativeEnvironmentRecord extends jint.runtime.environments.EnvironmentRecord
 {
     private var _engine:jint.Engine;
-    private var _bindings:system.collections.generic.IDictionary<String, jint.runtime.environments.Binding>;
+    private var _bindings:StringMap< jint.runtime.environments.Binding>;
     public function new(engine:jint.Engine)
     {
         super(engine);
-        _bindings = new system.collections.generic.Dictionary<String, jint.runtime.environments.Binding>();
+        _bindings = new StringMap< jint.runtime.environments.Binding>();
         _engine = engine;
     }
     override public function HasBinding(name:String):Bool
     {
-        return _bindings.ContainsKey(name);
+        return _bindings.exits(name);
     }
     override public function CreateMutableBinding(name:String, canBeDeleted:Bool = false):Void
     {
@@ -23,11 +23,11 @@ class DeclarativeEnvironmentRecord extends jint.runtime.environments.Environment
         binding.Value = jint.native.Undefined.Instance;
         binding.CanBeDeleted = canBeDeleted;
         binding.Mutable = true;
-        _bindings.Add(name, binding);
+        _bindings.set(name, binding);
     }
     override public function SetMutableBinding(name:String, value:jint.native.JsValue, strict:Bool):Void
     {
-        var binding:jint.runtime.environments.Binding = _bindings.GetValue_TKey(name);
+        var binding:jint.runtime.environments.Binding = _bindings.get(name);
         if (binding.Mutable)
         {
             binding.Value = value;
@@ -55,16 +55,18 @@ class DeclarativeEnvironmentRecord extends jint.runtime.environments.Environment
     }
     override public function DeleteBinding(name:String):Bool
     {
-        var binding:CsRef<jint.runtime.environments.Binding> = new CsRef<jint.runtime.environments.Binding>(null);
-        if (!_bindings.TryGetValue(name, binding))
+        var binding:jint.runtime.environments.Binding =null;
+        if (!_bindings.exits(name ))
         {
+			 
             return true;
         }
+		binding = _bindings.get(name);
         if (!binding.Value.CanBeDeleted)
         {
             return false;
         }
-        _bindings.Remove(name);
+        _bindings.remove(name);
         return true;
     }
     override public function ImplicitThisValue():jint.native.JsValue
@@ -77,7 +79,7 @@ class DeclarativeEnvironmentRecord extends jint.runtime.environments.Environment
         binding.Value = jint.native.Undefined.Instance;
         binding.Mutable = false;
         binding.CanBeDeleted = false;
-        _bindings.Add(name, binding);
+        _bindings.set(name, binding);
     }
     public function InitializeImmutableBinding(name:String, value:jint.native.JsValue):Void
     {
@@ -86,6 +88,6 @@ class DeclarativeEnvironmentRecord extends jint.runtime.environments.Environment
     }
     override public function GetAllBindingNames():Array<String>
     {
-        return system.linq.Enumerable.ToArray(_bindings.Keys);
+        return Lambda.array(_bindings.key().iterator());
     }
 }

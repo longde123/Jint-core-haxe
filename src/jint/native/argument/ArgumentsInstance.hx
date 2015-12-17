@@ -32,8 +32,8 @@ class ArgumentsInstance extends jint.native.object.ObjectInstance
                 if (!strict && !system.Cs2Hx.Contains(mappedNamed, name))
                 {
                     mappedNamed.push(name);
-                    var g:(jint.native.JsValue -> jint.native.JsValue) = function (n:jint.native.JsValue):jint.native.JsValue { return env.GetBindingValue(name, false); } ;
-                    var p:(jint.native.JsValue -> jint.native.JsValue -> Void) = new (jint.native.JsValue -> jint.native.JsValue -> Void)(function (n:jint.native.JsValue, o:jint.native.JsValue):Void { env.SetMutableBinding(name, o, true); } );
+                    var g = function (n:jint.native.JsValue):jint.native.JsValue { return env.GetBindingValue(name, false); } ;
+                    var p = function (n:jint.native.JsValue, o:jint.native.JsValue):Void { env.SetMutableBinding(name, o, true); } ;
                     map.DefineOwnProperty(indxStr, new jint.runtime.descriptors.specialized.ClrAccessDescriptor(engine, g, p), false);
                 }
             }
@@ -50,8 +50,8 @@ class ArgumentsInstance extends jint.native.object.ObjectInstance
         else
         {
             var thrower:jint.native.functions.FunctionInstance = engine.JFunction.ThrowTypeError;
-            obj.DefineOwnProperty("caller", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(thrower, thrower, new Nullable_Bool(false), new Nullable_Bool(false)), false);
-            obj.DefineOwnProperty("callee", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(thrower, thrower, new Nullable_Bool(false), new Nullable_Bool(false)), false);
+            obj.DefineOwnProperty("caller", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(thrower, thrower, false,  false), false);
+            obj.DefineOwnProperty("callee", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(thrower, thrower, false, false), false);
         }
         return obj;
     }

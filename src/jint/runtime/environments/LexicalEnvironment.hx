@@ -12,13 +12,13 @@ class LexicalEnvironment
         _record = record;
         _outer = outer;
     }
-    public var Record(get_Record, never):jint.runtime.environments.EnvironmentRecord;
+    public var Record(get, never):jint.runtime.environments.EnvironmentRecord;
     public function get_Record():jint.runtime.environments.EnvironmentRecord
     {
         return _record;
     }
 
-    public var Outer(get_Outer, never):jint.runtime.environments.LexicalEnvironment;
+    public var Outer(get, never):jint.runtime.environments.LexicalEnvironment;
     public function get_Outer():jint.runtime.environments.LexicalEnvironment
     {
         return _outer;

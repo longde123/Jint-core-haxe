@@ -37,12 +37,13 @@ class StrictModeScope implements system.IDisposable
             _refCount = _forcedRefCount;
         }
     }
+	@:isVar
     public static var IsStrictModeCode(get_IsStrictModeCode, never):Bool;
     public static function get_IsStrictModeCode():Bool
     {
         return _refCount > 0;
     }
-
+	@:isVar
     public static var RefCount(get_RefCount, set_RefCount):Int;
     public static function get_RefCount():Int
     {

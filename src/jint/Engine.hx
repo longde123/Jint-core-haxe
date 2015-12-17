@@ -1,5 +1,6 @@
 package jint;
 using StringTools;
+import jint.native.Null;
 import system.*;
 import anonymoustypes.*;
 
@@ -123,21 +124,21 @@ class Engine
     public var Options:jint.Options;
     public var DebugHandler:jint.runtime.debugger.DebugHandler;
     public var BreakPoints:Array<jint.runtime.debugger.BreakPoint>;
-    public function InvokeStepEvent(info:jint.runtime.debugger.DebugInformation):Nullable_Int
+    public function InvokeStepEvent(info:jint.runtime.debugger.DebugInformation):Null<Int>
     {
         if (Step != null)
         {
-            return new Nullable_Int(Step.Invoke(this, info));
+            return new Null<Int>(Step.Invoke(this, info));
         }
-        return new Nullable_Int();
+        return null;
     }
-    public function InvokeBreakEvent(info:jint.runtime.debugger.DebugInformation):Nullable_Int
+    public function InvokeBreakEvent(info:jint.runtime.debugger.DebugInformation):Null<Int>
     {
         if (Break != null)
         {
-            return new Nullable_Int(Break.Invoke(this, info));
+            return new Null<Int>(Break.Invoke(this, info));
         }
-        return new Nullable_Int();
+        return null;
     }
     public function EnterExecutionContext(lexicalEnvironment:jint.runtime.environments.LexicalEnvironment, variableEnvironment:jint.runtime.environments.LexicalEnvironment, thisBinding:jint.native.JsValue):jint.runtime.environments.ExecutionContext
     {

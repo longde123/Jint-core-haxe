@@ -71,5 +71,6 @@ class ArrayConstructor extends jint.native.functions.FunctionInstance implements
             PrototypeObject.Push(instance, arguments);
         }
         return instance;
+	
     }
 }

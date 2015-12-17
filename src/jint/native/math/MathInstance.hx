@@ -87,11 +87,11 @@ class MathInstance extends jint.native.object.ObjectInstance
         {
             if (x > 0)
             {
-                return +0;
+                return 0;
             }
             if (jint.native.number.NumberInstance.IsPositiveZero(x))
             {
-                return +0;
+                return 0;
             }
             if (jint.native.number.NumberInstance.IsNegativeZero(x))
             {
@@ -129,7 +129,7 @@ class MathInstance extends jint.native.object.ObjectInstance
         {
             if (Cs2Hx.IsPositiveInfinity(x))
             {
-                return +0;
+                return 0;
             }
             if (Cs2Hx.IsNegativeInfinity(x))
             {
@@ -252,11 +252,11 @@ class MathInstance extends jint.native.object.ObjectInstance
         {
             if (Cs2Hx.IsPositiveInfinity(y))
             {
-                return 正无穷大;
+                return Math.POSITIVE_INFINITY;
             }
             if (Cs2Hx.IsNegativeInfinity(y))
             {
-                return +0;
+                return  0;
             }
         }
         if (system.MathCS.Abs_Double(x).Equals_Double(1))
@@ -274,18 +274,18 @@ class MathInstance extends jint.native.object.ObjectInstance
             }
             if (Cs2Hx.IsNegativeInfinity(y))
             {
-                return 正无穷大;
+                return Math.POSITIVE_INFINITY;
             }
         }
         if (Cs2Hx.IsPositiveInfinity(x))
         {
             if (y > 0)
             {
-                return 正无穷大;
+                return Math.POSITIVE_INFINITY;
             }
             if (y < 0)
             {
-                return +0;
+                return 0;
             }
         }
         if (Cs2Hx.IsNegativeInfinity(x))
@@ -294,9 +294,9 @@ class MathInstance extends jint.native.object.ObjectInstance
             {
                 if (system.MathCS.Abs_Double(y % 2).Equals_Double(1))
                 {
-                    return 负无穷大;
+                    return Math.NEGATIVE_INFINITY;
                 }
-                return 正无穷大;
+                return Math.POSITIVE_INFINITY;
             }
             if (y < 0)
             {
@@ -304,7 +304,7 @@ class MathInstance extends jint.native.object.ObjectInstance
                 {
                     return -0;
                 }
-                return +0;
+                return 0;
             }
         }
         if (jint.native.number.NumberInstance.IsPositiveZero(x))
@@ -315,7 +315,7 @@ class MathInstance extends jint.native.object.ObjectInstance
             }
             if (y < 0)
             {
-                return 正无穷大;
+                return Math.POSITIVE_INFINITY;
             }
         }
         if (jint.native.number.NumberInstance.IsNegativeZero(x))
@@ -326,15 +326,15 @@ class MathInstance extends jint.native.object.ObjectInstance
                 {
                     return -0;
                 }
-                return +0;
+                return 0;
             }
             if (y < 0)
             {
                 if (system.MathCS.Abs_Double(y % 2).Equals_Double(1))
                 {
-                    return 负无穷大;
+                    return Math.NEGATIVE_INFINITY;
                 }
-                return 正无穷大;
+                return Math.POSITIVE_INFINITY;
             }
         }
         if (x < 0 && !Cs2Hx.IsInfinity(x) && !Cs2Hx.IsInfinity(y) && !y.Equals_Double(Std.int(y)))

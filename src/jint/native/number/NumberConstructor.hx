@@ -24,14 +24,14 @@ class NumberConstructor extends jint.native.functions.FunctionInstance implement
         FastAddProperty("MAX_VALUE", 3.4028235e+38, false, false, false);
         FastAddProperty("MIN_VALUE", 4.94065645841247E-324, false, false, false);
         FastAddProperty("NaN", Math.NaN, false, false, false);
-        FastAddProperty("NEGATIVE_INFINITY", 负无穷大, false, false, false);
-        FastAddProperty("POSITIVE_INFINITY", 正无穷大, false, false, false);
+        FastAddProperty("NEGATIVE_INFINITY", Math.NEGATIVE_INFINITY, false, false, false);
+        FastAddProperty("POSITIVE_INFINITY", Math.POSITIVE_INFINITY, false, false, false);
     }
     override public function Call(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         if (arguments.length == 0)
         {
-            return 0d;
+            return 0;
         }
         return jint.runtime.TypeConverter.ToNumber(arguments[0]);
     }

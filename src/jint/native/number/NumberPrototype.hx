@@ -214,11 +214,8 @@ class NumberPrototype extends jint.native.number.NumberInstance
         {
             return "-" + ToNumberString(-m);
         }
-        var result:String = jint.native.number.dtoa.FastDtoa.NumberToString(m);
-        if (result != null)
-        {
-            return result;
-        }
+        //todo v8 Fast Dtoa
+       
         var s:String = null;
         var rFormat:String = jint.runtime.TypeConverter.toString(m, "r");
         if (rFormat.indexOf("e", system.StringComparison.OrdinalIgnoreCase) == -1)

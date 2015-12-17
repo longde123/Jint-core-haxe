@@ -1,5 +1,6 @@
 package jint.runtime.interop;
 using StringTools;
+import jint.runtime.descriptors.specialized.IndexDescriptor;
 import system.*;
 import anonymoustypes.*;
 
@@ -9,12 +10,12 @@ class TypeReference extends jint.native.functions.FunctionInstance implements ji
     {
         super(engine, null, null, false);
     }
-    public var Type:system.TypeCS;
-    public static function CreateTypeReference(engine:jint.Engine, type:system.TypeCS):jint.runtime.interop.TypeReference
+    public var JType:Class<Dynamic>;
+    public static function CreateTypeReference(engine:jint.Engine, type:Class<Dynamic>):jint.runtime.interop.TypeReference
     {
         var obj:jint.runtime.interop.TypeReference = new jint.runtime.interop.TypeReference(engine);
         obj.Extensible = false;
-        obj.Type = type;
+        obj.JType = type;
         obj.Prototype = engine.JFunction.PrototypeObject;
         obj.FastAddProperty("length", 0, false, false, false);
         obj.FastAddProperty("prototype", engine.JObject.PrototypeObject, false, false, false);
@@ -26,10 +27,7 @@ class TypeReference extends jint.native.functions.FunctionInstance implements ji
     }
     public function Construct(arguments:Array<jint.native.JsValue>):jint.native.object.ObjectInstance
     {
-        var constructors:Array<system.reflection.ConstructorInfo> = Type.GetConstructors_BindingFlags(system.reflection.BindingFlags.Public | system.reflection.BindingFlags.Instance);
-        var methods:Array<system.reflection.MethodBase> = system.linq.Enumerable.ToList(jint.runtime.TypeConverter.FindBestMatch(Engine, constructors, arguments));
-        for (method in methods)
-        {
+       
             var parameters:Array<Dynamic> = [  ];
             try
             {
@@ -37,20 +35,20 @@ class TypeReference extends jint.native.functions.FunctionInstance implements ji
                     var i:Int = 0;
                     while (i < arguments.length)
                     {
-                        var parameterType:system.TypeCS = method.GetParameters()[i].ParameterType;
+                     
                         if (parameterType == typeof(jint.native.JsValue))
                         {
                             parameters[i] = arguments[i];
                         }
                         else
                         {
-                            parameters[i] = Engine.ClrTypeConverter.Convert(arguments[i].ToObject(), parameterType, system.globalization.CultureInfo.InvariantCulture);
+                            parameters[i] = arguments[i].ToObject() ;
                         }
                         i++;
                     }
                 } //end for
-                var constructor:system.reflection.ConstructorInfo = cast(method, system.reflection.ConstructorInfo);
-                var result:jint.native.object.ObjectInstance = jint.runtime.TypeConverter.ToObject(Engine, jint.native.JsValue.FromObject(Engine, constructor.Invoke(system.linq.Enumerable.ToArray(parameters))));
+                var constructor =Type.createInstance(JType,parameters);
+                var result:jint.native.object.ObjectInstance = jint.runtime.TypeConverter.ToObject(Engine, jint.native.JsValue.FromObject(Engine, constructor));
                 return result;
             }
             catch (__ex:Dynamic)
@@ -101,44 +99,39 @@ class TypeReference extends jint.native.functions.FunctionInstance implements ji
     }
     override public function GetOwnProperty(propertyName:String):jint.runtime.descriptors.PropertyDescriptor
     {
-        if (Type.IsEnum)
+        if (Reflect.isEnumValue(JType))
         {
-            var enumValues = null;
-            var enumNames = null;
-            { //for
-                var i:Int = 0;
-                while (i < enumValues.length)
-                {
-                    if (enumNames.GetValue_Int32(i) == propertyName)
-                    {
-                        return new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(jint.native.JsValue.op_Explicit_Int(enumValues.GetValue_Int32(i)), new Nullable_Bool(false), new Nullable_Bool(false), new Nullable_Bool(false));
-                    }
-                    i++;
-                }
-            } //end for
+			
+            var enumValues =Type.resolveEnum(propertyName);
+           
+			if (enumValues!= null)
+			{
+				return new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(enumValues,  (false), (false),  (false));
+			}
+               
             return jint.runtime.descriptors.PropertyDescriptor.Undefined;
         }
-        var propertyInfo:system.reflection.PropertyInfo = Type.GetProperty_String_BindingFlags(propertyName, system.reflection.BindingFlags.Public | system.reflection.BindingFlags.Static);
-        if (propertyInfo != null)
+        var propertyInfo = Lambda.find(Type.getInstanceFields(JType),function(p) return p==propertyName);
+        if (propertyInfo )
         {
-            return new jint.runtime.descriptors.specialized.PropertyInfoDescriptor(Engine, propertyInfo, Type);
+            return new jint.runtime.descriptors.specialized.PropertyInfoDescriptor(Engine, propertyName, JType);
         }
-        var fieldInfo:system.reflection.FieldInfo = Type.GetField_String_BindingFlags(propertyName, system.reflection.BindingFlags.Public | system.reflection.BindingFlags.Static);
-        if (fieldInfo != null)
+        var fieldInfo =Lambda.find(Type.getClassFields(JType),function(p) return p==propertyName);
+        if (fieldInfo  )
         {
-            return new jint.runtime.descriptors.specialized.FieldInfoDescriptor(Engine, fieldInfo, Type);
+            return new jint.runtime.descriptors.specialized.FieldInfoDescriptor(Engine, propertyName, JType);
         }
-        var methodInfo:Array<system.reflection.MethodInfo> = system.linq.Enumerable.ToArray(system.linq.Enumerable.Where(Type.GetMethods_BindingFlags(system.reflection.BindingFlags.Public | system.reflection.BindingFlags.Static), function (mi:system.reflection.MethodInfo):Bool { return mi.Name == propertyName; } ));
-        if (methodInfo.length == 0)
+		var IndexInfo =Lambda.find(Reflect.fields(JType),function(p) return p==propertyName);
+        if (IndexInfo  )
         {
-            return jint.runtime.descriptors.PropertyDescriptor.Undefined;
+            return new jint.runtime.descriptors.specialized.IndexDescriptor(Engine, propertyName, JType);
         }
-        return new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(new jint.runtime.interop.MethodInfoFunctionInstance(Engine, methodInfo), new Nullable_Bool(false), new Nullable_Bool(false), new Nullable_Bool(false));
+        return jint.runtime.descriptors.PropertyDescriptor.Undefined;
     }
     public var Target(get_Target, never):Dynamic;
     public function get_Target():Dynamic
     {
-        return Type;
+        return JType;
     }
 
     override public function get_Class():String

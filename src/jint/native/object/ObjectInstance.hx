@@ -2,7 +2,7 @@ package jint.native.object;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+import haxe.ds.StringMap;
 class ObjectInstance
 {
     public function new(engine:jint.Engine)
@@ -11,7 +11,7 @@ class ObjectInstance
         Properties = new jint.runtime.MruPropertyCache<String, jint.runtime.descriptors.PropertyDescriptor>();
     }
     public var Engine:jint.Engine;
-    public var Properties:system.collections.generic.IDictionary<String, jint.runtime.descriptors.PropertyDescriptor>;
+    public var Properties:jint.runtime.MruPropertyCache<String, jint.runtime.descriptors.PropertyDescriptor>;
     public var Prototype:jint.native.object.ObjectInstance;
     public var Extensible:Bool;
     public var Class(get_Class, never):String;
@@ -20,9 +20,9 @@ class ObjectInstance
         return "Object";
     }
 
-    public function GetOwnProperties():Array<system.collections.generic.KeyValuePair<String, jint.runtime.descriptors.PropertyDescriptor>>
+    public function GetOwnProperties():haxe.ds.HashMap<String, jint.runtime.descriptors.PropertyDescriptor>
     {
-        return Properties;
+        return Properties.iterator();
     }
     public function HasOwnProperty(p:String):Bool
     {

@@ -56,7 +56,7 @@ class ObjectEnvironmentRecord extends jint.runtime.environments.EnvironmentRecor
     {
         if (_bindingObject != null)
         {
-            return system.linq.Enumerable.ToArray(system.linq.Enumerable.Select(_bindingObject.GetOwnProperties(), function (x:system.collections.generic.KeyValuePair<String, jint.runtime.descriptors.PropertyDescriptor>):String { return x.Key; } ));
+            return  Lambda.array(_bindingObject.GetOwnProperties().keys());
         }
         return [  ];
     }

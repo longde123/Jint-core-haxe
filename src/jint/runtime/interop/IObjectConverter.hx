@@ -5,5 +5,5 @@ import anonymoustypes.*;
 
 interface IObjectConverter
 {
-    function TryConvert(value:Dynamic, result:CsRef<jint.native.JsValue>):Bool;
+    function TryConvert(value:Dynamic, result:jint.native.JsValue):Bool;
 }

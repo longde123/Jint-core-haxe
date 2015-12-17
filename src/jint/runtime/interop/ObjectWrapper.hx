@@ -42,53 +42,43 @@ class ObjectWrapper extends jint.native.object.ObjectInstance implements jint.ru
         {
             return x.Value;
         }
-        var type:system.TypeCS = system.Cs2Hx.GetType(Target);
-        var property:system.reflection.PropertyInfo = system.linq.Enumerable.FirstOrDefault(system.linq.Enumerable.Where(type.GetProperties_BindingFlags(system.reflection.BindingFlags.Static | system.reflection.BindingFlags.Instance | system.reflection.BindingFlags.Public), function (p:system.reflection.PropertyInfo):Bool { return EqualsIgnoreCasing(p.Name, propertyName); } ));
-        if (property != null)
+		var JType = Type.typeof(Target);
+        if (Reflect.isEnumValue(JType))
         {
-            var descriptor:jint.runtime.descriptors.specialized.PropertyInfoDescriptor = new jint.runtime.descriptors.specialized.PropertyInfoDescriptor(Engine, property, Target);
-            Properties.Add(propertyName, descriptor);
-            return descriptor;
+			
+            var enumValues =Type.resolveEnum(propertyName);
+           
+			if (enumValues!= null)
+			{
+				var descriptor =  new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(enumValues,  (false), (false),  (false));
+				Properties.Add(propertyName, descriptor);
+				return descriptor;
+			}
+               
+            return jint.runtime.descriptors.PropertyDescriptor.Undefined;
         }
-        var field:system.reflection.FieldInfo = system.linq.Enumerable.FirstOrDefault(system.linq.Enumerable.Where(type.GetFields_BindingFlags(system.reflection.BindingFlags.Static | system.reflection.BindingFlags.Instance | system.reflection.BindingFlags.Public), function (f:system.reflection.FieldInfo):Bool { return EqualsIgnoreCasing(f.Name, propertyName); } ));
-        if (field != null)
+        var propertyInfo = Lambda.find(Type.getInstanceFields(JType),function(p) return p==propertyName);
+        if (propertyInfo )
         {
-            var descriptor:jint.runtime.descriptors.specialized.FieldInfoDescriptor = new jint.runtime.descriptors.specialized.FieldInfoDescriptor(Engine, field, Target);
-            Properties.Add(propertyName, descriptor);
-            return descriptor;
+            var descriptor =  new jint.runtime.descriptors.specialized.PropertyInfoDescriptor(Engine, propertyName, JType);
+			Properties.Add(propertyName, descriptor);
+			return descriptor;
         }
-        var methods:Array<system.reflection.MethodInfo> = system.linq.Enumerable.ToArray(system.linq.Enumerable.Where(type.GetMethods_BindingFlags(system.reflection.BindingFlags.Static | system.reflection.BindingFlags.Instance | system.reflection.BindingFlags.Public), function (m:system.reflection.MethodInfo):Bool { return EqualsIgnoreCasing(m.Name, propertyName); } ));
-        if (system.linq.Enumerable.Any(methods))
+        var fieldInfo =Lambda.find(Type.getClassFields(JType),function(p) return p==propertyName);
+        if (fieldInfo  )
         {
-            var descriptor:jint.runtime.descriptors.PropertyDescriptor = new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(new jint.runtime.interop.MethodInfoFunctionInstance(Engine, methods), new Nullable_Bool(false), new Nullable_Bool(true), new Nullable_Bool(false));
-            Properties.Add(propertyName, descriptor);
-            return descriptor;
+            var descriptor =  new jint.runtime.descriptors.specialized.FieldInfoDescriptor(Engine, propertyName, JType);
+			Properties.Add(propertyName, descriptor);
+			return descriptor;
         }
-        if (system.linq.Enumerable.FirstOrDefault(system.linq.Enumerable.Where(type.GetProperties(), function (p:system.reflection.PropertyInfo):Bool { return p.GetIndexParameters().length != 0; } )) != null)
+		var IndexInfo =Lambda.find(Reflect.fields(JType),function(p) return p==propertyName);
+        if (IndexInfo  )
         {
-            return new jint.runtime.descriptors.specialized.IndexDescriptor(Engine, system.Cs2Hx.GetType(Target), propertyName, Target);
+            var descriptor =  new jint.runtime.descriptors.specialized.IndexDescriptor(Engine, propertyName, JType);
+			Properties.Add(propertyName, descriptor);
+			return descriptor;
         }
-        var interfaces:Array<system.TypeCS> = type.GetInterfaces();
-        var explicitProperties:Array<system.reflection.PropertyInfo> = null;
-        if (explicitProperties.length == 1)
-        {
-            var descriptor:jint.runtime.descriptors.specialized.PropertyInfoDescriptor = new jint.runtime.descriptors.specialized.PropertyInfoDescriptor(Engine, explicitProperties[0], Target);
-            Properties.Add(propertyName, descriptor);
-            return descriptor;
-        }
-        var explicitMethods:Array<system.reflection.MethodInfo> = null;
-        if (explicitMethods.length > 0)
-        {
-            var descriptor:jint.runtime.descriptors.PropertyDescriptor = new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(new jint.runtime.interop.MethodInfoFunctionInstance(Engine, explicitMethods), new Nullable_Bool(false), new Nullable_Bool(true), new Nullable_Bool(false));
-            Properties.Add(propertyName, descriptor);
-            return descriptor;
-        }
-        var explicitIndexers:Array<system.reflection.PropertyInfo> = null;
-        if (explicitIndexers.length == 1)
-        {
-            return new jint.runtime.descriptors.specialized.IndexDescriptor(Engine, explicitIndexers[0].DeclaringType, propertyName, Target);
-        }
-        return jint.runtime.descriptors.PropertyDescriptor.Undefined;
+        return jint.runtime.descriptors.PropertyDescriptor.Undefined; 
     }
     private function EqualsIgnoreCasing(s1:String, s2:String):Bool
     {

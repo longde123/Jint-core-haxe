@@ -1,8 +1,9 @@
 package jint.runtime.debugger;
 using StringTools;
+import jint.native.Null;
 import system.*;
-import anonymoustypes.*;
-
+import anonymoustypes.*;  
+import haxe.ds.StringMap;
 class DebugHandler
 {
     private var _debugCallStack:Array<String>;
@@ -19,18 +20,18 @@ class DebugHandler
     }
     public function PopDebugCallStack():Void
     {
-        if (_debugCallStack.Count > 0)
+        if (_debugCallStack.length > 0)
         {
             _debugCallStack.pop();
         }
-        if (_stepMode == jint.runtime.debugger.StepMode.Out && _debugCallStack.Count < _callBackStepOverDepth)
+        if (_stepMode == jint.runtime.debugger.StepMode.Out && _debugCallStack.length < _callBackStepOverDepth)
         {
-            _callBackStepOverDepth = _debugCallStack.Count;
+            _callBackStepOverDepth = _debugCallStack.length;
             _stepMode = jint.runtime.debugger.StepMode.Into;
         }
-        else if (_stepMode == jint.runtime.debugger.StepMode.Over && _debugCallStack.Count == _callBackStepOverDepth)
+        else if (_stepMode == jint.runtime.debugger.StepMode.Over && _debugCallStack.length == _callBackStepOverDepth)
         {
-            _callBackStepOverDepth = _debugCallStack.Count;
+            _callBackStepOverDepth = _debugCallStack.length;
             _stepMode = jint.runtime.debugger.StepMode.Into;
         }
     }
@@ -53,7 +54,7 @@ class DebugHandler
                     paramStrings.push("null");
                 }
             }
-            stack += system.Cs2Hx.Join(", ", system.linq.Enumerable.ToArray(paramStrings));
+            stack += system.Cs2Hx.Join(", ", (paramStrings));
             stack += ")";
             _debugCallStack.push(stack);
         }
@@ -65,25 +66,26 @@ class DebugHandler
         {
             return;
         }
-        var breakpoint:jint.runtime.debugger.BreakPoint = system.linq.Enumerable.FirstOrDefault_IEnumerable_FuncBoolean(_engine.BreakPoints, function (breakPoint:jint.runtime.debugger.BreakPoint):Bool { return BpTest(statement, breakPoint); } );
+		 
+        var breakpoint:jint.runtime.debugger.BreakPoint =  Lambda.find(_engine.BreakPoints.iterator(),function (breakPoint:jint.runtime.debugger.BreakPoint):Bool { return BpTest(statement, breakPoint); } );
         var breakpointFound:Bool = false;
         if (breakpoint != null)
         {
             var info:jint.runtime.debugger.DebugInformation = CreateDebugInformation(statement);
-            var result:Nullable_Int = _engine.InvokeBreakEvent(info);
-            if (result.HasValue)
+            var result:Null<Int> = _engine.InvokeBreakEvent(info);
+            if (result!=null)
             {
-                _stepMode = result.Value;
+                _stepMode = result;
                 breakpointFound = true;
             }
         }
         if (breakpointFound == false && _stepMode == jint.runtime.debugger.StepMode.Into)
         {
             var info:jint.runtime.debugger.DebugInformation = CreateDebugInformation(statement);
-            var result:Nullable_Int = _engine.InvokeStepEvent(info);
-            if (result.HasValue)
+            var result:Null<Int> = _engine.InvokeStepEvent(info);
+            if (result!=null)
             {
-                _stepMode = result.Value;
+                _stepMode = result;
             }
         }
         if (old == jint.runtime.debugger.StepMode.Into && _stepMode == jint.runtime.debugger.StepMode.Out)
@@ -138,7 +140,7 @@ class DebugHandler
     }
     private static function GetLocalVariables(lex:jint.runtime.environments.LexicalEnvironment):system.collections.generic.Dictionary<String, jint.native.JsValue>
     {
-        var locals:system.collections.generic.Dictionary<String, jint.native.JsValue> = new system.collections.generic.Dictionary<String, jint.native.JsValue>();
+        var locals:StringMap<jint.native.JsValue> = new StringMap< jint.native.JsValue>();
         if (lex != null && lex.Record != null)
         {
             AddRecordsFromEnvironment(lex, locals);
@@ -147,7 +149,7 @@ class DebugHandler
     }
     private static function GetGlobalVariables(lex:jint.runtime.environments.LexicalEnvironment):system.collections.generic.Dictionary<String, jint.native.JsValue>
     {
-        var globals:system.collections.generic.Dictionary<String, jint.native.JsValue> = new system.collections.generic.Dictionary<String, jint.native.JsValue>();
+        var globals:StringMap< jint.native.JsValue> = new StringMap< jint.native.JsValue>();
         var tempLex:jint.runtime.environments.LexicalEnvironment = lex;
         while (tempLex != null && tempLex.Record != null)
         {
@@ -156,12 +158,12 @@ class DebugHandler
         }
         return globals;
     }
-    private static function AddRecordsFromEnvironment(lex:jint.runtime.environments.LexicalEnvironment, locals:system.collections.generic.Dictionary<String, jint.native.JsValue>):Void
+    private static function AddRecordsFromEnvironment(lex:jint.runtime.environments.LexicalEnvironment, locals:StringMap<jint.native.JsValue>):Void
     {
         var bindings:Array<String> = lex.Record.GetAllBindingNames();
         for (binding in bindings)
-        {
-            if (locals.ContainsKey(binding) == false)
+        { 
+            if (locals.exits(binding) == false)
             {
                 var jsValue:jint.native.JsValue = lex.Record.GetBindingValue(binding, false);
                 if (jsValue.TryCast() == null)
