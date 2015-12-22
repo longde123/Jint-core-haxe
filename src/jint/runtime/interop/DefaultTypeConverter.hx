@@ -30,7 +30,7 @@ class DefaultTypeConverter implements jint.runtime.interop.ITypeConverter
         }
         if (Std.is(type,Enum))
         {
-            var integer:Dynamic = cast(value, type);
+            var integer:Dynamic = cast value ;
             if (integer == null)
             {
                 return throw new system.ArgumentOutOfRangeException();
@@ -69,12 +69,12 @@ class DefaultTypeConverter implements jint.runtime.interop.ITypeConverter
 		*/
         if (Std.is(type,Array))
         {
-            var source:Array<Dynamic> = (Std.is(value, Array<Dynamic>) ? cast(value, Array<Dynamic>) : null);
+            var source:Array<Dynamic> = (Std.is(value, Array ) ? cast(value, Array ) : null);
             if (source == null)
             {
                 return throw new system.ArgumentException(system.String.Format("Value of object[] type is expected, but actual type is {0}.", system.Cs2Hx.GetType(value)));
             } 
-            var result = Lambda.map( source, function(x) return Convert(o, type))); 
+            var result = Lambda.map( source, function(x) return Convert(o, type) ); 
             return result;
         }
         return system.Convert.ChangeType_Object_Type_IFormatProvider(value, type, formatProvider);
@@ -116,7 +116,7 @@ class DefaultTypeConverter implements jint.runtime.interop.ITypeConverter
     {
         _knownConversions = new system.collections.generic.Dictionary<String, Bool>();
   
-        convertChangeType = "ChangeType"
+        convertChangeType = "ChangeType";
         jsValueFromObject ="FromObject";
         jsValueToObject ="ToObject";
     }

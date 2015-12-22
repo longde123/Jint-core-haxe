@@ -2,7 +2,7 @@ package jint.native.functions;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class BindFunctionInstance extends jint.native.functions.FunctionInstance implements jint.native.IConstructor
 {
     public function new(engine:jint.Engine)
@@ -14,25 +14,25 @@ class BindFunctionInstance extends jint.native.functions.FunctionInstance implem
     public var BoundArgs:Array<jint.native.JsValue>;
     override public function Call(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
-        var f:jint.native.functions.FunctionInstance = TargetFunction.TryCast(function (x:jint.native.JsValue):Void
+        var f:jint.native.functions.FunctionInstance = TargetFunction.TryCast(FunctionInstance,function (x:jint.native.JsValue):Void
         {
             throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
         }
         );
-        return f.Call(BoundThis, system.linq.Enumerable.ToArray(system.linq.Enumerable.Union(BoundArgs, arguments)));
+        return f.Call(BoundThis, BoundArgs.concat( arguments) );
     }
     public function Construct(arguments:Array<jint.native.JsValue>):jint.native.object.ObjectInstance
     {
-        var target:jint.native.IConstructor = TargetFunction.TryCast(function (x:jint.native.JsValue):Void
+        var target:jint.native.IConstructor = TargetFunction.TryCast(IConstructor,function (x:jint.native.JsValue):Void
         {
             throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
         }
         );
-        return target.Construct(system.linq.Enumerable.ToArray(system.linq.Enumerable.Union(BoundArgs, arguments)));
+        return target.Construct(BoundArgs.concat( arguments));
     }
     override public function HasInstance(v:jint.native.JsValue):Bool
     {
-        var f:jint.native.functions.FunctionInstance = TargetFunction.TryCast(function (x:jint.native.JsValue):Void
+        var f:jint.native.functions.FunctionInstance = TargetFunction.TryCast(FunctionInstance,function (x:jint.native.JsValue):Void
         {
             throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
         }

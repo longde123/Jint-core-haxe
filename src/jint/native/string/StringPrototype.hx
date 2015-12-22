@@ -185,7 +185,7 @@ class StringPrototype extends jint.native.string.StringInstance
     {
         var s:String = jint.runtime.TypeConverter.toString(thisObj);
         var start:Float = jint.runtime.TypeConverter.ToInteger(jint.runtime.Arguments.At(arguments, 0));
-        var length:Float = jint.runtime.Arguments.At(arguments, 1).Equals(jint.native.JsValue.Undefined) ? 正无穷大 : jint.runtime.TypeConverter.ToInteger(jint.runtime.Arguments.At(arguments, 1));
+        var length:Float = jint.runtime.Arguments.At(arguments, 1).Equals(jint.native.JsValue.Undefined) ? Math.POSITIVE_INFINITY : jint.runtime.TypeConverter.ToInteger(jint.runtime.Arguments.At(arguments, 1));
         start = start >= 0 ? start : system.MathCS.Max_Double_Double(s.length + start, 0);
         length = system.MathCS.Min_Double_Double(system.MathCS.Max_Double_Double(length, 0), s.length - start);
         if (length <= 0)
@@ -304,16 +304,16 @@ class StringPrototype extends jint.native.string.StringInstance
         jint.runtime.TypeConverter.CheckObjectCoercible(Engine, thisObj);
         var s:String = jint.runtime.TypeConverter.toString(thisObj);
         var start:Float = jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 0));
-        if (负无穷大.Equals_Double(start))
+        if (Math.NEGATIVE_INFINITY.Equals_Double(start))
         {
             start = 0;
         }
-        if (正无穷大.Equals_Double(start))
+        if (Math.POSITIVE_INFINITY.Equals_Double(start))
         {
             return "";
         }
         var end:Float = jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 1));
-        if (正无穷大.Equals_Double(end))
+        if (Math.POSITIVE_INFINITY.Equals_Double(end))
         {
             end = s.length;
         }
@@ -545,7 +545,7 @@ class StringPrototype extends jint.native.string.StringInstance
         {
             numPos = jint.runtime.TypeConverter.ToNumber(arguments[1]);
         }
-        var pos:Float = Cs2Hx.IsNaN(numPos) ? 正无穷大 : jint.runtime.TypeConverter.ToInteger(numPos);
+        var pos:Float = Cs2Hx.IsNaN(numPos) ? Math.POSITIVE_INFINITY : jint.runtime.TypeConverter.ToInteger(numPos);
         var len:Int = s.length;
         var start:Int = Std.int(system.MathCS.Min_Double_Double(system.MathCS.Max_Double_Double(pos, 0), len));
         var searchLen:Int = searchStr.length;

@@ -3,6 +3,7 @@ using StringTools;
 import system.*;
 import anonymoustypes.*;
 import haxe.ds.StringMap;
+using jint.native.StaticJsValue;
 class ObjectInstance
 {
     public function new(engine:jint.Engine)

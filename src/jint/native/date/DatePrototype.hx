@@ -396,7 +396,7 @@ class DatePrototype extends jint.native.date.DateInstance
     private function SetFullYear(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var thisTime:Float = EnsureDateInstance(thisObj).PrimitiveValue;
-        var t:Float = Cs2Hx.IsNaN(thisTime) ? +0 : LocalTime(thisTime);
+        var t:Float = Cs2Hx.IsNaN(thisTime) ?  0 : LocalTime(thisTime);
         var y:Float = jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 0));
         var m:Float = arguments.length <= 1 ? MonthFromTime(t) : jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 1));
         var dt:Float = arguments.length <= 2 ? DateFromTime(t) : jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 2));
@@ -408,7 +408,7 @@ class DatePrototype extends jint.native.date.DateInstance
     private function SetYear(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var thisTime:Float = EnsureDateInstance(thisObj).PrimitiveValue;
-        var t:Float = Cs2Hx.IsNaN(thisTime) ? +0 : LocalTime(thisTime);
+        var t:Float = Cs2Hx.IsNaN(thisTime) ?  0 : LocalTime(thisTime);
         var y:Float = jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 0));
         if (Cs2Hx.IsNaN(y))
         {
@@ -428,7 +428,7 @@ class DatePrototype extends jint.native.date.DateInstance
     private function SetUTCFullYear(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var thisTime:Float = EnsureDateInstance(thisObj).PrimitiveValue;
-        var t:Float = Cs2Hx.IsNaN(thisTime) ? +0 : thisTime;
+        var t:Float = Cs2Hx.IsNaN(thisTime) ?  0 : thisTime;
         var y:Float = jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 0));
         var m:Float = arguments.length <= 1 ? MonthFromTime(t) : jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 1));
         var dt:Float = arguments.length <= 2 ? DateFromTime(t) : jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 2));
@@ -690,17 +690,17 @@ class DatePrototype extends jint.native.date.DateInstance
             var isLeapYear:Bool = InLeapYear(t).Equals_Double(1);
             year = isLeapYear ? 2000 : 1999;
         }
-        var dateTime:system.DateTime = new system.DateTime(Std.int(year), 1, 1).AddMilliseconds(timeInYear);
+        var dateTime:Date = new Date(Std.int(year), 1, 1).AddMilliseconds(timeInYear);
         return Engine.Options.IsDaylightSavingTime(dateTime) ? MsPerHour : 0;
     }
-    public function ToLocalTime(t:system.DateTime):system.DateTimeOffset
+    public function ToLocalTime(t:Date):Date
     {
-        if (t.Kind == system.DateTimeKind.Unspecified)
+        if (t.Kind == DateKind.Unspecified)
         {
             return t;
         }
         var offset:system.TimeSpan = Engine.Options.GetBaseUtcOffset();
-        return new system.DateTimeOffset(t.Ticks + offset.Ticks, offset);
+        return new DateOffset(t.Ticks + offset.Ticks, offset);
     }
     public function LocalTime(t:Float):Float
     {

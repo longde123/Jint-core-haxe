@@ -2,7 +2,7 @@ package jint.native.json;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class JsonSerializer
 {
     private var _engine:jint.Engine;

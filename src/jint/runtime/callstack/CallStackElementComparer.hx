@@ -3,7 +3,7 @@ using StringTools;
 import system.*;
 import anonymoustypes.*;
 
-class CallStackElementComparer implements system.collections.generic.IEqualityComparer<jint.runtime.CallStackElement>
+class CallStackElementComparer  
 {
     public function Equals(x:jint.runtime.CallStackElement, y:jint.runtime.CallStackElement):Bool
     {

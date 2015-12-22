@@ -1,5 +1,6 @@
 package jint.runtime.interop;
 using StringTools;
+import jint.native.JsValue.AbstractJsValue;
 import jint.runtime.descriptors.specialized.IndexDescriptor;
 import system.*;
 import anonymoustypes.*;
@@ -54,8 +55,9 @@ class TypeReference extends jint.native.functions.FunctionInstance implements ji
             catch (__ex:Dynamic)
             {
             }
-        }
-        return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(Engine.TypeError, "No public methods with the specified arguments were found.");
+       
+         throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(Engine.TypeError, "No public methods with the specified arguments were found.");
+		return null;
     }
     override public function DefineOwnProperty(propertyName:String, desc:jint.runtime.descriptors.PropertyDescriptor, throwOnError:Bool):Bool
     {

@@ -20,11 +20,6 @@ class BooleanInstance extends jint.native.object.ObjectInstance implements jint.
         return jint.runtime.Types.Boolean;
     }
 
-    var PrimitiveValue(get_PrimitiveValue, never):jint.native.JsValue;
-    function get_PrimitiveValue():jint.native.JsValue
-    {
-        return PrimitiveValue;
-    }
-
+ 
     public var PrimitiveValue:jint.native.JsValue;
 }

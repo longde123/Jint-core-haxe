@@ -2,7 +2,7 @@ package jint.runtime.references;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class Reference
 {
     private var _baseValue:jint.native.JsValue;

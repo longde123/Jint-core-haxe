@@ -2,7 +2,7 @@ package jint.native.object;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class ObjectPrototype extends jint.native.object.ObjectInstance
 {
     public function new(engine:jint.Engine)

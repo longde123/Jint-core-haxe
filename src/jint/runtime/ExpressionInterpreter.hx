@@ -2,7 +2,7 @@ package jint.runtime;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class ExpressionInterpreter
 {
     private var _engine:jint.Engine;
@@ -53,7 +53,7 @@ class ExpressionInterpreter
                 var rprim:jint.native.JsValue = jint.runtime.TypeConverter.ToPrimitive(rval);
                 if (lprim.IsString() || rprim.IsString())
                 {
-                    lval = jint.runtime.TypeConverter.toString(lprim) + jint.runtime.TypeConverter.toString(rprim);
+                    lval = (jint.runtime.TypeConverter.toString(lprim) + jint.runtime.TypeConverter.toString(rprim));
                 }
                 else
                 {

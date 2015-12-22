@@ -1,9 +1,19 @@
 package jint;
 using StringTools;
-import jint.native.Null;
+import jint.native.*;
+import jint.parser.*;
+import jint.parser.ast.*;
+import jint.runtime.*;
+import jint.runtime.callstack.*;
+import jint.runtime.debugger.*;
+import jint.runtime.descriptors.*;
+import jint.runtime.environments.*;
+import jint.runtime.interop.*;
+import jint.runtime.references.*;
 import system.*;
 import anonymoustypes.*;
-
+typedef StepDynamic =  Dynamic->jint.runtime.debugger.DebugInformation->Int ;
+typedef BreakDynamic =  Dynamic-> jint.runtime.debugger.DebugInformation->Int;
 class Engine
 {
     private var _expressions:jint.runtime.ExpressionInterpreter;
@@ -14,7 +24,7 @@ class Engine
     private var _timeoutTicks:Float;
     private var _lastSyntaxNode:jint.parser.ast.SyntaxNode;
     public var ClrTypeConverter:jint.runtime.interop.ITypeConverter;
-    public var TypeCache:system.collections.generic.Dictionary<String, system.TypeCS>;
+    public var TypeCache:system.collections.generic.Dictionary<String, Class<Dynamic>>;
     public var CallStack:jint.runtime.callstack.JintCallStack;
     public function new()
     {
@@ -24,8 +34,7 @@ class Engine
         _lastSyntaxNode = null;
         TypeCache = new system.collections.generic.Dictionary<String, system.TypeCS>();
         CallStack = new jint.runtime.callstack.JintCallStack();
-        Step = new CsEvent<(Dynamic -> jint.runtime.debugger.DebugInformation -> Int)>();
-        Break = new CsEvent<(Dynamic -> jint.runtime.debugger.DebugInformation -> Int)>();
+       
         Creator(null);
     }
     public function Creator(options:(jint.Options -> Void)):jint.Engine
@@ -124,21 +133,23 @@ class Engine
     public var Options:jint.Options;
     public var DebugHandler:jint.runtime.debugger.DebugHandler;
     public var BreakPoints:Array<jint.runtime.debugger.BreakPoint>;
-    public function InvokeStepEvent(info:jint.runtime.debugger.DebugInformation):Null<Int>
+	public var Step:StepDynamic;
+	public var Break:BreakDynamic;
+    public function InvokeStepEvent(info:jint.runtime.debugger.DebugInformation):Int
     {
         if (Step != null)
         {
-            return new Null<Int>(Step.Invoke(this, info));
+            return  Step(this, info);
         }
-        return null;
+        return -1;
     }
-    public function InvokeBreakEvent(info:jint.runtime.debugger.DebugInformation):Null<Int>
+    public function InvokeBreakEvent(info:jint.runtime.debugger.DebugInformation):Int
     {
         if (Break != null)
         {
-            return new Null<Int>(Break.Invoke(this, info));
+            return Break(this, info);
         }
-        return null;
+        return -1;
     }
     public function EnterExecutionContext(lexicalEnvironment:jint.runtime.environments.LexicalEnvironment, variableEnvironment:jint.runtime.environments.LexicalEnvironment, thisBinding:jint.native.JsValue):jint.runtime.environments.ExecutionContext
     {
@@ -247,45 +258,45 @@ class Engine
         switch (statement.Type)
         {
             case jint.parser.ast.SyntaxNodes.BlockStatement:
-                return _statements.ExecuteBlockStatement(statement.As());
+                return _statements.ExecuteBlockStatement(statement.As(BlockStatement));
             case jint.parser.ast.SyntaxNodes.BreakStatement:
-                return _statements.ExecuteBreakStatement(statement.As());
+                return _statements.ExecuteBreakStatement(statement.As(BreakStatement));
             case jint.parser.ast.SyntaxNodes.ContinueStatement:
-                return _statements.ExecuteContinueStatement(statement.As());
+                return _statements.ExecuteContinueStatement(statement.As(ContinueStatement));
             case jint.parser.ast.SyntaxNodes.DoWhileStatement:
-                return _statements.ExecuteDoWhileStatement(statement.As());
+                return _statements.ExecuteDoWhileStatement(statement.As(DoWhileStatement));
             case jint.parser.ast.SyntaxNodes.DebuggerStatement:
-                return _statements.ExecuteDebuggerStatement(statement.As());
+                return _statements.ExecuteDebuggerStatement(statement.As(DebuggerStatement));
             case jint.parser.ast.SyntaxNodes.EmptyStatement:
-                return _statements.ExecuteEmptyStatement(statement.As());
+                return _statements.ExecuteEmptyStatement(statement.As(EmptyStatement));
             case jint.parser.ast.SyntaxNodes.ExpressionStatement:
-                return _statements.ExecuteExpressionStatement(statement.As());
+                return _statements.ExecuteExpressionStatement(statement.As(ExpressionStatement));
             case jint.parser.ast.SyntaxNodes.ForStatement:
-                return _statements.ExecuteForStatement(statement.As());
+                return _statements.ExecuteForStatement(statement.As(ForStatement));
             case jint.parser.ast.SyntaxNodes.ForInStatement:
-                return _statements.ExecuteForInStatement(statement.As());
+                return _statements.ExecuteForInStatement(statement.As(ForInStatement));
             case jint.parser.ast.SyntaxNodes.FunctionDeclaration:
                 return new jint.runtime.Completion(jint.runtime.Completion.Normal, null, null);
             case jint.parser.ast.SyntaxNodes.IfStatement:
-                return _statements.ExecuteIfStatement(statement.As());
+                return _statements.ExecuteIfStatement(statement.As(IfStatement));
             case jint.parser.ast.SyntaxNodes.LabeledStatement:
-                return _statements.ExecuteLabelledStatement(statement.As());
+                return _statements.ExecuteLabelledStatement(statement.As(LabeledStatement));
             case jint.parser.ast.SyntaxNodes.ReturnStatement:
-                return _statements.ExecuteReturnStatement(statement.As());
+                return _statements.ExecuteReturnStatement(statement.As(ReturnStatement));
             case jint.parser.ast.SyntaxNodes.SwitchStatement:
-                return _statements.ExecuteSwitchStatement(statement.As());
+                return _statements.ExecuteSwitchStatement(statement.As(SwitchStatement));
             case jint.parser.ast.SyntaxNodes.ThrowStatement:
-                return _statements.ExecuteThrowStatement(statement.As());
+                return _statements.ExecuteThrowStatement(statement.As(ThrowStatement));
             case jint.parser.ast.SyntaxNodes.TryStatement:
-                return _statements.ExecuteTryStatement(statement.As());
+                return _statements.ExecuteTryStatement(statement.As(TryStatement));
             case jint.parser.ast.SyntaxNodes.VariableDeclaration:
-                return _statements.ExecuteVariableDeclaration(statement.As());
+                return _statements.ExecuteVariableDeclaration(statement.As(VariableDeclaration));
             case jint.parser.ast.SyntaxNodes.WhileStatement:
-                return _statements.ExecuteWhileStatement(statement.As());
+                return _statements.ExecuteWhileStatement(statement.As(WhileStatement));
             case jint.parser.ast.SyntaxNodes.WithStatement:
-                return _statements.ExecuteWithStatement(statement.As());
+                return _statements.ExecuteWithStatement(statement.As(WithStatement));
             case jint.parser.ast.SyntaxNodes.Program:
-                return _statements.ExecuteProgram(statement.As());
+                return _statements.ExecuteProgram(statement.As(Program));
             default:
                 return throw new system.ArgumentOutOfRangeException();
         }
@@ -296,39 +307,39 @@ class Engine
         switch (expression.Type)
         {
             case jint.parser.ast.SyntaxNodes.AssignmentExpression:
-                return _expressions.EvaluateAssignmentExpression(expression.As());
+                return _expressions.EvaluateAssignmentExpression(expression.As(AssignmentExpression));
             case jint.parser.ast.SyntaxNodes.ArrayExpression:
-                return _expressions.EvaluateArrayExpression(expression.As());
+                return _expressions.EvaluateArrayExpression(expression.As(ArrayExpression));
             case jint.parser.ast.SyntaxNodes.BinaryExpression:
-                return _expressions.EvaluateBinaryExpression(expression.As());
+                return _expressions.EvaluateBinaryExpression(expression.As(BinaryExpression));
             case jint.parser.ast.SyntaxNodes.CallExpression:
-                return _expressions.EvaluateCallExpression(expression.As());
+                return _expressions.EvaluateCallExpression(expression.As(CallExpression));
             case jint.parser.ast.SyntaxNodes.ConditionalExpression:
-                return _expressions.EvaluateConditionalExpression(expression.As());
+                return _expressions.EvaluateConditionalExpression(expression.As(ConditionalExpression));
             case jint.parser.ast.SyntaxNodes.FunctionExpression:
-                return _expressions.EvaluateFunctionExpression(expression.As());
+                return _expressions.EvaluateFunctionExpression(expression.As(FunctionExpression));
             case jint.parser.ast.SyntaxNodes.Identifier:
-                return _expressions.EvaluateIdentifier(expression.As());
+                return _expressions.EvaluateIdentifier(expression.As(Identifier));
             case jint.parser.ast.SyntaxNodes.Literal:
-                return _expressions.EvaluateLiteral(expression.As());
+                return _expressions.EvaluateLiteral(expression.As(Literal));
             case jint.parser.ast.SyntaxNodes.RegularExpressionLiteral:
-                return _expressions.EvaluateLiteral(expression.As());
+                return _expressions.EvaluateLiteral(expression.As(RegularExpressionLiteral));
             case jint.parser.ast.SyntaxNodes.LogicalExpression:
-                return _expressions.EvaluateLogicalExpression(expression.As());
+                return _expressions.EvaluateLogicalExpression(expression.As(LogicalExpression));
             case jint.parser.ast.SyntaxNodes.MemberExpression:
-                return _expressions.EvaluateMemberExpression(expression.As());
+                return _expressions.EvaluateMemberExpression(expression.As(MemberExpression));
             case jint.parser.ast.SyntaxNodes.NewExpression:
-                return _expressions.EvaluateNewExpression(expression.As());
+                return _expressions.EvaluateNewExpression(expression.As(NewExpression));
             case jint.parser.ast.SyntaxNodes.ObjectExpression:
-                return _expressions.EvaluateObjectExpression(expression.As());
+                return _expressions.EvaluateObjectExpression(expression.As(ObjectExpression));
             case jint.parser.ast.SyntaxNodes.SequenceExpression:
-                return _expressions.EvaluateSequenceExpression(expression.As());
+                return _expressions.EvaluateSequenceExpression(expression.As(SequenceExpression));
             case jint.parser.ast.SyntaxNodes.ThisExpression:
-                return _expressions.EvaluateThisExpression(expression.As());
+                return _expressions.EvaluateThisExpression(expression.As(ThisExpression));
             case jint.parser.ast.SyntaxNodes.UpdateExpression:
-                return _expressions.EvaluateUpdateExpression(expression.As());
+                return _expressions.EvaluateUpdateExpression(expression.As(UpdateExpression));
             case jint.parser.ast.SyntaxNodes.UnaryExpression:
-                return _expressions.EvaluateUnaryExpression(expression.As());
+                return _expressions.EvaluateUnaryExpression(expression.As(UnaryExpression));
             default:
                 return throw new system.ArgumentOutOfRangeException();
         }
@@ -522,13 +533,13 @@ class Engine
                 {
                     var go:jint.native.global.GlobalObject = Global;
                     var existingProp:jint.runtime.descriptors.PropertyDescriptor = go.GetProperty(fn);
-                    if (existingProp.Configurable.Value)
+                    if (existingProp.Configurable!=null)
                     {
-                        go.DefineOwnProperty(fn, new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(jint.native.Undefined.Instance, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(configurableBindings)), true);
+                        go.DefineOwnProperty(fn, new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(jint.native.Undefined.Instance,  (true),  (true),  (configurableBindings)), true);
                     }
                     else
                     {
-                        if (existingProp.IsAccessorDescriptor() || (!existingProp.Enumerable.Value))
+                        if (existingProp.IsAccessorDescriptor() || (!existingProp.Enumerable))
                         {
                             throw new jint.runtime.JavaScriptException().Creator(TypeError);
                         }

@@ -2,7 +2,7 @@ package jint.native.regexp;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class RegExpConstructor extends jint.native.functions.FunctionInstance implements jint.native.IConstructor
 {
     public function new(engine:jint.Engine)

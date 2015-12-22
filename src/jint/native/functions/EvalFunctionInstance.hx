@@ -5,7 +5,7 @@ import anonymoustypes.*;
 
 class EvalFunctionInstance extends jint.native.functions.FunctionInstance
 {
-    private var _engine:jint.Engine;
+ 
     public function new(engine:jint.Engine, parameters:Array<String>, scope:jint.runtime.environments.LexicalEnvironment, strict:Bool)
     {
         super(engine, parameters, scope, strict);

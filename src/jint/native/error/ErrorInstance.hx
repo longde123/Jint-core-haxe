@@ -2,7 +2,7 @@ package jint.native.error;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class ErrorInstance extends jint.native.object.ObjectInstance
 {
     public function new(engine:jint.Engine, name:String)

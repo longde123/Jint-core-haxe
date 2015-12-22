@@ -2,7 +2,7 @@ package jint.runtime;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class TypeConverter
 {
     public static function ToPrimitive(input:jint.native.JsValue, preferredType:Int = jint.runtime.Types.None):jint.native.JsValue
@@ -92,11 +92,12 @@ class TypeConverter
             }
             if (system.Cs2Hx.Equals_String("+Infinity", s) || system.Cs2Hx.Equals_String("Infinity", s))
             {
-                return 正无穷大;
+				
+                return Math.POSITIVE_INFINITY;
             }
             if (system.Cs2Hx.Equals_String("-Infinity", s))
             {
-                return 负无穷大;
+                return Math.NEGATIVE_INFINITY;
             }
             try
             {
@@ -119,7 +120,7 @@ class TypeConverter
             }
             catch (__ex:system.OverflowException)
             {
-                return system.Cs2Hx.StartsWith(s, "-") ? 负无穷大 : 正无穷大;
+                return system.Cs2Hx.StartsWith(s, "-") ? Math.NEGATIVE_INFINITY : Math.POSITIVE_INFINITY;
             }
             catch (__ex:Dynamic)
             {
@@ -233,15 +234,12 @@ class TypeConverter
             throw new jint.runtime.JavaScriptException().Creator(engine.TypeError);
         }
     }
-    public static function FindBestMatch(engine:jint.Engine, methods:Array<system.reflection.MethodBase>, arguments:Array<jint.native.JsValue>):Array<system.reflection.MethodBase>
-    {
-        return methods;
-    }
+ 
     public static function TypeIsNullable(type:system.TypeCS):Bool
     {
         return !type.IsValueType;
     }
-    public static function ToString_Double_String_CultureInfo(x:Float, p:String, cultureInfo:system.globalization.CultureInfo):String
+    public static function ToString_Double_String_CultureInfo(x:Float, p:String, cultureInfo:Date):String
     {
         return throw new system.NotImplementedException();
     }
@@ -253,7 +251,7 @@ class TypeConverter
     {
         return throw new system.NotImplementedException();
     }
-    public static function ToString_Int32_CultureInfo(p:Int, cultureInfo:system.globalization.CultureInfo):String
+    public static function ToString_Int32_CultureInfo(p:Int, cultureInfo:Date):String
     {
         return throw new system.NotImplementedException();
     }

@@ -2,7 +2,7 @@ package jint.native.string;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class StringInstance extends jint.native.object.ObjectInstance implements jint.native.IPrimitiveInstance
 {
     public function new(engine:jint.Engine)
@@ -20,11 +20,7 @@ class StringInstance extends jint.native.object.ObjectInstance implements jint.n
         return jint.runtime.Types.String;
     }
 
-    var PrimitiveValue(get_PrimitiveValue, never):jint.native.JsValue;
-    function get_PrimitiveValue():jint.native.JsValue
-    {
-        return PrimitiveValue;
-    }
+  
 
     public var PrimitiveValue:jint.native.JsValue;
     private static function IsInt(d:Float):Bool
@@ -67,6 +63,6 @@ class StringInstance extends jint.native.object.ObjectInstance implements jint.n
             return jint.runtime.descriptors.PropertyDescriptor.Undefined;
         }
         var resultStr:String = Cs2Hx.CharToString(str.AsString().charCodeAt(index));
-        return new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(new jint.native.JsValue().Creator_String(resultStr), new Nullable_Bool(false), new Nullable_Bool(true), new Nullable_Bool(false));
+        return new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(resultStr, new Nullable_Bool(false), new Nullable_Bool(true), new Nullable_Bool(false));
     }
 }

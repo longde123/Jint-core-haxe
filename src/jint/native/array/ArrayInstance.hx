@@ -1,12 +1,13 @@
 package jint.native.array;
 using StringTools;
+import haxe.ds.IntMap.IntMap;
 import system.*;
 import anonymoustypes.*;
 
 class ArrayInstance extends jint.native.object.ObjectInstance
 {
     private var _engine:jint.Engine;
-    private var _array:system.collections.generic.IDictionary<Int, jint.runtime.descriptors.PropertyDescriptor>;
+    private var _array:jint.runtime.MruPropertyCache<Int, jint.runtime.descriptors.PropertyDescriptor>;
     private var _length:jint.runtime.descriptors.PropertyDescriptor;
     public function new(engine:jint.Engine)
     {

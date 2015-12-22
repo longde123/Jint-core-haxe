@@ -5,7 +5,7 @@ import anonymoustypes.*;
 
 class ObjectConstructor extends jint.native.functions.FunctionInstance implements jint.native.IConstructor
 {
-    private var _engine:jint.Engine;
+   
     public function new(engine:jint.Engine)
     {
         super(engine, null, null, false);

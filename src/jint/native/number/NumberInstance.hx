@@ -5,7 +5,7 @@ import anonymoustypes.*;
 
 class NumberInstance extends jint.native.object.ObjectInstance implements jint.native.IPrimitiveInstance
 {
-    private static inline var NegativeZeroBits:Float = system.BitConverter.DoubleToInt64Bits(-0.0);
+    private static inline var NegativeZeroBits:Float = (-0.0);
     public function new(engine:jint.Engine)
     {
         super(engine);
@@ -20,12 +20,7 @@ class NumberInstance extends jint.native.object.ObjectInstance implements jint.n
     {
         return jint.runtime.Types.Number;
     }
-
-    var PrimitiveValue(get_PrimitiveValue, never):jint.native.JsValue;
-    function get_PrimitiveValue():jint.native.JsValue
-    {
-        return PrimitiveValue;
-    }
+ 
 
     public var PrimitiveValue:jint.native.JsValue;
     public static function IsNegativeZero(x:Float):Bool

@@ -30,6 +30,6 @@ class DelegateWrapper extends jint.native.functions.FunctionInstance
         } //end for
       
        // change the "this" scope in a Haxe object
-        return jint.native.JsValue.FromObject(Engine, Reflect.callMethod(_item!=null?_item:this,_d,parameters);
+        return jint.native.JsValue.FromObject(Engine, Reflect.callMethod(_item!=null?_item:this,_d,parameters));
     }
 }

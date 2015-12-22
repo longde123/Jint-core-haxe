@@ -2,7 +2,7 @@ package jint.native.array;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class ArrayPrototype extends jint.native.array.ArrayInstance
 {
     public function new(engine:jint.Engine)
