@@ -5,8 +5,7 @@ import jint.parser.ast.*;
 import system.*;
 import anonymoustypes.*;
  
- 
- 
+
 class JavaScriptParser
 {
     private static var Keywords:Array<String>;

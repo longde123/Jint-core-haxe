@@ -2,12 +2,12 @@ package jint.runtime;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class JavaScriptException extends system.Exception
 {
     private var _errorObject:jint.native.JsValue;
     public var _Message:String;
-    override public function get_Message():String
+    public function get_Message():String
     {
         return _Message;
     }

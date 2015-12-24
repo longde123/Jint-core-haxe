@@ -133,7 +133,11 @@ class StaticJsValue
 		var self:AbstractJsValue = me;
        return self.toString();
     }
-		
+	static	public function GetJType(me:JsValue):Int
+    {
+       	var self:AbstractJsValue = me;
+       return self.GetJType();
+    }
     static public function Equals_Object(me:JsValue,obj:Dynamic):Bool
     {
        var self:AbstractJsValue = me;

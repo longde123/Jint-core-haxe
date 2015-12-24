@@ -2,7 +2,7 @@ package jint.native.functions;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class FunctionInstance extends jint.native.object.ObjectInstance implements jint.native.ICallable
 {
     private var _engine:jint.Engine;
@@ -23,7 +23,7 @@ class FunctionInstance extends jint.native.object.ObjectInstance implements jint
     public var Strict:Bool;
     public function HasInstance(v:jint.native.JsValue):Bool
     {
-        var vObj:jint.native.object.ObjectInstance = v.TryCast();
+        var vObj:jint.native.object.ObjectInstance = v.TryCast(jint.native.object.ObjectInstance);
         if (vObj == null)
         {
             return false;
@@ -51,7 +51,7 @@ class FunctionInstance extends jint.native.object.ObjectInstance implements jint
             }
         }
     }
-    override public function get_Class():String
+    override public function get_JClass():String
     {
         return "Function";
     }
@@ -59,7 +59,7 @@ class FunctionInstance extends jint.native.object.ObjectInstance implements jint
     override public function Get(propertyName:String):jint.native.JsValue
     {
         var v:jint.native.JsValue = super.Get(propertyName);
-        var f:jint.native.functions.FunctionInstance = v.As();
+        var f:jint.native.functions.FunctionInstance = v.As(jint.native.functions.FunctionInstance);
         if (propertyName == "caller" && f != null && f.Strict)
         {
             return throw new jint.runtime.JavaScriptException().Creator(_engine.TypeError);

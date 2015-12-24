@@ -1,5 +1,6 @@
 package jint.native.json;
 using StringTools;
+import jint.native.ICallable;
 import system.*;
 import anonymoustypes.*;
 using jint.native.StaticJsValue;
@@ -19,24 +20,24 @@ class JsonSerializer
     public function Serialize(value:jint.native.JsValue, replacer:jint.native.JsValue, space:jint.native.JsValue):jint.native.JsValue
     {
         _stack = new Array<Dynamic>();
-        if (value.Is() && replacer.Equals(jint.native.Undefined.Instance))
+        if (value.Is(jint.native.ICallable) && replacer.Equals(jint.native.Undefined.Instance))
         {
             return jint.native.Undefined.Instance;
         }
         if (replacer.IsObject())
         {
-            if (replacer.Is())
+            if (replacer.Is(jint.native.ICallable))
             {
                 _replacerFunction = replacer;
             }
             else
             {
                 var replacerObj:jint.native.object.ObjectInstance = replacer.AsObject();
-                if (replacerObj.Class == "Array")
+                if (replacerObj.JClass == "Array")
                 {
                     _propertyList = new Array<String>();
                 }
-                for (property in system.linq.Enumerable.Select(replacerObj.GetOwnProperties(), function (x:system.collections.generic.KeyValuePair<String, jint.runtime.descriptors.PropertyDescriptor>):jint.runtime.descriptors.PropertyDescriptor { return x.Value; } ))
+                for (property in  replacerObj.GetOwnProperties().iterator()   )
                 {
                     var v:jint.native.JsValue = _engine.GetValue(property);
                     var item:String = null;
@@ -51,7 +52,7 @@ class JsonSerializer
                     else if (v.IsObject())
                     {
                         var propertyObj:jint.native.object.ObjectInstance = v.AsObject();
-                        if (propertyObj.Class == "String" || propertyObj.Class == "Number")
+                        if (propertyObj.JClass == "String" || propertyObj.JClass == "Number")
                         {
                             item = jint.runtime.TypeConverter.toString(v);
                         }
@@ -66,11 +67,11 @@ class JsonSerializer
         if (space.IsObject())
         {
             var spaceObj:jint.native.object.ObjectInstance = space.AsObject();
-            if (spaceObj.Class == "Number")
+            if (spaceObj.JClass == "Number")
             {
                 space = jint.runtime.TypeConverter.ToNumber(spaceObj);
             }
-            else if (spaceObj.Class == "String")
+            else if (spaceObj.JClass == "String")
             {
                 space = jint.runtime.TypeConverter.toString(spaceObj);
             }
@@ -79,7 +80,9 @@ class JsonSerializer
         {
             if (space.AsNumber() > 0)
             {
-                _gap = new String(32, Std.int(system.MathCS.Min_Double_Double(10, space.AsNumber())));
+				//  _gap = new System.String(' ', (int)System.Math.Min(10, space.AsNumber()));
+				//todo
+                _gap =" ";
             }
             else
             {
@@ -96,7 +99,7 @@ class JsonSerializer
             _gap = "";
         }
         var wrapper:jint.native.object.ObjectInstance = _engine.JObject.Construct(jint.runtime.Arguments.Empty);
-        wrapper.DefineOwnProperty("", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(value, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), false);
+        wrapper.DefineOwnProperty("", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(value, (true), (true), (true)), false);
         return Str("", wrapper);
     }
     private function Str(key:String, holder:jint.native.object.ObjectInstance):jint.native.JsValue
@@ -122,7 +125,7 @@ class JsonSerializer
         if (value.IsObject())
         {
             var valueObj:jint.native.object.ObjectInstance = value.AsObject();
-            switch (valueObj.Class)
+            switch (valueObj.JClass)
             {
                 case "Number":
                     value = jint.runtime.TypeConverter.ToNumber(value);
@@ -131,7 +134,7 @@ class JsonSerializer
                 case "Boolean":
                     value = jint.runtime.TypeConverter.ToPrimitive(value);
                 case "Array":
-                    value = SerializeArray(value.As());
+                    value = SerializeArray(value.As(jint.native.array.ArrayInstance));
                     return value;
                 case "Object":
                     value = SerializeObject(value.AsObject());
@@ -165,9 +168,9 @@ class JsonSerializer
         var isCallable:Bool = value.IsObject() && Std.is(value.AsObject(), jint.native.ICallable);
         if (value.IsObject() && isCallable == false)
         {
-            if (value.AsObject().Class == "Array")
+            if (value.AsObject().JClass == "Array")
             {
-                return SerializeArray(value.As());
+                return SerializeArray(value.As(jint.native.array.ArrayInstance));
             }
             return SerializeObject(value.AsObject());
         }
@@ -198,7 +201,7 @@ class JsonSerializer
                     if (c < 0x20)
                     {
                         product += "\\u";
-                        product += jint.runtime.TypeConverter.toString(c, "x4");
+                        product += jint.runtime.TypeConverter.ToString_Int32_String(c, "x4");
                     }
                     else
                     {
@@ -257,7 +260,7 @@ class JsonSerializer
         {
             throw new system.ArgumentNullException("value");
         }
-        if (_stack.Contains(value))
+        if (_stack.indexOf(value)!=-1)
         {
             throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.TypeError, "Cyclic reference detected.");
         }
@@ -269,8 +272,28 @@ class JsonSerializer
         _stack.push(value);
         var stepback:String = _indent;
         _indent += _gap;
-        var k:Array<String> = Cs2Hx.Coalesce(_propertyList, system.linq.Enumerable.ToList(system.linq.Enumerable.Select(system.linq.Enumerable.Where(value.GetOwnProperties(), function (x:system.collections.generic.KeyValuePair<String, jint.runtime.descriptors.PropertyDescriptor>):Bool { return x.Value.Enumerable.HasValue && x.Value.Enumerable.Value == true; } ), function (x:system.collections.generic.KeyValuePair<String, jint.runtime.descriptors.PropertyDescriptor>):String { return x.Key; } )));
-        var partial:Array<String> = new Array<String>();
+		/*
+		var k = _propertyList ?? value.GetOwnProperties()
+                .Where(x => x.Value.Enumerable.HasValue && x.Value.Enumerable.Value == true)
+                .Select(x => x.Key)
+                .ToList();
+*/
+        var k:Array<String> = _propertyList;
+		if (k == null)
+		{
+			k = [];
+			var OwnProperties = value.GetOwnProperties();
+			for (key in OwnProperties.keys())
+			{
+				var x = OwnProperties.get(key);
+				if ( x.Enumerable != null && x.Enumerable == true )
+				{
+					k.push(key);
+				}
+			} 
+		}
+        
+		var partial:Array<String> = new Array<String>();
         for (p in k)
         {
             var strP:jint.native.JsValue = Str(p, value);

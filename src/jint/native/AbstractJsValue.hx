@@ -1,8 +1,10 @@
 package jint.native; 
+import haxe.ds.StringMap.StringMap;
 /**
  * ...
  * @author paling
  */
+using jint.native.StaticJsValue;
 
 class  AbstractJsValue  { 
  
@@ -128,7 +130,7 @@ class  AbstractJsValue  {
         if (IsObject())
         {
             var o:jint.native.object.ObjectInstance = AsObject();
-            var t:T = (Std.is(o, TClass) ? cast(o, TClass) : null);
+            var t:T = (Std.is(o, TClass) ? cast o : null);
             if (t != null)
             {
                 return t;
@@ -146,7 +148,7 @@ class  AbstractJsValue  {
     }
     public function As<T: (jint.native.object.ObjectInstance)>(TClass:Class<T>):T
     {
-        return (Std.is(_object, TClass) ? cast(_object, TClass) : null);
+        return (Std.is(_object, TClass) ? cast _object  : null);
     }
     public function AsBoolean():Bool
     {
@@ -198,105 +200,13 @@ class  AbstractJsValue  {
                 return throw new system.ArgumentOutOfRangeException();
         }
     }
-    public var Type(get, never):Int;
-    public function get_Type():Int
+
+    public function GetJType():Int
     {
         return _type;
     }
 
-    public static function FromObject(engine:jint.Engine, value:Dynamic):jint.native.AbstractJsValue
-    {
-        if (value == null)
-        {
-            return Null;
-        }
-        for (converter in engine.Options.GetObjectConverters())
-        {
-            var result:CsRef<jint.native.AbstractJsValue> = new CsRef<jint.native.AbstractJsValue>(null);
-            if (converter.TryConvert(value, result))
-            {
-                return result.Value;
-            }
-        }
-        var typeCode:Int = system.TypeCS.GetTypeCode(system.Cs2Hx.GetType(value));
-        switch (typeCode)
-        {
-            case system.TypeCode.Boolean:
-                return new jint.native.AbstractJsValue().Creator(value);
-            case system.TypeCode.Byte:
-                return new jint.native.AbstractJsValue().Creator_Double(value);
-            case system.TypeCode.Char:
-                return new jint.native.AbstractJsValue().Creator_String(value.toString());
-            case system.TypeCode.DateTime:
-                return engine.JDate.Construct_DateTime(value);
-            case system.TypeCode.Decimal:
-                return new jint.native.AbstractJsValue().Creator_Double(cast(value, Float));
-            case system.TypeCode.Double:
-                return new jint.native.AbstractJsValue().Creator_Double(value);
-            case system.TypeCode.Int16:
-                return new jint.native.AbstractJsValue().Creator_Double(value);
-            case system.TypeCode.Int32:
-                return new jint.native.AbstractJsValue().Creator_Double(value);
-            case system.TypeCode.Int64:
-                return new jint.native.AbstractJsValue().Creator_Double(value);
-            case system.TypeCode.SByte:
-                return new jint.native.AbstractJsValue().Creator_Double(value);
-            case system.TypeCode.Single:
-                return new jint.native.AbstractJsValue().Creator_Double(value);
-            case system.TypeCode.String:
-                return new jint.native.AbstractJsValue().Creator_String(value);
-            case system.TypeCode.UInt16:
-                return new jint.native.AbstractJsValue().Creator_Double(value);
-            case system.TypeCode.UInt32:
-                return new jint.native.AbstractJsValue().Creator_Double(value);
-            case system.TypeCode.UInt64:
-                return new jint.native.AbstractJsValue().Creator_Double(value);
-            case system.TypeCode.Object:
-            case system.TypeCode.Empty:
-            default:
-                return throw new system.ArgumentOutOfRangeException();
-        }
-        if (Std.is(value, system.DateTimeOffset))
-        {
-            return engine.JDate.Construct_DateTimeOffset(value);
-        }
-        var instance:jint.native.object.ObjectInstance = (Std.is(value, jint.native.object.ObjectInstance) ? cast(value, jint.native.object.ObjectInstance) : null);
-        if (instance != null)
-        {
-            return new jint.native.AbstractJsValue().Creator_ObjectInstance(instance);
-        }
-        if (Std.is(value, jint.native.AbstractJsValue))
-        {
-            return value;
-        }
-        var array = cast(value);
-        if (array != null)
-        {
-            var jsArray:jint.native.object.ObjectInstance = engine.JArray.Construct(jint.runtime.Arguments.Empty);
-            for (item in array)
-            {
-                var jsItem:jint.native.AbstractJsValue = FromObject(engine, item);
-                engine.JArray.PrototypeObject.Push(jsArray, jint.runtime.Arguments.From([ jsItem ]));
-            }
-            return jsArray;
-        }
-        var regex:system.text.regularexpressions.Regex = value;
-        if (regex != null)
-        {
-            var jsRegex:jint.native.regexp.RegExpInstance = engine.JRegExp.Construct_String(system.Cs2Hx.Trim_(regex.toString(), [ 47 ]));
-            return jsRegex;
-        }
-        var d:system.Delegate = value;
-        if (d != null)
-        {
-            return new jint.runtime.interop.DelegateWrapper(engine, d);
-        }
-        if (system.Cs2Hx.GetType(value).IsEnum)
-        {
-            return new jint.native.AbstractJsValue().Creator_Double(value);
-        }
-        return new jint.runtime.interop.ObjectWrapper(engine, value);
-    }
+  
     public function ToObject():Dynamic
     {
         switch (_type)
@@ -315,7 +225,7 @@ class  AbstractJsValue  {
                 {
                     return wrapper.Target;
                 }
-                switch ((_object).Class)
+                switch ((_object).JClass)
                 {
                     case "Array":
                         var arrayInstance:jint.native.array.ArrayInstance = _object;
@@ -347,6 +257,7 @@ class  AbstractJsValue  {
                         var stringInstance:jint.native.string.StringInstance = _object;
                         if (stringInstance != null)
                         {
+							
                             return stringInstance.PrimitiveValue.AsString();
                         }
                     case "Date":
@@ -380,15 +291,21 @@ class  AbstractJsValue  {
                             return regeExpInstance.Value;
                         }
                     case "Object":
-                        var o:system.collections.generic.IDictionary<String, Dynamic> = new system.collections.generic.Dictionary<String, Dynamic>();
-                        for (p in ((Std.is(_object, jint.native.object.ObjectInstance) ? cast(_object, jint.native.object.ObjectInstance) : null)).GetOwnProperties())
-                        {
-                            if (!p.Value.Enumerable.HasValue || p.Value.Enumerable.Value == false)
-                            {
-                                continue;
-                            }
-                            o.Add(p.Key, ((Std.is(_object, jint.native.object.ObjectInstance) ? cast(_object, jint.native.object.ObjectInstance) : null)).Get(p.Key).ToObject());
-                        }
+                        var o:StringMap<Dynamic> = new StringMap<Dynamic>();
+						var ObjInst = ((Std.is(_object, jint.native.object.ObjectInstance) ? cast(_object, jint.native.object.ObjectInstance) : null));
+						if (ObjInst != null)
+						{
+							var OwnProperties = ObjInst.GetOwnProperties();					 
+							for (pKey in OwnProperties.keys())
+							{
+								var p = OwnProperties.get(pKey);
+								if (p.Enumerable==null || p.Enumerable == false)
+								{
+									continue;
+								}
+								o.set(pKey, ObjInst.Get(pKey).ToObject());
+							}
+						}
                         return o;
                 }
                 return _object;
@@ -398,11 +315,12 @@ class  AbstractJsValue  {
     }
     public function Invoke(arguments:Array<jint.native.AbstractJsValue>):jint.native.AbstractJsValue
     {
-        return Invoke_AbstractJsValue_(Undefined, arguments);
+		var undefined:AbstractJsValue=JsValue.Undefined;
+        return Invoke_AbstractJsValue_(undefined, arguments);
     }
     public function Invoke_AbstractJsValue_(thisObj:jint.native.AbstractJsValue, arguments:Array<jint.native.AbstractJsValue>):jint.native.AbstractJsValue
     {
-        var callable:jint.native.ICallable = TryCast();
+        var callable:jint.native.ICallable = TryCast(ICallable);
         if (callable == null)
         {
             return throw new system.ArgumentException("Can only invoke functions");
@@ -432,7 +350,7 @@ class  AbstractJsValue  {
 		
     public function Equals_Object(obj:Dynamic):Bool
     {
-        if (ReferenceEquals(null, obj))
+        if (null== obj)
         {
             return false;
         }
@@ -446,12 +364,6 @@ class  AbstractJsValue  {
         hashCode = (hashCode * 397) ^ _type;
         return hashCode;
     }
-    public static function cctor():Void
-    {
-        Undefined = new jint.native.AbstractJsValue().Creator_Types(jint.runtime.Types.Undefined);
-        Null = new jint.native.AbstractJsValue().Creator_Types(jint.runtime.Types.Null);
-        False = new jint.native.AbstractJsValue().Creator(false);
-        True = new jint.native.AbstractJsValue().Creator(true);
-    }
+
    
 }

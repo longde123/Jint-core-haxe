@@ -56,7 +56,7 @@ import jint.runtime.TypeConverter;
 import jint.runtime.Types;
  */
 import jint.StrictModeScope;
-//import jint.native.JsValue;
+import jint.native.JsValue;
 using  TestAbstract;
 
  
@@ -75,7 +75,8 @@ class Main
 	}
 	static function main() 
 	{ 
-		
+		var c:ColorAbstract =  1;
+		c.testColor();
 		var a:MyAbstract = "3";
 		a.test();  
 		var stage = Lib.current.stage;

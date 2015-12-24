@@ -476,10 +476,10 @@ class JsonParser
         _engine.JArray.PrototypeObject.Push(jsArray, system.linq.Enumerable.ToArray(values));
         return jsArray;
     }
-    private function ThrowError(token:jint.native.json.JsonParser_Token, messageFormat:String, arguments:Array<Dynamic>):Void
+    private function ThrowError(token:jint.native.json.JsonParser_Token, messageFormat:String, ?arguments:Array<Dynamic>):Void
     {
         var exception:jint.parser.ParserException;
-        var msg:String = system.String.Format_String_(messageFormat, arguments);
+        var msg:String = Cs2Hx.Format(messageFormat, arguments);
         if (token.LineNumber.HasValue)
         {
             exception = new jint.parser.ParserException("Line " + token.LineNumber + ": " + msg);
@@ -516,14 +516,14 @@ class JsonParser
     private function Expect(value:String):Void
     {
         var token:jint.native.json.JsonParser_Token = Lex();
-        if (token.Type != jint.native.json.JsonParser_Tokens.Punctuator || !system.Cs2Hx.Equals(value, token.Value))
+        if (token.Type != jint.native.json.JsonParser_Tokens.Punctuator || (value!= token.Value))
         {
             ThrowUnexpected(token);
         }
     }
     private function Match(value:String):Bool
     {
-        return _lookahead.Type == jint.native.json.JsonParser_Tokens.Punctuator && system.Cs2Hx.Equals(value, _lookahead.Value);
+        return _lookahead.Type == jint.native.json.JsonParser_Tokens.Punctuator && (value== _lookahead.Value);
     }
     private function ParseJsonArray():jint.native.object.ObjectInstance
     {
@@ -602,11 +602,11 @@ class JsonParser
                 var v:Dynamic = Lex().Value;
                 return jint.native.Null.Instance;
             case jint.native.json.JsonParser_Tokens.BooleanLiteral:
-                return new jint.native.JsValue().Creator(Lex().Value);
+                return (Lex().Value);
             case jint.native.json.JsonParser_Tokens.String:
-                return new jint.native.JsValue().Creator_String(Lex().Value);
+                return (Lex().Value);
             case jint.native.json.JsonParser_Tokens.Number:
-                return new jint.native.JsValue().Creator_Double(Lex().Value);
+                return (Lex().Value);
         }
         if (Match("["))
         {
@@ -641,7 +641,7 @@ class JsonParser
         _state.MarkerStack = new Array<Int>();
         _extra = new jint.native.json.JsonParser_Extra();
         _extra.Range = [  ];
-        _extra.Loc = new Nullable_Int(0);
+        _extra.Loc = (0);
         if (options != null)
         {
             if (!system.Cs2Hx.IsNullOrEmpty(options.Source))
@@ -661,7 +661,7 @@ class JsonParser
         var value:Dynamic = _lookahead.Value;
         if (_lookahead.Type != jint.native.json.JsonParser_Tokens.EOF)
         {
-            return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.SyntaxError, Cs2Hx.Format("Unexpected {0} {1}", _lookahead.Type, _lookahead.Value));
+            return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.SyntaxError, Cs2Hx.Format("Unexpected {0} {1}", [_lookahead.Type, _lookahead.Value]));
         }
         return jsv;
         _extra = new jint.native.json.JsonParser_Extra();

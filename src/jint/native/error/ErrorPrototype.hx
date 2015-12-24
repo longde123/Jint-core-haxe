@@ -2,7 +2,7 @@ package jint.native.error;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class ErrorPrototype extends jint.native.error.ErrorInstance
 {
     public function new(engine:jint.Engine, name:String)
@@ -26,11 +26,11 @@ class ErrorPrototype extends jint.native.error.ErrorInstance
     }
     public function Configure():Void
     {
-        FastAddProperty("toString", new jint.runtime.interop.ClrFunctionInstance(Engine, ToString), true, false, true);
+        FastAddProperty("toString", new jint.runtime.interop.ClrFunctionInstance(Engine, toString), true, false, true);
     }
     override public function toString(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
-        var o:jint.native.object.ObjectInstance = thisObject.TryCast();
+        var o:jint.native.object.ObjectInstance = thisObject.TryCast(jint.native.object.ObjectInstance);
         if (o == null)
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);

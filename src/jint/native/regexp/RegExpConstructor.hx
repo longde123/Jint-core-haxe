@@ -26,7 +26,7 @@ class RegExpConstructor extends jint.native.functions.FunctionInstance implement
     {
         var pattern:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 0);
         var flags:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 1);
-        if (!pattern.Equals(jint.native.Undefined.Instance) && flags.Equals(jint.native.Undefined.Instance) && jint.runtime.TypeConverter.ToObject(Engine, pattern).Class == "Regex")
+        if (!pattern.Equals(jint.native.Undefined.Instance) && flags.Equals(jint.native.Undefined.Instance) && jint.runtime.TypeConverter.ToObject(Engine, pattern).JClass == "Regex")
         {
             return pattern;
         }

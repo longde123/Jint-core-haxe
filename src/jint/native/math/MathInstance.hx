@@ -10,7 +10,7 @@ class MathInstance extends jint.native.object.ObjectInstance
     {
         super(engine);
     }
-    override public function get_Class():String
+    override public function get_JClass():String
     {
         return "Math";
     }
@@ -42,11 +42,11 @@ class MathInstance extends jint.native.object.ObjectInstance
         FastAddProperty("sin", new jint.runtime.interop.ClrFunctionInstance(Engine, Sin), true, false, true);
         FastAddProperty("sqrt", new jint.runtime.interop.ClrFunctionInstance(Engine, Sqrt), true, false, true);
         FastAddProperty("tan", new jint.runtime.interop.ClrFunctionInstance(Engine, Tan), true, false, true);
-        FastAddProperty("E", system.MathCS.E, false, false, false);
+        //FastAddProperty("E", system.MathCS.E, false, false, false);
         FastAddProperty("LN10", system.MathCS.Log(10), false, false, false);
         FastAddProperty("LN2", system.MathCS.Log(2), false, false, false);
-        FastAddProperty("LOG2E", system.MathCS.Log_Double_Double(system.MathCS.E, 2), false, false, false);
-        FastAddProperty("LOG10E", system.MathCS.Log_Double_Double(system.MathCS.E, 10), false, false, false);
+		//FastAddProperty("LOG2E", system.MathCS.Log_Double_Double(system.MathCS.E, 2), false, false, false);
+		//FastAddProperty("LOG10E", system.MathCS.Log_Double_Double(system.MathCS.E, 10), false, false, false);
         FastAddProperty("PI", system.MathCS.PI, false, false, false);
         FastAddProperty("SQRT1_2", system.MathCS.Sqrt(0.5), false, false, false);
         FastAddProperty("SQRT2", system.MathCS.Sqrt(2), false, false, false);
@@ -79,7 +79,7 @@ class MathInstance extends jint.native.object.ObjectInstance
         {
             return Math.NaN;
         }
-        if (y > 0 && x.Equals_Double(0))
+        if (y > 0 && x==(0))
         {
             return system.MathCS.PI / 2;
         }
@@ -121,7 +121,7 @@ class MathInstance extends jint.native.object.ObjectInstance
                 return -system.MathCS.PI;
             }
         }
-        if (y < 0 && x.Equals_Double(0))
+        if (y < 0 && x==(0))
         {
             return -system.MathCS.PI / 2;
         }
@@ -191,7 +191,7 @@ class MathInstance extends jint.native.object.ObjectInstance
     private static function Floor(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var x:Float = jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 0));
-        return system.MathCS.Floor_Double(x);
+        return Math.floor(x);
     }
     private static function Log(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
@@ -202,7 +202,7 @@ class MathInstance extends jint.native.object.ObjectInstance
     {
         if (arguments.length == 0)
         {
-            return system.Double.NegativeInfinity;
+            return Math.NEGATIVE_INFINITY;
         }
         var max:Float = jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 0));
         { //for
@@ -219,7 +219,7 @@ class MathInstance extends jint.native.object.ObjectInstance
     {
         if (arguments.length == 0)
         {
-            return system.Double.PositiveInfinity;
+            return Math.POSITIVE_INFINITY;
         }
         var min:Float = jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 0));
         { //for
@@ -240,11 +240,11 @@ class MathInstance extends jint.native.object.ObjectInstance
         {
             return Math.NaN;
         }
-        if (y.Equals_Double(0))
+        if (y==(0))
         {
             return 1;
         }
-        if (Cs2Hx.IsNaN(x) && !y.Equals_Double(0))
+        if (Cs2Hx.IsNaN(x) && y!=(0))
         {
             return Math.NaN;
         }
@@ -259,7 +259,7 @@ class MathInstance extends jint.native.object.ObjectInstance
                 return  0;
             }
         }
-        if (system.MathCS.Abs_Double(x).Equals_Double(1))
+        if (system.MathCS.Abs_Double(x)==(1))
         {
             if (Cs2Hx.IsInfinity(y))
             {
@@ -292,7 +292,7 @@ class MathInstance extends jint.native.object.ObjectInstance
         {
             if (y > 0)
             {
-                if (system.MathCS.Abs_Double(y % 2).Equals_Double(1))
+                if (system.MathCS.Abs_Double(y % 2)==(1))
                 {
                     return Math.NEGATIVE_INFINITY;
                 }
@@ -300,7 +300,7 @@ class MathInstance extends jint.native.object.ObjectInstance
             }
             if (y < 0)
             {
-                if (system.MathCS.Abs_Double(y % 2).Equals_Double(1))
+                if (system.MathCS.Abs_Double(y % 2)==(1))
                 {
                     return -0;
                 }
@@ -322,7 +322,7 @@ class MathInstance extends jint.native.object.ObjectInstance
         {
             if (y > 0)
             {
-                if (system.MathCS.Abs_Double(y % 2).Equals_Double(1))
+                if (system.MathCS.Abs_Double(y % 2)==(1))
                 {
                     return -0;
                 }
@@ -330,18 +330,18 @@ class MathInstance extends jint.native.object.ObjectInstance
             }
             if (y < 0)
             {
-                if (system.MathCS.Abs_Double(y % 2).Equals_Double(1))
+                if (system.MathCS.Abs_Double(y % 2)==(1))
                 {
                     return Math.NEGATIVE_INFINITY;
                 }
                 return Math.POSITIVE_INFINITY;
             }
         }
-        if (x < 0 && !Cs2Hx.IsInfinity(x) && !Cs2Hx.IsInfinity(y) && !y.Equals_Double(Std.int(y)))
+        if (x < 0 && !Cs2Hx.IsInfinity(x) && !Cs2Hx.IsInfinity(y) && y!=(Std.int(y)))
         {
             return Math.NaN;
         }
-        return system.MathCS.Pow(x, y);
+        return Math.pow(x, y);
     }
     private static function Random(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
@@ -350,8 +350,8 @@ class MathInstance extends jint.native.object.ObjectInstance
     private static function Round(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var x:Float = jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 0));
-        var round:Float = system.MathCS.Round(x);
-        if (round.Equals_Double(x - 0.5))
+        var round:Float = Math.round(x);
+        if (round==(x - 0.5))
         {
             return round + 1;
         }

@@ -15,12 +15,12 @@ class IndexDescriptor extends jint.runtime.descriptors.PropertyDescriptor
         super();
         _engine = engine;
         _item = item; 
-        Writable = new Null<Bool>(true);
+        Writable =  (true);
     }
     override public function get_Value():jint.native.JsValue
     { 
 		try{
-            var invokeValue:Bool =Lambda.has( Reflect.fields(_item),function(k) return k==_key);
+		var invokeValue:Bool = Lambda.has( Reflect.fields(_item), function(k) { return k == _key; } );
             if (invokeValue != true)
             {
                 return jint.native.JsValue.Undefined;

@@ -2,7 +2,7 @@ package jint.native.functions;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class EvalFunctionInstance extends jint.native.functions.FunctionInstance
 {
  
@@ -19,7 +19,7 @@ class EvalFunctionInstance extends jint.native.functions.FunctionInstance
     }
     public function Call_JsValue__Boolean(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>, directCall:Bool):jint.native.JsValue
     {
-        if (jint.runtime.Arguments.At(arguments, 0).Type != jint.runtime.Types.String)
+        if (jint.runtime.Arguments.At(arguments, 0).GetJType() != jint.runtime.Types.String)
         {
             return jint.runtime.Arguments.At(arguments, 0);
         }

@@ -2,6 +2,7 @@ package jint.native.functions;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
+using jint.native.StaticJsValue;
 
 class FunctionConstructor extends jint.native.functions.FunctionInstance implements jint.native.IConstructor
 {
@@ -120,7 +121,7 @@ class FunctionConstructor extends jint.native.functions.FunctionInstance impleme
         {
             return throw new system.ArgumentException("Apply has to be called with two arguments.");
         }
-        var func:jint.native.ICallable = thisObject.TryCast();
+        var func:jint.native.ICallable = thisObject.TryCast(jint.native.ICallable);
         var thisArg:jint.native.JsValue = arguments[0];
         var argArray:jint.native.JsValue = arguments[1];
         if (func == null)
@@ -131,7 +132,7 @@ class FunctionConstructor extends jint.native.functions.FunctionInstance impleme
         {
             return func.Call(thisArg, jint.runtime.Arguments.Empty);
         }
-        var argArrayObj:jint.native.object.ObjectInstance = argArray.TryCast();
+        var argArrayObj:jint.native.object.ObjectInstance = argArray.TryCast(jint.native.object.ObjectInstance);
         if (argArrayObj == null)
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);

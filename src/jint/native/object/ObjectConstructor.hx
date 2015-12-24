@@ -1,8 +1,9 @@
 package jint.native.object;
 using StringTools;
+import haxe.ds.StringMap.StringMap;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class ObjectConstructor extends jint.native.functions.FunctionInstance implements jint.native.IConstructor
 {
    
@@ -55,12 +56,12 @@ class ObjectConstructor extends jint.native.functions.FunctionInstance implement
         if (arguments.length > 0)
         {
             var value:jint.native.JsValue = arguments[0];
-            var valueObj:jint.native.object.ObjectInstance = value.TryCast();
+            var valueObj:jint.native.object.ObjectInstance = value.TryCast(jint.native.object.ObjectInstance);
             if (valueObj != null)
             {
                 return valueObj;
             }
-            var type:Int = value.Type;
+            var type:Int = value.GetJType();
             if (type == jint.runtime.Types.String || type == jint.runtime.Types.Number || type == jint.runtime.Types.Boolean)
             {
                 return jint.runtime.TypeConverter.ToObject(_engine, value);
@@ -72,17 +73,17 @@ class ObjectConstructor extends jint.native.functions.FunctionInstance implement
     public function GetPrototypeOf(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var oArg:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 0);
-        var o:jint.native.object.ObjectInstance = oArg.TryCast();
+        var o:jint.native.object.ObjectInstance = oArg.TryCast(jint.native.object.ObjectInstance);
         if (o == null)
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
         }
-        return Cs2Hx.Coalesce(o.Prototype, jint.native.Null.Instance);
+        return o.Prototype!=null?o.Prototype:jint.native.Null.Instance;
     }
     public function GetOwnPropertyDescriptor(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var oArg:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 0);
-        var o:jint.native.object.ObjectInstance = oArg.TryCast();
+        var o:jint.native.object.ObjectInstance = oArg.TryCast(jint.native.object.ObjectInstance);
         if (o == null)
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
@@ -95,7 +96,7 @@ class ObjectConstructor extends jint.native.functions.FunctionInstance implement
     public function GetOwnPropertyNames(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var oArg:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 0);
-        var o:jint.native.object.ObjectInstance = oArg.TryCast();
+        var o:jint.native.object.ObjectInstance = oArg.TryCast(jint.native.object.ObjectInstance);
         if (o == null)
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
@@ -109,15 +110,16 @@ class ObjectConstructor extends jint.native.functions.FunctionInstance implement
                 var i:Int = 0;
                 while (i < s.PrimitiveValue.AsString().length)
                 {
-                    array.DefineOwnProperty(Std.string(n), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(Std.string(i), new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), false);
+                    array.DefineOwnProperty(Std.string(n), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(Std.string(i), (true), (true), (true)), false);
                     n++;
                     i++;
                 }
             } //end for
         }
-        for (p in o.GetOwnProperties())
+		var OwnProperties = o.GetOwnProperties();
+        for (p in OwnProperties.keys())
         {
-            array.DefineOwnProperty(Std.string(n), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(p.Key, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), false);
+            array.DefineOwnProperty(Std.string(n), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(p, (true), (true), (true)), false);
             n++;
         }
         return array;
@@ -125,7 +127,7 @@ class ObjectConstructor extends jint.native.functions.FunctionInstance implement
     public function Create(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var oArg:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 0);
-        var o:jint.native.object.ObjectInstance = oArg.TryCast();
+        var o:jint.native.object.ObjectInstance = oArg.TryCast(jint.native.object.ObjectInstance);
         if (o == null && !oArg.Equals(jint.native.Null.Instance))
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
@@ -142,7 +144,7 @@ class ObjectConstructor extends jint.native.functions.FunctionInstance implement
     public function DefineProperty(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var oArg:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 0);
-        var o:jint.native.object.ObjectInstance = oArg.TryCast();
+        var o:jint.native.object.ObjectInstance = oArg.TryCast(jint.native.object.ObjectInstance);
         if (o == null)
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
@@ -157,45 +159,49 @@ class ObjectConstructor extends jint.native.functions.FunctionInstance implement
     public function DefineProperties(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var oArg:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 0);
-        var o:jint.native.object.ObjectInstance = oArg.TryCast();
+        var o:jint.native.object.ObjectInstance = oArg.TryCast(jint.native.object.ObjectInstance);
         if (o == null)
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
         }
         var properties:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 1);
         var props:jint.native.object.ObjectInstance = jint.runtime.TypeConverter.ToObject(Engine, properties);
-        var descriptors:Array<system.collections.generic.KeyValuePair<String, jint.runtime.descriptors.PropertyDescriptor>> = new Array<system.collections.generic.KeyValuePair<String, jint.runtime.descriptors.PropertyDescriptor>>();
-        for (p in props.GetOwnProperties())
+        var descriptors:StringMap<jint.runtime.descriptors.PropertyDescriptor> = new StringMap<jint.runtime.descriptors.PropertyDescriptor>();
+		var OwnProperties = props.GetOwnProperties();
+		for (pKey in OwnProperties.keys() )
         {
-            if (!p.Value.Enumerable.HasValue || !p.Value.Enumerable.Value)
+			var p = OwnProperties.get(pKey);
+            if (p.Enumerable==null || p.Enumerable==false)
             {
                 continue;
             }
-            var descObj:jint.native.JsValue = props.Get(p.Key);
+            var descObj:jint.native.JsValue = props.Get(pKey);
             var desc:jint.runtime.descriptors.PropertyDescriptor = jint.runtime.descriptors.PropertyDescriptor.ToPropertyDescriptor(Engine, descObj);
-            descriptors.push(new system.collections.generic.KeyValuePair<String, jint.runtime.descriptors.PropertyDescriptor>(p.Key, desc));
+            descriptors.set(pKey, desc);
         }
-        for (pair in descriptors)
+        for (pair in descriptors.keys())
         {
-            o.DefineOwnProperty(pair.Key, pair.Value, true);
+            o.DefineOwnProperty(pair, descriptors.get(pair), true);
         }
         return o;
     }
     public function Seal(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var oArg:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 0);
-        var o:jint.native.object.ObjectInstance = oArg.TryCast();
+        var o:jint.native.object.ObjectInstance = oArg.TryCast(jint.native.object.ObjectInstance);
         if (o == null)
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
         }
-        for (prop in o.GetOwnProperties())
+		var OwnProperties = o.GetOwnProperties();
+        for (propKey in OwnProperties.keys())
         {
-            if (prop.Value.Configurable.HasValue && prop.Value.Configurable.Value)
+			var prop = OwnProperties.get(propKey);
+            if (prop.Configurable!=null && prop.Configurable)
             {
-                prop.Value.Configurable = new Nullable_Bool(false);
+                prop.Configurable = (false);
             }
-            o.DefineOwnProperty(prop.Key, prop.Value, true);
+            o.DefineOwnProperty(propKey, prop, true);
         }
         o.Extensible = false;
         return o;
@@ -203,7 +209,7 @@ class ObjectConstructor extends jint.native.functions.FunctionInstance implement
     public function Freeze(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var oArg:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 0);
-        var o:jint.native.object.ObjectInstance = oArg.TryCast();
+        var o:jint.native.object.ObjectInstance = oArg.TryCast(jint.native.object.ObjectInstance);
         if (o == null)
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
@@ -216,12 +222,12 @@ class ObjectConstructor extends jint.native.functions.FunctionInstance implement
             {
                 if (desc.Writable.HasValue && desc.Writable.Value)
                 {
-                    desc.Writable = new Nullable_Bool(false);
+                    desc.Writable = (false);
                 }
             }
             if (desc.Configurable.HasValue && desc.Configurable.Value)
             {
-                desc.Configurable = new Nullable_Bool(false);
+                desc.Configurable = (false);
             }
             o.DefineOwnProperty(p, desc, true);
         }
@@ -231,7 +237,7 @@ class ObjectConstructor extends jint.native.functions.FunctionInstance implement
     public function PreventExtensions(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var oArg:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 0);
-        var o:jint.native.object.ObjectInstance = oArg.TryCast();
+        var o:jint.native.object.ObjectInstance = oArg.TryCast(jint.native.object.ObjectInstance);
         if (o == null)
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
@@ -242,7 +248,7 @@ class ObjectConstructor extends jint.native.functions.FunctionInstance implement
     public function IsSealed(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var oArg:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 0);
-        var o:jint.native.object.ObjectInstance = oArg.TryCast();
+        var o:jint.native.object.ObjectInstance = oArg.TryCast(jint.native.object.ObjectInstance);
         if (o == null)
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
@@ -263,7 +269,7 @@ class ObjectConstructor extends jint.native.functions.FunctionInstance implement
     public function IsFrozen(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var oArg:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 0);
-        var o:jint.native.object.ObjectInstance = oArg.TryCast();
+        var o:jint.native.object.ObjectInstance = oArg.TryCast(jint.native.object.ObjectInstance);
         if (o == null)
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
@@ -292,7 +298,7 @@ class ObjectConstructor extends jint.native.functions.FunctionInstance implement
     public function IsExtensible(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var oArg:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 0);
-        var o:jint.native.object.ObjectInstance = oArg.TryCast();
+        var o:jint.native.object.ObjectInstance = oArg.TryCast(jint.native.object.ObjectInstance);
         if (o == null)
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
@@ -302,7 +308,7 @@ class ObjectConstructor extends jint.native.functions.FunctionInstance implement
     public function Keys(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var oArg:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 0);
-        var o:jint.native.object.ObjectInstance = oArg.TryCast();
+        var o:jint.native.object.ObjectInstance = oArg.TryCast(jint.native.object.ObjectInstance);
         if (o == null)
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
@@ -314,7 +320,7 @@ class ObjectConstructor extends jint.native.functions.FunctionInstance implement
         for (prop in enumerableProperties)
         {
             var p:String = prop.Key;
-            array.DefineOwnProperty(jint.runtime.TypeConverter.toString(index), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(p, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), false);
+            array.DefineOwnProperty(jint.runtime.TypeConverter.toString(index), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(p, (true), (true), (true)), false);
             index++;
         }
         return array;

@@ -9,7 +9,7 @@ class RegExpInstance extends jint.native.object.ObjectInstance
     {
         super(engine);
     }
-    override public function get_Class():String
+    override public function get_JClass():String
     {
         return "RegExp";
     }

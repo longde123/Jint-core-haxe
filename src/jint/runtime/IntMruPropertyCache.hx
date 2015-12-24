@@ -1,13 +1,20 @@
 package jint.runtime;
+
+/**
+ * ...
+ * @author paling
+ */
+ 
 using StringTools;
+import haxe.ds.StringMap;
 import system.*;
 import anonymoustypes.*;
-import haxe.ds.HashMap;
-class MruPropertyCache<TKey:{ function hashCode():Int; },TValue>   
+import haxe.ds.IntMap;
+class IntMruPropertyCache<TValue>   
 {
-    private var _dictionary : HashMap<TKey, TValue > ;
+    private var _dictionary : IntMap<TValue> ;
     private var _set:Bool;
-    private var _key:TKey;
+    private var _key:Int;
     private var _value:TValue;
 	 
 	/**
@@ -16,11 +23,11 @@ class MruPropertyCache<TKey:{ function hashCode():Int; },TValue>
 	public function toString() : String return "" ;
     public function new()
     {
-        _dictionary = new HashMap<TKey, TValue >();
+        _dictionary = new IntMap<TValue>();
         _set = false;
 		 
     }
-	public inline function iterator() : HashMap<TKey, TValue >{
+	public inline function  Cache() :IntMap<TValue>{
 		return _dictionary;
 	}
     public var Count(get, never):Int;
@@ -33,8 +40,8 @@ class MruPropertyCache<TKey:{ function hashCode():Int; },TValue>
 
     public var IsReadOnly:Bool;
 
-    public var Keys(get, never):Iterator<TKey>;
-    public function get_Keys():Iterator<TKey>
+    public var Keys(get, never):Iterator<Int>;
+    public function get_Keys():Iterator<Int>
     {
         return _dictionary.keys();
     }
@@ -46,7 +53,7 @@ class MruPropertyCache<TKey:{ function hashCode():Int; },TValue>
     }
 
  
-    public function Add(key:TKey, value:TValue):Void
+    public function Add(key:Int, value:TValue):Void
     {
         _set = true;
         _key = key;
@@ -58,10 +65,10 @@ class MruPropertyCache<TKey:{ function hashCode():Int; },TValue>
         _set = false;
         _key = null;
         _value = null;
-        _dictionary=   new HashMap<TKey, TValue >();
+        _dictionary=   new IntMap< TValue >();
     }
    
-    public function Contains(key:TKey):Bool
+    public function Contains(key:Int):Bool
     {
         if (_set && key==(_key))
         {
@@ -71,7 +78,7 @@ class MruPropertyCache<TKey:{ function hashCode():Int; },TValue>
     }
  
  
-    public function Remove(key:TKey):Bool
+    public function Remove(key:Int):Bool
     {
         if (_set && key==(_key))
         {
@@ -81,7 +88,7 @@ class MruPropertyCache<TKey:{ function hashCode():Int; },TValue>
         }
         return _dictionary.remove(key);
     }
-    public function TryGetValue(key:TKey, value:TValue):Bool
+    public function TryGetValue(key:Int, value:TValue):Bool
     {
         if (_set && key==(_key))
         {

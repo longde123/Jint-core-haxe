@@ -2,7 +2,7 @@ package jint.native.json;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class JsonInstance extends jint.native.object.ObjectInstance
 {
     private var _engine:jint.Engine;
@@ -12,7 +12,7 @@ class JsonInstance extends jint.native.object.ObjectInstance
         _engine = engine;
         Extensible = true;
     }
-    override public function get_Class():String
+    override public function get_JClass():String
     {
         return "JSON";
     }

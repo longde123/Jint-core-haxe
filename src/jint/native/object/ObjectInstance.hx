@@ -4,30 +4,31 @@ import system.*;
 import anonymoustypes.*;
 import haxe.ds.StringMap;
 using jint.native.StaticJsValue;
+import jint.runtime.StringMruPropertyCache;
 class ObjectInstance
 {
     public function new(engine:jint.Engine)
     {
         Engine = engine;
-        Properties = new jint.runtime.MruPropertyCache<String, jint.runtime.descriptors.PropertyDescriptor>();
+        Properties = new jint.runtime.StringMruPropertyCache<jint.runtime.descriptors.PropertyDescriptor>();
     }
     public var Engine:jint.Engine;
-    public var Properties:jint.runtime.MruPropertyCache<String, jint.runtime.descriptors.PropertyDescriptor>;
+    public var Properties:jint.runtime.StringMruPropertyCache<jint.runtime.descriptors.PropertyDescriptor>;
     public var Prototype:jint.native.object.ObjectInstance;
     public var Extensible:Bool;
-    public var Class(get_Class, never):String;
-    public function get_Class():String
+    public var JClass(get, never):String;
+    public function get_JClass():String
     {
         return "Object";
     }
 
-    public function GetOwnProperties():haxe.ds.HashMap<String, jint.runtime.descriptors.PropertyDescriptor>
+    public function GetOwnProperties():haxe.ds.StringMap< jint.runtime.descriptors.PropertyDescriptor>
     {
-        return Properties.iterator();
+        return Properties.Cache();
     }
     public function HasOwnProperty(p:String):Bool
     {
-        return Properties.ContainsKey(p);
+        return Properties.Contains(p);
     }
     public function RemoveOwnProperty(p:String):Void
     {
@@ -49,21 +50,21 @@ class ObjectInstance
         {
             return jint.native.Undefined.Instance;
         }
-        var callable:jint.native.ICallable = getter.TryCast();
+        var callable:jint.native.ICallable = getter.TryCast(jint.native.ICallable);
         return callable.Call(this, jint.runtime.Arguments.Empty);
     }
     public function GetOwnProperty(propertyName:String):jint.runtime.descriptors.PropertyDescriptor
     {
-        var x:CsRef<jint.runtime.descriptors.PropertyDescriptor> = new CsRef<jint.runtime.descriptors.PropertyDescriptor>(null);
+        var x:jint.runtime.descriptors.PropertyDescriptor= new jint.runtime.descriptors.PropertyDescriptor();
         if (Properties.TryGetValue(propertyName, x))
         {
-            return x.Value;
+            return x;
         }
         return jint.runtime.descriptors.PropertyDescriptor.Undefined;
     }
     public function SetOwnProperty(propertyName:String, desc:jint.runtime.descriptors.PropertyDescriptor):Void
     {
-        Properties.SetValue(propertyName, desc);
+        Properties.Add(propertyName, desc);
     }
     public function GetProperty(propertyName:String):jint.runtime.descriptors.PropertyDescriptor
     {
@@ -97,12 +98,12 @@ class ObjectInstance
         var desc:jint.runtime.descriptors.PropertyDescriptor = GetProperty(propertyName);
         if (desc.IsAccessorDescriptor())
         {
-            var setter:jint.native.ICallable = desc.JSet.TryCast();
-            setter.Call(new jint.native.JsValue().Creator_ObjectInstance(this), [ value ]);
+            var setter:jint.native.ICallable = desc.JSet.TryCast(jint.native.ICallable);
+            setter.Call( this , [ value ]);
         }
         else
         {
-            var newDesc:jint.runtime.descriptors.PropertyDescriptor = new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(value, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true));
+            var newDesc:jint.runtime.descriptors.PropertyDescriptor = new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(value, (true),  (true),  (true));
             DefineOwnProperty(propertyName, newDesc, throwOnError);
         }
     }
@@ -119,7 +120,7 @@ class ObjectInstance
                 }
                 return true;
             }
-            return desc.Writable.HasValue && desc.Writable.Value;
+            return desc.Writable!=null && desc.Writable;
         }
         if (Prototype == null)
         {
@@ -144,7 +145,7 @@ class ObjectInstance
         }
         else
         {
-            return inherited.Writable.HasValue && inherited.Writable.Value;
+            return inherited.Writable!=null && inherited.Writable;
         }
     }
     public function HasProperty(propertyName:String):Bool
@@ -158,7 +159,7 @@ class ObjectInstance
         {
             return true;
         }
-        if (desc.Configurable.HasValue && desc.Configurable.Value)
+        if (desc.Configurable!=null && desc.Configurable)
         {
             RemoveOwnProperty(propertyName);
             return true;
@@ -176,19 +177,19 @@ class ObjectInstance
     {
         if (hint == jint.runtime.Types.String || (hint == jint.runtime.Types.None && Class == "Date"))
         {
-            var toString:jint.native.ICallable = Get("toString").TryCast();
+            var toString:jint.native.ICallable = Get("toString").TryCast(jint.native.ICallable );
             if (toString != null)
             {
-                var str:jint.native.JsValue = toString.Call(new jint.native.JsValue().Creator_ObjectInstance(this), jint.runtime.Arguments.Empty);
+                var str:jint.native.JsValue = toString.Call(this, jint.runtime.Arguments.Empty);
                 if (str.IsPrimitive())
                 {
                     return str;
                 }
             }
-            var valueOf:jint.native.ICallable = Get("valueOf").TryCast();
+            var valueOf:jint.native.ICallable = Get("valueOf").TryCast(jint.native.ICallable);
             if (valueOf != null)
             {
-                var val:jint.native.JsValue = valueOf.Call(new jint.native.JsValue().Creator_ObjectInstance(this), jint.runtime.Arguments.Empty);
+                var val:jint.native.JsValue = valueOf.Call(this, jint.runtime.Arguments.Empty);
                 if (val.IsPrimitive())
                 {
                     return val;
@@ -198,19 +199,19 @@ class ObjectInstance
         }
         if (hint == jint.runtime.Types.Number || hint == jint.runtime.Types.None)
         {
-            var valueOf:jint.native.ICallable = Get("valueOf").TryCast();
+            var valueOf:jint.native.ICallable = Get("valueOf").TryCast(jint.native.ICallable);
             if (valueOf != null)
             {
-                var val:jint.native.JsValue = valueOf.Call(new jint.native.JsValue().Creator_ObjectInstance(this), jint.runtime.Arguments.Empty);
+                var val:jint.native.JsValue = valueOf.Call( this , jint.runtime.Arguments.Empty);
                 if (val.IsPrimitive())
                 {
                     return val;
                 }
             }
-            var toString:jint.native.ICallable = Get("toString").TryCast();
+            var toString:jint.native.ICallable = Get("toString").TryCast(jint.native.ICallable);
             if (toString != null)
             {
-                var str:jint.native.JsValue = toString.Call(new jint.native.JsValue().Creator_ObjectInstance(this), jint.runtime.Arguments.Empty);
+                var str:jint.native.JsValue = toString.Call( this , jint.runtime.Arguments.Empty);
                 if (str.IsPrimitive())
                 {
                     return str;
@@ -241,26 +242,26 @@ class ObjectInstance
             {
                 if (desc.IsGenericDescriptor() || desc.IsDataDescriptor())
                 {
-                    SetOwnProperty(propertyName, new jint.runtime.descriptors.PropertyDescriptor().Creator(desc).Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(desc.Value != null ? desc.Value : jint.native.JsValue.Undefined, new Nullable_Bool(desc.Writable.HasValue ? desc.Writable.Value : false), new Nullable_Bool(desc.Enumerable.HasValue ? desc.Enumerable.Value : false), new Nullable_Bool(desc.Configurable.HasValue ? desc.Configurable.Value : false)));
+                    SetOwnProperty(propertyName, new jint.runtime.descriptors.PropertyDescriptor().Creator(desc).Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(desc.Value != null ? desc.Value : jint.native.JsValue.Undefined,  (desc.Writable!=null ? desc.Writable : false),  (desc.Enumerable!=null ? desc.Enumerable : false), (desc.Configurable!=null ? desc.Configurable : false)));
                 }
                 else
                 {
-                    SetOwnProperty(propertyName, new jint.runtime.descriptors.PropertyDescriptor().Creator(desc).Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(desc.JGet, desc.JSet, desc.Enumerable.HasValue ? desc.Enumerable : new Nullable_Bool(false), desc.Configurable.HasValue ? desc.Configurable : new Nullable_Bool(false)));
+                    SetOwnProperty(propertyName, new jint.runtime.descriptors.PropertyDescriptor().Creator(desc).Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(desc.JGet, desc.JSet, desc.Enumerable!=null ? desc.Enumerable : (false), desc.Configurable!=null ? desc.Configurable : (false)));
                 }
             }
             return true;
         }
-        if (!current.Configurable.HasValue && !current.Enumerable.HasValue && !current.Writable.HasValue && current.JGet == null && current.JSet == null && current.Value == null)
+        if (current.Configurable==null && current.Enumerable==null && current.Writable==null && current.JGet == null && current.JSet == null && current.Value == null)
         {
             return true;
         }
-        if (current.Configurable.Value == desc.Configurable.Value && current.Writable.Value == desc.Writable.Value && current.Enumerable.Value == desc.Enumerable.Value && ((current.JGet == null && desc.JGet == null) || (current.JGet != null && desc.JGet != null && jint.runtime.ExpressionInterpreter.SameValue(current.JGet, desc.JGet))) && ((current.JSet == null && desc.JSet == null) || (current.JSet != null && desc.JSet != null && jint.runtime.ExpressionInterpreter.SameValue(current.JSet, desc.JSet))) && ((current.Value == null && desc.Value == null) || (current.Value != null && desc.Value != null && jint.runtime.ExpressionInterpreter.StrictlyEqual(current.Value, desc.Value))))
+        if (current.Configurable == desc.Configurable && current.Writable == desc.Writable && current.Enumerable == desc.Enumerable && ((current.JGet == null && desc.JGet == null) || (current.JGet != null && desc.JGet != null && jint.runtime.ExpressionInterpreter.SameValue(current.JGet, desc.JGet))) && ((current.JSet == null && desc.JSet == null) || (current.JSet != null && desc.JSet != null && jint.runtime.ExpressionInterpreter.SameValue(current.JSet, desc.JSet))) && ((current.Value == null && desc.Value == null) || (current.Value != null && desc.Value != null && jint.runtime.ExpressionInterpreter.StrictlyEqual(current.Value, desc.Value))))
         {
             return true;
         }
-        if (!current.Configurable.HasValue || !current.Configurable.Value)
+        if (current.Configurable==null || !current.Configurable)
         {
-            if (desc.Configurable.HasValue && desc.Configurable.Value)
+            if (desc.Configurable!=null && desc.Configurable)
             {
                 if (throwOnError)
                 {
@@ -268,7 +269,7 @@ class ObjectInstance
                 }
                 return false;
             }
-            if (desc.Enumerable.HasValue && (!current.Enumerable.HasValue || desc.Enumerable.Value != current.Enumerable.Value))
+            if (desc.Enumerable!=null && (current.Enumerable==null || desc.Enumerable != current.Enumerable))
             {
                 if (throwOnError)
                 {
@@ -281,7 +282,7 @@ class ObjectInstance
         {
             if (current.IsDataDescriptor() != desc.IsDataDescriptor())
             {
-                if (!current.Configurable.HasValue || !current.Configurable.Value)
+                if (current.Configurable==null || !current.Configurable)
                 {
                     if (throwOnError)
                     {
@@ -295,14 +296,14 @@ class ObjectInstance
                 }
                 else
                 {
-                    SetOwnProperty(propertyName, current = new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(jint.native.Undefined.Instance, new Nullable_Bool(), current.Enumerable, current.Configurable));
+                    SetOwnProperty(propertyName, current = new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(jint.native.Undefined.Instance, null, current.Enumerable, current.Configurable));
                 }
             }
             else if (current.IsDataDescriptor() && desc.IsDataDescriptor())
             {
-                if (!current.Configurable.HasValue || current.Configurable.Value == false)
+                if (current.Configurable==null || current.Configurable == false)
                 {
-                    if (!current.Writable.HasValue || !current.Writable.Value && desc.Writable.HasValue && desc.Writable.Value)
+                    if (current.Writable==null || !current.Writable && desc.Writable!=null && desc.Writable)
                     {
                         if (throwOnError)
                         {
@@ -310,7 +311,7 @@ class ObjectInstance
                         }
                         return false;
                     }
-                    if (!current.Writable.Value)
+                    if (current.Writable==null)
                     {
                         if (desc.Value != null && !jint.runtime.ExpressionInterpreter.SameValue(desc.Value, current.Value))
                         {
@@ -325,7 +326,7 @@ class ObjectInstance
             }
             else if (current.IsAccessorDescriptor() && desc.IsAccessorDescriptor())
             {
-                if (!current.Configurable.HasValue || !current.Configurable.Value)
+                if (current.Configurable==null || !current.Configurable)
                 {
                     if ((desc.JSet != null && !jint.runtime.ExpressionInterpreter.SameValue(desc.JSet, current.JSet != null ? current.JSet : jint.native.Undefined.Instance)) || (desc.JGet != null && !jint.runtime.ExpressionInterpreter.SameValue(desc.JGet, current.JGet != null ? current.JGet : jint.native.Undefined.Instance)))
                     {
@@ -342,15 +343,15 @@ class ObjectInstance
         {
             current.Value = desc.Value;
         }
-        if (desc.Writable.HasValue)
+        if (desc.Writable!=null)
         {
             current.Writable = desc.Writable;
         }
-        if (desc.Enumerable.HasValue)
+        if (desc.Enumerable!=null)
         {
             current.Enumerable = desc.Enumerable;
         }
-        if (desc.Configurable.HasValue)
+        if (desc.Configurable!=null)
         {
             current.Configurable = desc.Configurable;
         }
@@ -366,7 +367,7 @@ class ObjectInstance
     }
     public function FastAddProperty(name:String, value:jint.native.JsValue, writable:Bool, enumerable:Bool, configurable:Bool):Void
     {
-        SetOwnProperty(name, new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(value, new Nullable_Bool(writable), new Nullable_Bool(enumerable), new Nullable_Bool(configurable)));
+        SetOwnProperty(name, new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(value,  (writable),  (enumerable), (configurable)));
     }
     public function FastSetProperty(name:String, value:jint.runtime.descriptors.PropertyDescriptor):Void
     {

@@ -20,7 +20,7 @@ class FunctionPrototype extends jint.native.functions.FunctionInstance
     public function Configure():Void
     {
         FastAddProperty("constructor", Engine.JFunction, true, false, true);
-        FastAddProperty("toString", new jint.runtime.interop.ClrFunctionInstance(Engine, ToString), true, false, true);
+        FastAddProperty("toString", new jint.runtime.interop.ClrFunctionInstance(Engine, __ToString), true, false, true);
         FastAddProperty("apply", new jint.runtime.interop.ClrFunctionInstance(Engine, Apply, 2), true, false, true);
         FastAddProperty("call", new jint.runtime.interop.ClrFunctionInstance(Engine, CallImpl, 1), true, false, true);
         FastAddProperty("bind", new jint.runtime.interop.ClrFunctionInstance(Engine, Bind, 1), true, false, true);
@@ -53,18 +53,18 @@ class FunctionPrototype extends jint.native.functions.FunctionInstance
         f.DefineOwnProperty("arguments", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(thrower, thrower, new Nullable_Bool(false), new Nullable_Bool(false)), false);
         return f;
     }
-    override private function toString(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
+    public function __ToString(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
-        var func:jint.native.functions.FunctionInstance = thisObj.TryCast();
+        var func:jint.native.functions.FunctionInstance = thisObj.TryCast(jint.native.functions.FunctionInstance);
         if (func == null)
         {
             return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(Engine.TypeError, "Function object expected.");
         }
-        return system.String.Format_String_("function() {{ ... }}");
+        return  "function() {{ ... }}" ;
     }
     public function Apply(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
-        var func:jint.native.ICallable = thisObject.TryCast();
+        var func:jint.native.ICallable = thisObject.TryCast(jint.native.ICallable);
         var thisArg:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 0);
         var argArray:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 1);
         if (func == null)
@@ -75,7 +75,7 @@ class FunctionPrototype extends jint.native.functions.FunctionInstance
         {
             return func.Call(thisArg, jint.runtime.Arguments.Empty);
         }
-        var argArrayObj:jint.native.object.ObjectInstance = argArray.TryCast();
+        var argArrayObj:jint.native.object.ObjectInstance = argArray.TryCast(jint.native.object.ObjectInstance);
         if (argArrayObj == null)
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
@@ -97,7 +97,7 @@ class FunctionPrototype extends jint.native.functions.FunctionInstance
     }
     public function CallImpl(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
-        var func:jint.native.ICallable = thisObject.TryCast();
+        var func:jint.native.ICallable = thisObject.TryCast(jint.native.ICallable);
         if (func == null)
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);

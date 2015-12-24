@@ -9,13 +9,13 @@ class BooleanInstance extends jint.native.object.ObjectInstance implements jint.
     {
         super(engine);
     }
-    override public function get_Class():String
+    override public function get_JClass():String
     {
         return "Boolean";
     }
 
-    var Type(get_Type, never):Int;
-    function get_Type():Int
+    public var JType(get, never):Int;
+    public function get_JType():Int
     {
         return jint.runtime.Types.Boolean;
     }

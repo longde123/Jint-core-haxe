@@ -2,7 +2,7 @@ package jint.native.number;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class NumberPrototype extends jint.native.number.NumberInstance
 {
     public function new(engine:jint.Engine)
@@ -20,7 +20,7 @@ class NumberPrototype extends jint.native.number.NumberInstance
     }
     public function Configure():Void
     {
-        FastAddProperty("toString", new jint.runtime.interop.ClrFunctionInstance(Engine, ToNumberString), true, false, true);
+        FastAddProperty("toString", new jint.runtime.interop.ClrFunctionInstance(Engine, ToNumberString_JsValue_), true, false, true);
         FastAddProperty("toLocaleString", new jint.runtime.interop.ClrFunctionInstance(Engine, ToLocaleString), true, false, true);
         FastAddProperty("valueOf", new jint.runtime.interop.ClrFunctionInstance(Engine, ValueOf), true, false, true);
         FastAddProperty("toFixed", new jint.runtime.interop.ClrFunctionInstance(Engine, ToFixed, 1), true, false, true);
@@ -58,7 +58,7 @@ class NumberPrototype extends jint.native.number.NumberInstance
     }
     private function ValueOf(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
-        var number:jint.native.number.NumberInstance = thisObj.TryCast();
+        var number:jint.native.number.NumberInstance = thisObj.TryCast(jint.native.number.NumberInstance);
         if (number == null)
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
@@ -182,7 +182,7 @@ class NumberPrototype extends jint.native.number.NumberInstance
     public static function ToFractionBase(n:Float, radix:Int):String
     {
         var digits:String = "0123456789abcdefghijklmnopqrstuvwxyz";
-        if (n.Equals_Double(0))
+        if (n==(0))
         {
             return "0";
         }
@@ -202,7 +202,7 @@ class NumberPrototype extends jint.native.number.NumberInstance
         {
             return "NaN";
         }
-        if (m.Equals_Double(0))
+        if (m==(0))
         {
             return "0";
         }
@@ -217,13 +217,13 @@ class NumberPrototype extends jint.native.number.NumberInstance
         //todo v8 Fast Dtoa
        
         var s:String = null;
-        var rFormat:String = jint.runtime.TypeConverter.toString(m, "r");
+        var rFormat:String = jint.runtime.TypeConverter.ToString_Double_String(m, "r");
         if (rFormat.indexOf("e", system.StringComparison.OrdinalIgnoreCase) == -1)
         {
             s = system.Cs2Hx.TrimEnd(system.Cs2Hx.TrimStart(rFormat.replace(".", ""), [ 48 ]), [ 48 ]);
         }
         var format:String = "0.00000000000000000e0";
-        var parts:Array<String> = system.Cs2Hx.Split(jint.runtime.TypeConverter.toString(m, format, system.globalization.CultureInfo.InvariantCulture), [ 101 ]);
+        var parts:Array<String> = system.Cs2Hx.Split(jint.runtime.TypeConverter.ToString_Double_String_CultureInfo(m, format, null), [ 101 ]);
         if (s == null)
         {
             s = system.Cs2Hx.TrimEnd(parts[0], [ 48 ]).replace(".", "");
@@ -232,7 +232,7 @@ class NumberPrototype extends jint.native.number.NumberInstance
         var k:Int = s.length;
         if (k <= n && n <= 21)
         {
-            return s + new String(48, n - k);
+            return s; //todo + new String(48, n - k);
         }
         if (0 < n && n <= 21)
         {
@@ -240,7 +240,7 @@ class NumberPrototype extends jint.native.number.NumberInstance
         }
         if (-6 < n && n <= 0)
         {
-            return "0." + new String(48, -n) + s;
+            return "0.";//todo  + new String(48, -n) + s;
         }
         if (k == 1)
         {

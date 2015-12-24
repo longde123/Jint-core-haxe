@@ -2,7 +2,7 @@ package jint.native.array;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class ArrayConstructor extends jint.native.functions.FunctionInstance implements jint.native.IConstructor
 {
     public function new(engine:jint.Engine)
@@ -31,7 +31,7 @@ class ArrayConstructor extends jint.native.functions.FunctionInstance implements
             return false;
         }
         var o:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 0);
-        return o.IsObject() && o.AsObject().Class == "Array";
+        return o.IsObject() && o.AsObject().JClass == "Array";
     }
     override public function Call(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
@@ -45,15 +45,16 @@ class ArrayConstructor extends jint.native.functions.FunctionInstance implements
         if (arguments.length == 1 && jint.runtime.Arguments.At(arguments, 0).IsNumber())
         {
             var length:Int = jint.runtime.TypeConverter.ToUint32(jint.runtime.Arguments.At(arguments, 0));
-            if (!jint.runtime.TypeConverter.ToNumber(arguments[0]).Equals_Double(length))
+            if (jint.runtime.TypeConverter.ToNumber(arguments[0])!=(length))
             {
                 return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(Engine.RangeError, "Invalid array length");
             }
             instance.FastAddProperty("length", length, true, false, false);
         }
-        else if (arguments.length == 1 && jint.runtime.Arguments.At(arguments, 0).IsObject() && jint.runtime.Arguments.At(arguments, 0).As() != null)
+        else if (arguments.length == 1 && jint.runtime.Arguments.At(arguments, 0).IsObject() && jint.runtime.Arguments.At(arguments, 0).As(jint.runtime.interop.ObjectWrapper) != null)
         {
-            var enumerable:Array = jint.runtime.Arguments.At(arguments, 0).As().Target;
+			var objectWrapper:jint.runtime.interop.ObjectWrapper = jint.runtime.Arguments.At(arguments, 0).As(jint.runtime.interop.ObjectWrapper);
+            var enumerable:Array<Dynamic> =cast objectWrapper.Target;
             if (enumerable != null)
             {
                 var jsArray:jint.native.object.ObjectInstance = Engine.JArray.Construct(jint.runtime.Arguments.Empty);

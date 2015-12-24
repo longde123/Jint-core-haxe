@@ -1,21 +1,22 @@
 package jint.native.array;
 using StringTools;
-import haxe.ds.IntMap.IntMap;
+import haxe.ds.*;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
+import jint.runtime.IntMruPropertyCache;
 class ArrayInstance extends jint.native.object.ObjectInstance
 {
     private var _engine:jint.Engine;
-    private var _array:jint.runtime.MruPropertyCache<Int, jint.runtime.descriptors.PropertyDescriptor>;
+    private var _array:jint.runtime.IntMruPropertyCache< jint.runtime.descriptors.PropertyDescriptor>;
     private var _length:jint.runtime.descriptors.PropertyDescriptor;
     public function new(engine:jint.Engine)
     {
         super(engine);
-        _array = new jint.runtime.MruPropertyCache<Int, jint.runtime.descriptors.PropertyDescriptor>();
+        _array = new jint.runtime.IntMruPropertyCache< jint.runtime.descriptors.PropertyDescriptor>();
         _engine = engine;
     }
-    override public function get_Class():String
+    override public function get_JClass():String
     {
         return "Array";
     }
@@ -33,19 +34,19 @@ class ArrayInstance extends jint.native.object.ObjectInstance
         var ownDesc:jint.runtime.descriptors.PropertyDescriptor = GetOwnProperty(propertyName);
         if (ownDesc.IsDataDescriptor())
         {
-            var valueDesc:jint.runtime.descriptors.PropertyDescriptor = new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(value, new Nullable_Bool(), new Nullable_Bool(), new Nullable_Bool());
+            var valueDesc:jint.runtime.descriptors.PropertyDescriptor = new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(value, null, null, null);
             DefineOwnProperty(propertyName, valueDesc, throwOnError);
             return;
         }
         var desc:jint.runtime.descriptors.PropertyDescriptor = GetProperty(propertyName);
         if (desc.IsAccessorDescriptor())
         {
-            var setter:jint.native.ICallable = desc.JSet.TryCast();
-            setter.Call(new jint.native.JsValue().Creator_ObjectInstance(this), [ value ]);
+            var setter:jint.native.ICallable = desc.JSet.TryCast(jint.native.ICallable);
+            setter.Call(this, [ value ]);
         }
         else
         {
-            var newDesc:jint.runtime.descriptors.PropertyDescriptor = new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(value, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true));
+            var newDesc:jint.runtime.descriptors.PropertyDescriptor = new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(value, (true), (true), (true));
             DefineOwnProperty(propertyName, newDesc, throwOnError);
         }
     }
@@ -53,7 +54,7 @@ class ArrayInstance extends jint.native.object.ObjectInstance
     {
         var oldLenDesc:jint.runtime.descriptors.PropertyDescriptor = GetOwnProperty("length");
         var oldLen:Int = Std.int(jint.runtime.TypeConverter.ToNumber(oldLenDesc.Value));
-        var index:CsRef<Int> = new CsRef<Int>(0);
+        var index:Null<Int> =(0);
         if (propertyName == "length")
         {
             if (desc.Value == null)
@@ -71,7 +72,7 @@ class ArrayInstance extends jint.native.object.ObjectInstance
             {
                 return super.DefineOwnProperty("length", _length = newLenDesc, throwOnError);
             }
-            if (!oldLenDesc.Writable.Value)
+            if (!oldLenDesc.Writable)
             {
                 if (throwOnError)
                 {
@@ -80,14 +81,14 @@ class ArrayInstance extends jint.native.object.ObjectInstance
                 return false;
             }
             var newWritable:Bool;
-            if (!newLenDesc.Writable.HasValue || newLenDesc.Writable.Value)
+            if (newLenDesc.Writable==null || newLenDesc.Writable)
             {
                 newWritable = true;
             }
             else
             {
                 newWritable = false;
-                newLenDesc.Writable = new Nullable_Bool(true);
+                newLenDesc.Writable =  (true);
             }
             var succeeded:Bool = super.DefineOwnProperty("length", _length = newLenDesc, throwOnError);
             if (!succeeded)
@@ -95,20 +96,19 @@ class ArrayInstance extends jint.native.object.ObjectInstance
                 return false;
             }
             if (_array.Count < oldLen - newLen)
-            {
-                var keys:Array<Int> = system.linq.Enumerable.ToArray(_array.Keys);
-                for (key in keys)
+            { 
+                for (key in _array.Keys)
                 {
-                    var keyIndex:CsRef<Int> = new CsRef<Int>(0);
-                    if (IsArrayIndex(key, keyIndex) && keyIndex.Value >= newLen && keyIndex.Value < oldLen)
+                    var keyIndex:Null<Int> =(0);
+                    if (IsArrayIndex(key, keyIndex) && keyIndex >= newLen && keyIndex < oldLen)
                     {
                         var deleteSucceeded:Bool = Delete(Std.string(key), false);
                         if (!deleteSucceeded)
                         {
-                            newLenDesc.Value = new jint.native.JsValue().Creator_Double(keyIndex.Value + 1);
+                            newLenDesc.Value = keyIndex + 1;
                             if (!newWritable)
                             {
-                                newLenDesc.Writable = new Nullable_Bool(false);
+                                newLenDesc.Writable = (false);
                             }
                             super.DefineOwnProperty("length", _length = newLenDesc, false);
                             if (throwOnError)
@@ -131,7 +131,7 @@ class ArrayInstance extends jint.native.object.ObjectInstance
                         newLenDesc.Value = oldLen + 1;
                         if (!newWritable)
                         {
-                            newLenDesc.Writable = new Nullable_Bool(false);
+                            newLenDesc.Writable = (false);
                         }
                         super.DefineOwnProperty("length", _length = newLenDesc, false);
                         if (throwOnError)
@@ -144,13 +144,13 @@ class ArrayInstance extends jint.native.object.ObjectInstance
             }
             if (!newWritable)
             {
-                DefineOwnProperty("length", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(null, new Nullable_Bool(false), new Nullable_Bool(), new Nullable_Bool()), false);
+                DefineOwnProperty("length", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(null, (false), null, null), false);
             }
             return true;
         }
         else if (IsArrayIndex(propertyName, index))
         {
-            if (index.Value >= oldLen && !oldLenDesc.Writable.Value)
+            if (index >= oldLen && !oldLenDesc.Writable)
             {
                 if (throwOnError)
                 {
@@ -167,9 +167,9 @@ class ArrayInstance extends jint.native.object.ObjectInstance
                 }
                 return false;
             }
-            if (index.Value >= oldLen)
+            if (index >= oldLen)
             {
-                oldLenDesc.Value = index.Value + 1;
+                oldLenDesc.Value = index + 1;
                 super.DefineOwnProperty("length", _length = oldLenDesc, false);
             }
             return true;
@@ -180,28 +180,30 @@ class ArrayInstance extends jint.native.object.ObjectInstance
     {
         return jint.runtime.TypeConverter.ToUint32(_length.Value);
     }
-    override public function GetOwnProperties():Array<system.collections.generic.KeyValuePair<String, jint.runtime.descriptors.PropertyDescriptor>>
-    {
-        var properties:system.collections.generic.Dictionary<String, jint.runtime.descriptors.PropertyDescriptor> = new system.collections.generic.Dictionary<String, jint.runtime.descriptors.PropertyDescriptor>();
-        for (entry in _array.GetEnumerator())
+    override public function GetOwnProperties():haxe.ds.StringMap<jint.runtime.descriptors.PropertyDescriptor>
+    { 
+        var properties:StringMap<jint.runtime.descriptors.PropertyDescriptor> = new StringMap<jint.runtime.descriptors.PropertyDescriptor>();
+        var cache = _array.Cache();
+		for (entry in cache.keys())
         {
-            properties.Add(Std.string(entry.Key), entry.Value);
+            properties.set(Std.string(entry), cache.get(entry));
         }
-        for (entry in super.GetOwnProperties())
+		var cache2 = super.GetOwnProperties();
+        for (entry in cache2.keys())
         {
-            properties.Add(entry.Key, entry.Value);
+            properties.set(entry,  cache2.get(entry));
         }
         return properties;
     }
     override public function GetOwnProperty(propertyName:String):jint.runtime.descriptors.PropertyDescriptor
     {
-        var index:CsRef<Int> = new CsRef<Int>(0);
+        var index:Null<Int> = (0);
         if (IsArrayIndex(propertyName, index))
         {
-            var result:CsRef<jint.runtime.descriptors.PropertyDescriptor> = new CsRef<jint.runtime.descriptors.PropertyDescriptor>(null);
-            if (_array.TryGetValue(index.Value, result))
+            var result:jint.runtime.descriptors.PropertyDescriptor = null;
+            if (_array.TryGetValue(index, result))
             {
-                return result.Value;
+                return result;
             }
             else
             {
@@ -212,10 +214,10 @@ class ArrayInstance extends jint.native.object.ObjectInstance
     }
     override public function SetOwnProperty(propertyName:String, desc:jint.runtime.descriptors.PropertyDescriptor):Void
     {
-        var index:CsRef<Int> = new CsRef<Int>(0);
+        var index:Null<Int> = (0);
         if (IsArrayIndex(propertyName, index))
         {
-            _array.SetValue(index.Value, desc);
+            _array.Add(index, desc);
         }
         else
         {
@@ -228,56 +230,30 @@ class ArrayInstance extends jint.native.object.ObjectInstance
     }
     override public function HasOwnProperty(p:String):Bool
     {
-        var index:CsRef<Int> = new CsRef<Int>(0);
+        var index:Null<Int> = (0);
         if (IsArrayIndex(p, index))
         {
-            return index.Value < GetLength() && _array.ContainsKey(index.Value);
+            return index < GetLength() && _array.Contains(index);
         }
         return super.HasOwnProperty(p);
     }
     override public function RemoveOwnProperty(p:String):Void
     {
-        var index:CsRef<Int> = new CsRef<Int>(0);
+        var index:Null<Int> =(0);
         if (IsArrayIndex(p, index))
         {
-            _array.Remove(index.Value);
+            _array.Remove(index);
         }
         super.RemoveOwnProperty(p);
     }
-    public static function IsArrayIndex(p:jint.native.JsValue, index:CsRef<Int>):Bool
+    public static function IsArrayIndex(p:jint.native.JsValue, index:Null<Int>):Bool
     {
-        index.Value = ParseArrayIndex(jint.runtime.TypeConverter.toString(p));
-        return index.Value != 4294967295;
+        index = ParseArrayIndex(jint.runtime.TypeConverter.toString(p));
+        return index>0&&index<Math.POSITIVE_INFINITY;
     }
     public static function ParseArrayIndex(p:String):Int
     {
-        var d:Int = p.charCodeAt(0) - 48;
-        if (d < 0 || d > 9)
-        {
-            return 4294967295;
-        }
-        if (d == 0 && p.length > 1)
-        {
-            return 4294967295;
-        }
-        var result:Float = d;
-        { //for
-            var i:Int = 1;
-            while (i < p.length)
-            {
-                d = p.charCodeAt(i) - 48;
-                if (d < 0 || d > 9)
-                {
-                    return 4294967295;
-                }
-                result = result * 10 + d;
-                if (result >= 4294967295)
-                {
-                    return 4294967295;
-                }
-                i++;
-            }
-        } //end for
-        return Std.int(result);
+        
+        return Std.parseInt(p);
     }
 }

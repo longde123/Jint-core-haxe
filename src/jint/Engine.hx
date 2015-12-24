@@ -12,6 +12,7 @@ import jint.runtime.interop.*;
 import jint.runtime.references.*;
 import system.*;
 import anonymoustypes.*;
+using jint.native.StaticJsValue;
 typedef StepDynamic =  Dynamic->jint.runtime.debugger.DebugInformation->Int ;
 typedef BreakDynamic =  Dynamic-> jint.runtime.debugger.DebugInformation->Int;
 class Engine
@@ -124,7 +125,7 @@ class Engine
     public var RangeError:jint.native.error.ErrorConstructor;
     public var ReferenceError:jint.native.error.ErrorConstructor;
     public var UriError:jint.native.error.ErrorConstructor;
-    public var ExecutionContext(get_ExecutionContext, never):jint.runtime.environments.ExecutionContext;
+    public var ExecutionContext(get, never):jint.runtime.environments.ExecutionContext;
     public function get_ExecutionContext():jint.runtime.environments.ExecutionContext
     {
         return _executionContexts.Peek();

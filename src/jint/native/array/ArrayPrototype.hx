@@ -20,7 +20,7 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
     }
     public function Configure():Void
     {
-        FastAddProperty("toString", new jint.runtime.interop.ClrFunctionInstance(Engine, ToString, 0), true, false, true);
+        FastAddProperty("toString", new jint.runtime.interop.ClrFunctionInstance(Engine, __ToString, 0), true, false, true);
         FastAddProperty("toLocaleString", new jint.runtime.interop.ClrFunctionInstance(Engine, ToLocaleString), true, false, true);
         FastAddProperty("concat", new jint.runtime.interop.ClrFunctionInstance(Engine, Concat, 1), true, false, true);
         FastAddProperty("join", new jint.runtime.interop.ClrFunctionInstance(Engine, Join, 1), true, false, true);
@@ -755,7 +755,7 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
         system.Cs2Hx.AddRange(items, arguments);
         for (e in items)
         {
-            var eArray:jint.native.array.ArrayInstance = e.TryCast();
+            var eArray:jint.native.array.ArrayInstance = e.TryCast(jint.native.array.ArrayInstance);
             if (eArray != null)
             {
                 var len:Int = jint.runtime.TypeConverter.ToUint32(eArray.Get("length"));
@@ -784,7 +784,7 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
         a.DefineOwnProperty("length", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(n, new Nullable_Bool(), new Nullable_Bool(), new Nullable_Bool()), false);
         return a;
     }
-    override private function toString(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
+    public function __ToString(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var array:jint.native.object.ObjectInstance = jint.runtime.TypeConverter.ToObject(Engine, thisObj);
         var func:jint.native.ICallable;

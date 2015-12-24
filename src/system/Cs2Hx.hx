@@ -5,7 +5,25 @@ import system.Exception;
 
 class Cs2Hx
 {
+	public static function IsPositiveInfinity(cp:Float):Bool
+	{
+		return cp == Math.POSITIVE_INFINITY;
+	}
+	public static function IsNegativeInfinity(cp:Float):Bool
+	{
+		return cp == Math.NEGATIVE_INFINITY;
+	}
 	
+	public static function Format(a:String ,b:Array<Dynamic>):String
+	{
+		return a;
+	 
+	}
+	public static function CompareOrdinal(a:String ,b:String):Int
+	{
+		//todo
+		return 0;
+	}
 	public static function Equals_String(a:String ,b:String):Bool
 	{
 		return a==b;

@@ -35,7 +35,7 @@ class NamespaceReference extends jint.native.object.ObjectInstance implements ji
             while (i < arguments.length)
             {
                 var genericTypeReference:jint.native.JsValue = jint.runtime.Arguments.At(arguments, i);
-                if (genericTypeReference.Equals(jint.native.Undefined.Instance) || !genericTypeReference.IsObject() || genericTypeReference.AsObject().Class != "TypeReference")
+                if (genericTypeReference.Equals(jint.native.Undefined.Instance) || !genericTypeReference.IsObject() || genericTypeReference.AsObject().JClass != "TypeReference")
                 {
                     return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(Engine.TypeError, "Invalid generic type parameter");
                 }
@@ -58,9 +58,9 @@ class NamespaceReference extends jint.native.object.ObjectInstance implements ji
     }
     public function GetPath(  path:String):JsValue
 	{
-		Type type;
+		var type;
 
-		if (Engine.TypeCache.TryGetValue(path, out type))
+		if (Engine.TypeCache.TryGetValue(path,   type))
 		{
 			if (type == null)
 			{

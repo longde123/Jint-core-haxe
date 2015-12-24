@@ -2,7 +2,7 @@ package jint.native.date;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class DateConstructor extends jint.native.functions.FunctionInstance implements jint.native.IConstructor
 {
     public static var Epoch:Date;
@@ -28,22 +28,10 @@ class DateConstructor extends jint.native.functions.FunctionInstance implements 
     }
     private function Parse(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
-        var result:CsRef<Date> = new CsRef<Date>(null);
         var date:String = jint.runtime.TypeConverter.toString(jint.runtime.Arguments.At(arguments, 0));
-        if (!Date.TryParseExact_String__IFormatProvider_DateTimeStyles_DateTime(date, [ "yyyy-MM-ddTHH:mm:ss.FFF", "yyyy-MM-ddTHH:mm:ss", "yyyy-MM-ddTHH:mm", "yyyy-MM-dd", "yyyy-MM", "yyyy" ], system.globalization.CultureInfo.InvariantCulture, system.globalization.DateTimeStyles.AdjustToUniversal | system.globalization.DateTimeStyles.AssumeUniversal, result))
-        {
-            if (!Date.TryParseExact_String__IFormatProvider_DateTimeStyles_DateTime(date, [ "ddd MMM dd yyyy HH:mm:ss 'GMT'K", "ddd MMM dd yyyy", "HH:mm:ss 'GMT'K", "yyyy-M-dTH:m:s.FFFK", "yyyy/M/dTH:m:s.FFFK", "yyyy-M-dTH:m:sK", "yyyy/M/dTH:m:sK", "yyyy-M-dTH:mK", "yyyy/M/dTH:mK", "yyyy-M-d H:m:s.FFFK", "yyyy/M/d H:m:s.FFFK", "yyyy-M-d H:m:sK", "yyyy/M/d H:m:sK", "yyyy-M-d H:mK", "yyyy/M/d H:mK", "yyyy-M-dK", "yyyy/M/dK", "yyyy-MK", "yyyy/MK", "yyyyK", "THH:mm:ss.FFFK", "THH:mm:ssK", "THH:mmK", "THHK" ], system.globalization.CultureInfo.InvariantCulture, system.globalization.DateTimeStyles.AdjustToUniversal, result))
-            {
-                if (!Date.TryParse_String_IFormatProvider_DateTimeStyles_DateTime(date, Engine.Options.GetCulture(), system.globalization.DateTimeStyles.AdjustToUniversal, result))
-                {
-                    if (!Date.TryParse_String_IFormatProvider_DateTimeStyles_DateTime(date, system.globalization.CultureInfo.InvariantCulture, system.globalization.DateTimeStyles.AdjustToUniversal, result))
-                    {
-                        return Math.NaN;
-                    }
-                }
-            }
-        }
-        return FromDateTime(result.Value);
+        var result:Date  = Date.now();
+		DateTools.format(result,date);
+        return FromDateTime(result);
     }
     private function Utc(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
@@ -51,7 +39,7 @@ class DateConstructor extends jint.native.functions.FunctionInstance implements 
     }
     private function Now(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
-        return system.MathCS.Floor_Double((Date.UtcNow - Epoch).TotalMilliseconds);
+        return  Date.now().getTime();
     }
     override public function Call(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
@@ -61,7 +49,7 @@ class DateConstructor extends jint.native.functions.FunctionInstance implements 
     {
         if (arguments.length == 0)
         {
-            return Construct_DateTime(Date.UtcNow);
+            return Construct_DateTime(Date.now());
         }
         else if (arguments.length == 1)
         {
@@ -111,7 +99,7 @@ class DateConstructor extends jint.native.functions.FunctionInstance implements 
     public var PrototypeObject:jint.native.date.DatePrototype;
     public function Construct_DateTimeOffset(value:Date):jint.native.date.DateInstance
     {
-        return Construct_DateTime(value.UtcDateTime);
+        return Construct_DateTime(value);
     }
     public function Construct_DateTime(value:Date):jint.native.date.DateInstance
     {
@@ -136,18 +124,17 @@ class DateConstructor extends jint.native.functions.FunctionInstance implements 
         return jint.runtime.TypeConverter.ToInteger(time);
     }
     public function FromDateTime(dt:Date):Float
-    {
-        var convertToUtcAfter:Bool = (dt.Kind == DateKind.Unspecified);
-        var dateAsUtc:Date = dt.Kind == DateKind.Local ? dt.ToUniversalTime() : Date.SpecifyKind(dt, DateKind.Utc);
-        var result:Float = (dateAsUtc - Epoch).TotalMilliseconds;
-        if (convertToUtcAfter)
+    { 
+
+        var result:Float = dt.getTime();
+       // if (convertToUtcAfter)
         {
             result = PrototypeObject.Utc(result);
         }
-        return system.MathCS.Floor_Double(result);
+        return (result);
     }
     public static function cctor():Void
     {
-        Epoch = new Date(1970, 1, 1, 0, 0, 0, DateKind.Utc);
+        Epoch =   DateTools.makeUtc(1970, 1, 1, 0, 0, 0);
     }
 }

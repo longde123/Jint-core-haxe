@@ -38,7 +38,7 @@ class ExpressionInterpreter
         }
         if (assignmentExpression.Operator == jint.parser.ast.AssignmentOperator.Assign)
         {
-            if (lref.IsStrict() && lref.GetBase().TryCast() != null && (lref.GetReferencedName() == "eval" || lref.GetReferencedName() == "arguments"))
+            if (lref.IsStrict() && lref.GetBase().TryCast(jint.runtime.environments.EnvironmentRecord) != null && (lref.GetReferencedName() == "eval" || lref.GetReferencedName() == "arguments"))
             {
                 return throw new jint.runtime.JavaScriptException().Creator(_engine.SyntaxError);
             }
@@ -117,7 +117,7 @@ class ExpressionInterpreter
             {
                 return Math.NaN;
             }
-            if (Cs2Hx.IsInfinity(lN) && rN.Equals_Double(0))
+            if (Cs2Hx.IsInfinity(lN) && rN==(0))
             {
                 if (jint.native.number.NumberInstance.IsNegativeZero(rN))
                 {
@@ -125,11 +125,11 @@ class ExpressionInterpreter
                 }
                 return lN;
             }
-            if (lN.Equals_Double(0) && rN.Equals_Double(0))
+            if (lN==(0) && rN==(0))
             {
                 return Math.NaN;
             }
-            if (rN.Equals_Double(0))
+            if (rN==(0))
             {
                 if (jint.native.number.NumberInstance.IsNegativeZero(rN))
                 {
@@ -233,7 +233,7 @@ class ExpressionInterpreter
             case jint.parser.ast.BinaryOperator.UnsignedRightShift:
                 return jint.runtime.TypeConverter.ToInt32(left) >> (jint.runtime.TypeConverter.ToUint32(right) & 0x1F);
             case jint.parser.ast.BinaryOperator.InstanceOf:
-                var f:jint.native.functions.FunctionInstance = right.TryCast();
+                var f:jint.native.functions.FunctionInstance = right.TryCast(jint.native.functions.FunctionInstance);
                 if (f == null)
                 {
                     return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.TypeError, "instanceof can only be used with a function object");
@@ -273,8 +273,8 @@ class ExpressionInterpreter
     }
     public static function Equal(x:jint.native.JsValue, y:jint.native.JsValue):Bool
     {
-        var typex:Int = x.Type;
-        var typey:Int = y.Type;
+        var typex:Int = x.GetJType();
+        var typey:Int = y.GetJType();
         if (typex == typey)
         {
             if (typex == jint.runtime.Types.Undefined || typex == jint.runtime.Types.Null)
@@ -289,7 +289,7 @@ class ExpressionInterpreter
                 {
                     return false;
                 }
-                if (nx.Equals_Double(ny))
+                if (nx==(ny))
                 {
                     return true;
                 }
@@ -341,8 +341,8 @@ class ExpressionInterpreter
     }
     public static function StrictlyEqual(x:jint.native.JsValue, y:jint.native.JsValue):Bool
     {
-        var typea:Int = x.Type;
-        var typeb:Int = y.Type;
+        var typea:Int = x.GetJType();
+        var typeb:Int = y.GetJType();
         if (typea != typeb)
         {
             return false;
@@ -363,7 +363,7 @@ class ExpressionInterpreter
             {
                 return false;
             }
-            if (nx.Equals_Double(ny))
+            if (nx==(ny))
             {
                 return true;
             }
@@ -399,9 +399,9 @@ class ExpressionInterpreter
             {
                 return true;
             }
-            if (nx.Equals_Double(ny))
+            if (nx==(ny))
             {
-                if (nx.Equals_Double(0))
+                if (nx==(0))
                 {
                     return jint.native.number.NumberInstance.IsNegativeZero(nx) == jint.native.number.NumberInstance.IsNegativeZero(ny);
                 }
@@ -433,8 +433,8 @@ class ExpressionInterpreter
             py = jint.runtime.TypeConverter.ToPrimitive(y, jint.runtime.Types.Number);
             px = jint.runtime.TypeConverter.ToPrimitive(x, jint.runtime.Types.Number);
         }
-        var typea:Int = px.Type;
-        var typeb:Int = py.Type;
+        var typea:Int = px.GetJType();
+        var typeb:Int = py.GetJType();
         if (typea != jint.runtime.Types.String || typeb != jint.runtime.Types.String)
         {
             var nx:Float = jint.runtime.TypeConverter.ToNumber(px);
@@ -443,7 +443,7 @@ class ExpressionInterpreter
             {
                 return jint.native.Undefined.Instance;
             }
-            if (nx.Equals_Double(ny))
+            if (nx==(ny))
             {
                 return false;
             }
@@ -467,7 +467,8 @@ class ExpressionInterpreter
         }
         else
         {
-            return system.String.CompareOrdinal(jint.runtime.TypeConverter.toString(x), jint.runtime.TypeConverter.toString(y)) < 0;
+			// return String.CompareOrdinal(TypeConverter.ToString(x), TypeConverter.ToString(y)) < 0;
+            return Cs2Hx.CompareOrdinal(jint.runtime.TypeConverter.toString(x), jint.runtime.TypeConverter.toString(y)) < 0;
         }
     }
     public function EvaluateIdentifier(identifier:jint.parser.ast.Identifier):jint.runtime.references.Reference
@@ -497,7 +498,7 @@ class ExpressionInterpreter
                 case jint.parser.ast.PropertyKind.Data:
                     var exprValue:Dynamic = _engine.EvaluateExpression(property.Value);
                     var propValue:jint.native.JsValue = _engine.GetValue(exprValue);
-                    propDesc = new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(propValue, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true));
+                    propDesc = new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(propValue, (true), (true), (true));
                 case jint.parser.ast.PropertyKind.Get:
                     var getter:jint.parser.ast.FunctionExpression = cast(property.Value, jint.parser.ast.FunctionExpression);
                     if (getter == null)
@@ -507,7 +508,7 @@ class ExpressionInterpreter
                     var get:jint.native.functions.ScriptFunctionInstance = null;
                     var strictModeScope:jint.StrictModeScope = (new jint.StrictModeScope(getter.Strict));
                     get = new jint.native.functions.ScriptFunctionInstance(_engine, getter, _engine.ExecutionContext.LexicalEnvironment, jint.StrictModeScope.IsStrictModeCode);
-                    propDesc = new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(get, new Nullable_Bool(), new Nullable_Bool(true), new Nullable_Bool(true));
+                    propDesc = new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(get, null, (true), (true));
                 case jint.parser.ast.PropertyKind.Set:
                     var setter:jint.parser.ast.FunctionExpression = cast(property.Value, jint.parser.ast.FunctionExpression);
                     if (setter == null)
@@ -517,7 +518,7 @@ class ExpressionInterpreter
                     var set:jint.native.functions.ScriptFunctionInstance;
                     var strictModeScope_:jint.StrictModeScope = (new jint.StrictModeScope(setter.Strict));
                     set = new jint.native.functions.ScriptFunctionInstance(_engine, setter, _engine.ExecutionContext.LexicalEnvironment, jint.StrictModeScope.IsStrictModeCode);
-                    propDesc = new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(null, set, new Nullable_Bool(true), new Nullable_Bool(true));
+                    propDesc = new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(null, set, (true), (true));
                 default:
                     return throw new system.ArgumentOutOfRangeException();
             }
@@ -560,7 +561,7 @@ class ExpressionInterpreter
         {
             var literal:jint.parser.ast.Literal = new jint.parser.ast.Literal();
             literal.Type = jint.parser.ast.SyntaxNodes.Literal;
-            literal.Value = memberExpression.Property.As().Name;
+            literal.Value = memberExpression.Property.As(jint.parser.ast.Identifier).Name;
             expression = literal;
         }
         var propertyNameReference:Dynamic = EvaluateExpression(expression);
@@ -608,13 +609,13 @@ class ExpressionInterpreter
         }
         if (func.Equals(jint.native.Undefined.Instance))
         {
-            return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.TypeError, r == null ? "" : Cs2Hx.Format("Object has no method '{0}'", (callee).GetReferencedName()));
+            return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.TypeError, r == null ? "" :  ("Object has no method '{0}'" +(callee).GetReferencedName()));
         }
         if (!func.IsObject())
         {
-            return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.TypeError, r == null ? "" : Cs2Hx.Format("Property '{0}' of object is not a function", (callee).GetReferencedName()));
+            return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.TypeError, r == null ? "" :  ("Property '{0}' of object is not a function"+ (callee).GetReferencedName()));
         }
-        var callable:jint.native.ICallable = func.TryCast();
+        var callable:jint.native.ICallable = func.TryCast(jint.native.ICallable);
         if (callable == null)
         {
             return throw new jint.runtime.JavaScriptException().Creator(_engine.TypeError);
@@ -627,7 +628,7 @@ class ExpressionInterpreter
             }
             else
             {
-                var env:jint.runtime.environments.EnvironmentRecord = r.GetBase().TryCast();
+                var env:jint.runtime.environments.EnvironmentRecord = r.GetBase().TryCast(jint.runtime.environments.EnvironmentRecord);
                 thisObject = env.ImplicitThisValue();
             }
         }
@@ -663,21 +664,24 @@ class ExpressionInterpreter
     {
         var value:Dynamic = _engine.EvaluateExpression(updateExpression.Argument);
         var r:jint.runtime.references.Reference;
+		
+		var oldValue:Float = 0;
+        var newValue:Float = 0;
         switch (updateExpression.Operator)
         {
             case jint.parser.ast.UnaryOperator.Increment:
                 r = value;
-                if (r != null && r.IsStrict() && (r.GetBase().TryCast() != null) && (system.Array.IndexOf__T([ "eval", "arguments" ], r.GetReferencedName()) != -1))
+                if (r != null && r.IsStrict() && (r.GetBase().TryCast(jint.runtime.environments.EnvironmentRecord) != null) && ([ "eval", "arguments" ].indexOf( r.GetReferencedName()) != -1))
                 {
                     return throw new jint.runtime.JavaScriptException().Creator(_engine.SyntaxError);
                 }
-                var oldValue:Float = jint.runtime.TypeConverter.ToNumber(_engine.GetValue(value));
-                var newValue:Float = oldValue + 1;
+                oldValue = jint.runtime.TypeConverter.ToNumber(_engine.GetValue(value));
+                newValue = oldValue + 1;
                 _engine.PutValue(r, newValue);
                 return updateExpression.Prefix ? newValue : oldValue;
             case jint.parser.ast.UnaryOperator.Decrement:
                 r = value;
-                if (r != null && r.IsStrict() && (r.GetBase().TryCast() != null) && (system.Array.IndexOf__T([ "eval", "arguments" ], r.GetReferencedName()) != -1))
+                if (r != null && r.IsStrict() && (r.GetBase().TryCast(jint.runtime.environments.EnvironmentRecord) != null) && ([ "eval", "arguments" ].indexOf(  r.GetReferencedName()) != -1))
                 {
                     return throw new jint.runtime.JavaScriptException().Creator(_engine.SyntaxError);
                 }
@@ -696,7 +700,7 @@ class ExpressionInterpreter
     public function EvaluateNewExpression(newExpression:jint.parser.ast.NewExpression):jint.native.JsValue
     {
         var arguments:Array<jint.native.JsValue> = null;
-        var callee:jint.native.IConstructor = _engine.GetValue(EvaluateExpression(newExpression.Callee)).TryCast();
+        var callee:jint.native.IConstructor = _engine.GetValue(EvaluateExpression(newExpression.Callee)).TryCast(jint.native.IConstructor);
         if (callee == null)
         {
             return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.TypeError, "The object can't be used as constructor.");
@@ -713,7 +717,7 @@ class ExpressionInterpreter
             if (expr != null)
             {
                 var value:jint.native.JsValue = _engine.GetValue(EvaluateExpression(expr));
-                a.DefineOwnProperty(Std.string(n), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(value, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), false);
+                a.DefineOwnProperty(Std.string(n), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(value, (true), (true), (true)), false);
             }
             n++;
         }
@@ -757,7 +761,7 @@ class ExpressionInterpreter
                 {
                     return throw new jint.runtime.JavaScriptException().Creator(_engine.SyntaxError);
                 }
-                var bindings:jint.runtime.environments.EnvironmentRecord = r.GetBase().TryCast();
+                var bindings:jint.runtime.environments.EnvironmentRecord = r.GetBase().TryCast(jint.runtime.environments.EnvironmentRecord);
                 return bindings.DeleteBinding(r.GetReferencedName());
             case jint.parser.ast.UnaryOperator.Void:
                 _engine.GetValue(value);
@@ -780,7 +784,7 @@ class ExpressionInterpreter
                 {
                     return "object";
                 }
-                switch (v.Type)
+                switch (v.GetJType() )
                 {
                     case jint.runtime.Types.Boolean:
                         return "boolean";
@@ -789,7 +793,7 @@ class ExpressionInterpreter
                     case jint.runtime.Types.String:
                         return "string";
                 }
-                if (v.TryCast() != null)
+                if (v.TryCast(jint.native.ICallable) != null)
                 {
                     return "function";
                 }

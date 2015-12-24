@@ -1,6 +1,6 @@
 package jint.runtime.interop;
 using StringTools;
-import jint.native.JsValue.AbstractJsValue;
+import jint.native.JsValue;
 import jint.runtime.descriptors.specialized.IndexDescriptor;
 import system.*;
 import anonymoustypes.*;
@@ -136,7 +136,7 @@ class TypeReference extends jint.native.functions.FunctionInstance implements ji
         return JType;
     }
 
-    override public function get_Class():String
+    override public function get_JClass():String
     {
         return "TypeReference";
     }

@@ -5,6 +5,6 @@ import anonymoustypes.*;
 
 interface IPrimitiveInstance
 {
-    var Type(get_Type, never):Int;
-    var PrimitiveValue(get_PrimitiveValue, never):jint.native.JsValue;
+    var JType(get, never):Int;
+    var PrimitiveValue:jint.native.JsValue;
 }

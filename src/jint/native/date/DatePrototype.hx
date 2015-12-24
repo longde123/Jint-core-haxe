@@ -2,7 +2,8 @@ package jint.native.date;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
+using DateTools;
 class DatePrototype extends jint.native.date.DateInstance
 {
     public function new(engine:jint.Engine)
@@ -17,7 +18,7 @@ class DatePrototype extends jint.native.date.DateInstance
     }
     public function Configure():Void
     {
-        FastAddProperty("toString", new jint.runtime.interop.ClrFunctionInstance(Engine, ToString, 0), true, false, true);
+        FastAddProperty("toString", new jint.runtime.interop.ClrFunctionInstance(Engine, __ToString, 0), true, false, true);
         FastAddProperty("toDateString", new jint.runtime.interop.ClrFunctionInstance(Engine, ToDateString, 0), true, false, true);
         FastAddProperty("toTimeString", new jint.runtime.interop.ClrFunctionInstance(Engine, ToTimeString, 0), true, false, true);
         FastAddProperty("toLocaleString", new jint.runtime.interop.ClrFunctionInstance(Engine, ToLocaleString, 0), true, false, true);
@@ -69,35 +70,34 @@ class DatePrototype extends jint.native.date.DateInstance
     }
     private function EnsureDateInstance(thisObj:jint.native.JsValue):jint.native.date.DateInstance
     {
-        return thisObj.TryCast(function (value:jint.native.JsValue):Void
-        {
-            throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(Engine.TypeError, "Invalid Date");
-        }
+        return thisObj.TryCast(jint.native.date.DateInstance,function (value:jint.native.JsValue) return  throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(Engine.TypeError, "Invalid Date")
+ 
         );
     }
-    override public function toString(thisObj:jint.native.JsValue, arg2:Array<jint.native.JsValue>):jint.native.JsValue
+    public function __ToString(thisObj:jint.native.JsValue, arg2:Array<jint.native.JsValue>):jint.native.JsValue
     {
-        return ToLocalTime(EnsureDateInstance(thisObj).ToDateTime()).toString("ddd MMM dd yyyy HH:mm:ss 'GMT'K", system.globalization.CultureInfo.InvariantCulture);
+        return ToLocalTime(EnsureDateInstance(thisObj).ToDateTime()).toString();
     }
     private function ToDateString(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
-        return ToLocalTime(EnsureDateInstance(thisObj).ToDateTime()).toString("ddd MMM dd yyyy", system.globalization.CultureInfo.InvariantCulture);
+ 
+        return ToLocalTime(EnsureDateInstance(thisObj).ToDateTime()).format("ddd MMM dd yyyy");
     }
     private function ToTimeString(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
-        return ToLocalTime(EnsureDateInstance(thisObj).ToDateTime()).toString("HH:mm:ss 'GMT'K", system.globalization.CultureInfo.InvariantCulture);
+        return ToLocalTime(EnsureDateInstance(thisObj).ToDateTime()).format("HH:mm:ss 'GMT'K");
     }
     private function ToLocaleString(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
-        return ToLocalTime(EnsureDateInstance(thisObj).ToDateTime()).toString("F", Engine.Options.GetCulture());
+        return ToLocalTime(EnsureDateInstance(thisObj).ToDateTime()).format("F");
     }
     private function ToLocaleDateString(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
-        return ToLocalTime(EnsureDateInstance(thisObj).ToDateTime()).toString("D", Engine.Options.GetCulture());
+        return ToLocalTime(EnsureDateInstance(thisObj).ToDateTime()).format("D");
     }
     private function ToLocaleTimeString(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
-        return ToLocalTime(EnsureDateInstance(thisObj).ToDateTime()).toString("T", Engine.Options.GetCulture());
+        return ToLocalTime(EnsureDateInstance(thisObj).ToDateTime()).format("T");
     }
     private function GetTime(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
@@ -226,7 +226,7 @@ class DatePrototype extends jint.native.date.DateInstance
     }
     private function GetSeconds(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
-        var t:Float = thisObj.TryCast().PrimitiveValue;
+        var t:Float = thisObj.TryCast(jint.native.date.DateInstance).PrimitiveValue;
         if (Cs2Hx.IsNaN(t))
         {
             return Math.NaN;
@@ -278,7 +278,7 @@ class DatePrototype extends jint.native.date.DateInstance
         var t:Float = LocalTime(EnsureDateInstance(thisObj).PrimitiveValue);
         var time:Float = MakeTime(HourFromTime(t), MinFromTime(t), SecFromTime(t), jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 0)));
         var u:Float = TimeClip(Utc(MakeDate(Day(t), time)));
-        thisObj.As().PrimitiveValue = u;
+        thisObj.As(jint.native.date.DateInstance).PrimitiveValue = u;
         return u;
     }
     private function SetUTCMilliseconds(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
@@ -286,7 +286,7 @@ class DatePrototype extends jint.native.date.DateInstance
         var t:Float = EnsureDateInstance(thisObj).PrimitiveValue;
         var time:Float = MakeTime(HourFromTime(t), MinFromTime(t), SecFromTime(t), jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 0)));
         var u:Float = TimeClip(MakeDate(Day(t), time));
-        thisObj.As().PrimitiveValue = u;
+        thisObj.As(jint.native.date.DateInstance).PrimitiveValue = u;
         return u;
     }
     private function SetSeconds(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
@@ -296,7 +296,7 @@ class DatePrototype extends jint.native.date.DateInstance
         var milli:Float = arguments.length <= 1 ? MsFromTime(t) : jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 1));
         var date:Float = MakeDate(Day(t), MakeTime(HourFromTime(t), MinFromTime(t), s, milli));
         var u:Float = TimeClip(Utc(date));
-        thisObj.As().PrimitiveValue = u;
+        thisObj.As(jint.native.date.DateInstance).PrimitiveValue = u;
         return u;
     }
     private function SetUTCSeconds(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
@@ -306,7 +306,7 @@ class DatePrototype extends jint.native.date.DateInstance
         var milli:Float = arguments.length <= 1 ? MsFromTime(t) : jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 1));
         var date:Float = MakeDate(Day(t), MakeTime(HourFromTime(t), MinFromTime(t), s, milli));
         var u:Float = TimeClip(date);
-        thisObj.As().PrimitiveValue = u;
+        thisObj.As(jint.native.date.DateInstance).PrimitiveValue = u;
         return u;
     }
     private function SetMinutes(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
@@ -317,7 +317,7 @@ class DatePrototype extends jint.native.date.DateInstance
         var milli:Float = arguments.length <= 2 ? MsFromTime(t) : jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 2));
         var date:Float = MakeDate(Day(t), MakeTime(HourFromTime(t), m, s, milli));
         var u:Float = TimeClip(Utc(date));
-        thisObj.As().PrimitiveValue = u;
+        thisObj.As(jint.native.date.DateInstance).PrimitiveValue = u;
         return u;
     }
     private function SetUTCMinutes(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
@@ -328,7 +328,7 @@ class DatePrototype extends jint.native.date.DateInstance
         var milli:Float = arguments.length <= 2 ? MsFromTime(t) : jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 2));
         var date:Float = MakeDate(Day(t), MakeTime(HourFromTime(t), m, s, milli));
         var u:Float = TimeClip(date);
-        thisObj.As().PrimitiveValue = u;
+        thisObj.As(jint.native.date.DateInstance).PrimitiveValue = u;
         return u;
     }
     private function SetHours(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
@@ -340,7 +340,7 @@ class DatePrototype extends jint.native.date.DateInstance
         var milli:Float = arguments.length <= 3 ? MsFromTime(t) : jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 3));
         var date:Float = MakeDate(Day(t), MakeTime(h, m, s, milli));
         var u:Float = TimeClip(Utc(date));
-        thisObj.As().PrimitiveValue = u;
+        thisObj.As(jint.native.date.DateInstance).PrimitiveValue = u;
         return u;
     }
     private function SetUTCHours(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
@@ -352,7 +352,7 @@ class DatePrototype extends jint.native.date.DateInstance
         var milli:Float = arguments.length <= 3 ? MsFromTime(t) : jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 3));
         var date:Float = MakeDate(Day(t), MakeTime(h, m, s, milli));
         var u:Float = TimeClip(date);
-        thisObj.As().PrimitiveValue = u;
+        thisObj.As(jint.native.date.DateInstance).PrimitiveValue = u;
         return u;
     }
     private function SetDate(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
@@ -361,7 +361,7 @@ class DatePrototype extends jint.native.date.DateInstance
         var dt:Float = jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 0));
         var newDate:Float = MakeDate(MakeDay(YearFromTime(t), MonthFromTime(t), dt), TimeWithinDay(t));
         var u:Float = TimeClip(Utc(newDate));
-        thisObj.As().PrimitiveValue = u;
+        thisObj.As(jint.native.date.DateInstance).PrimitiveValue = u;
         return u;
     }
     private function SetUTCDate(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
@@ -370,7 +370,7 @@ class DatePrototype extends jint.native.date.DateInstance
         var dt:Float = jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 0));
         var newDate:Float = MakeDate(MakeDay(YearFromTime(t), MonthFromTime(t), dt), TimeWithinDay(t));
         var u:Float = TimeClip(newDate);
-        thisObj.As().PrimitiveValue = u;
+        thisObj.As(jint.native.date.DateInstance).PrimitiveValue = u;
         return u;
     }
     private function SetMonth(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
@@ -380,7 +380,7 @@ class DatePrototype extends jint.native.date.DateInstance
         var dt:Float = arguments.length <= 1 ? DateFromTime(t) : jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 1));
         var newDate:Float = MakeDate(MakeDay(YearFromTime(t), m, dt), TimeWithinDay(t));
         var u:Float = TimeClip(Utc(newDate));
-        thisObj.As().PrimitiveValue = u;
+        thisObj.As(jint.native.date.DateInstance).PrimitiveValue = u;
         return u;
     }
     private function SetUTCMonth(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
@@ -390,7 +390,7 @@ class DatePrototype extends jint.native.date.DateInstance
         var dt:Float = arguments.length <= 1 ? DateFromTime(t) : jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 1));
         var newDate:Float = MakeDate(MakeDay(YearFromTime(t), m, dt), TimeWithinDay(t));
         var u:Float = TimeClip(newDate);
-        thisObj.As().PrimitiveValue = u;
+        thisObj.As(jint.native.date.DateInstance).PrimitiveValue = u;
         return u;
     }
     private function SetFullYear(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
@@ -402,7 +402,7 @@ class DatePrototype extends jint.native.date.DateInstance
         var dt:Float = arguments.length <= 2 ? DateFromTime(t) : jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 2));
         var newDate:Float = MakeDate(MakeDay(y, m, dt), TimeWithinDay(t));
         var u:Float = TimeClip(Utc(newDate));
-        thisObj.As().PrimitiveValue = u;
+        thisObj.As(jint.native.date.DateInstance).PrimitiveValue = u;
         return u;
     }
     private function SetYear(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
@@ -434,20 +434,22 @@ class DatePrototype extends jint.native.date.DateInstance
         var dt:Float = arguments.length <= 2 ? DateFromTime(t) : jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 2));
         var newDate:Float = MakeDate(MakeDay(y, m, dt), TimeWithinDay(t));
         var u:Float = TimeClip(newDate);
-        thisObj.As().PrimitiveValue = u;
+        thisObj.As(jint.native.date.DateInstance).PrimitiveValue = u;
         return u;
     }
     private function ToUtcString(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
-        return thisObj.TryCast(function (x:jint.native.JsValue):Void
+        var date= thisObj.TryCast(jint.native.date.DateInstance,function (x:jint.native.JsValue):Void
         {
             throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
         }
-        ).ToDateTime().ToUniversalTime().toString("ddd MMM dd yyyy HH:mm:ss 'GMT'", system.globalization.CultureInfo.InvariantCulture);
+        ).ToDateTime() ;
+		
+		return date.format("ddd MMM dd yyyy HH:mm:ss 'GMT'");
     }
     private function ToISOString(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
-        var t:Float = thisObj.TryCast(function (x:jint.native.JsValue):Void
+        var t:Float = thisObj.TryCast(jint.native.date.DateInstance,function (x:jint.native.JsValue):Void
         {
             throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
         }
@@ -456,7 +458,7 @@ class DatePrototype extends jint.native.date.DateInstance
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.RangeError);
         }
-        return Cs2Hx.Format("{0:0000}-{1:00}-{2:00}T{3:00}:{4:00}:{5:00}.{6:000}Z", [ YearFromTime(t), MonthFromTime(t) + 1, DateFromTime(t), HourFromTime(t), MinFromTime(t), SecFromTime(t), MsFromTime(t) ]);
+        return "";//todo Cs2Hx.Format("{0:0000}-{1:00}-{2:00}T{3:00}:{4:00}:{5:00}.{6:000}Z", [ YearFromTime(t), MonthFromTime(t) + 1, DateFromTime(t), HourFromTime(t), MinFromTime(t), SecFromTime(t), MsFromTime(t) ]);
     }
     private function ToJSON(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
@@ -466,12 +468,12 @@ class DatePrototype extends jint.native.date.DateInstance
         {
             return jint.native.JsValue.Null;
         }
-        var toIso:jint.native.JsValue = o.Get("toISOString");
-        if (!toIso.Is())
+        var toIso  = o.Get("toISOString");
+        if (!toIso.Is(jint.native.ICallable))
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
         }
-        return toIso.TryCast().Call(o, jint.runtime.Arguments.Empty);
+        return toIso.TryCast(jint.native.ICallable).Call(o, jint.runtime.Arguments.Empty);
     }
     public static var HoursPerDay:Float;
     public static var MinutesPerHour:Float;
@@ -482,7 +484,7 @@ class DatePrototype extends jint.native.date.DateInstance
     public static var MsPerDay:Float;
     public static function Day(t:Float):Float
     {
-        return system.MathCS.Floor_Double(t / MsPerDay);
+        return  (t / MsPerDay);
     }
     public static function TimeWithinDay(t:Float):Float
     {
@@ -490,19 +492,19 @@ class DatePrototype extends jint.native.date.DateInstance
     }
     public static function DaysInYear(y:Float):Float
     {
-        if (!(y % 4).Equals_Double(0))
+        if ((y % 4)!=(0))
         {
             return 365;
         }
-        if ((y % 4).Equals_Double(0) && !(y % 100).Equals_Double(0))
+        if ((y % 4)==(0) && (y % 100)!=(0))
         {
             return 366;
         }
-        if ((y % 100).Equals_Double(0) && !(y % 400).Equals_Double(0))
+        if ((y % 100)==(0) && (y % 400)!=(0))
         {
             return 365;
         }
-        if ((y % 400).Equals_Double(0))
+        if ((y % 400)==(0))
         {
             return 366;
         }
@@ -510,7 +512,7 @@ class DatePrototype extends jint.native.date.DateInstance
     }
     public static function DayFromYear(y:Float):Float
     {
-        return 365 * (y - 1970) + system.MathCS.Floor_Double((y - 1969) / 4) - system.MathCS.Floor_Double((y - 1901) / 100) + system.MathCS.Floor_Double((y - 1601) / 400);
+        return 365 * (y - 1970) + Math.floor((y - 1969) / 4) - Math.floor((y - 1901) / 100) + Math.floor((y - 1601) / 400);
     }
     public static function TimeFromYear(y:Float):Float
     {
@@ -520,13 +522,13 @@ class DatePrototype extends jint.native.date.DateInstance
     {
         if (!AreFinite([ t ]))
         {
-            return system.Double.NaN;
+            return Math.NaN;
         }
         var upper:Float = 3.4028235e+38;
         var lower:Float = 1.4e-45;
         while (upper > lower + 1)
         {
-            var current:Float = system.MathCS.Floor_Double((upper + lower) / 2);
+            var current:Float = Math.floor((upper + lower) / 2);
             var tfy:Float = TimeFromYear(current);
             if (tfy <= t)
             {
@@ -542,11 +544,11 @@ class DatePrototype extends jint.native.date.DateInstance
     public static function InLeapYear(t:Float):Float
     {
         var daysInYear:Float = DaysInYear(YearFromTime(t));
-        if (daysInYear.Equals_Double(365))
+        if (daysInYear==(365))
         {
             return 0;
         }
-        if (daysInYear.Equals_Double(366))
+        if (daysInYear==(366))
         {
             return 1;
         }
@@ -614,51 +616,51 @@ class DatePrototype extends jint.native.date.DateInstance
     {
         var monthFromTime:Float = MonthFromTime(t);
         var dayWithinYear:Float = DayWithinYear(t);
-        if (monthFromTime.Equals_Double(0))
+        if (monthFromTime==(0))
         {
             return dayWithinYear + 1;
         }
-        if (monthFromTime.Equals_Double(1))
+        if (monthFromTime==(1))
         {
             return dayWithinYear - 30;
         }
-        if (monthFromTime.Equals_Double(2))
+        if (monthFromTime==(2))
         {
             return dayWithinYear - 58 - InLeapYear(t);
         }
-        if (monthFromTime.Equals_Double(3))
+        if (monthFromTime==(3))
         {
             return dayWithinYear - 89 - InLeapYear(t);
         }
-        if (monthFromTime.Equals_Double(4))
+        if (monthFromTime==(4))
         {
             return dayWithinYear - 119 - InLeapYear(t);
         }
-        if (monthFromTime.Equals_Double(5))
+        if (monthFromTime==(5))
         {
             return dayWithinYear - 150 - InLeapYear(t);
         }
-        if (monthFromTime.Equals_Double(6))
+        if (monthFromTime==(6))
         {
             return dayWithinYear - 180 - InLeapYear(t);
         }
-        if (monthFromTime.Equals_Double(7))
+        if (monthFromTime==(7))
         {
             return dayWithinYear - 211 - InLeapYear(t);
         }
-        if (monthFromTime.Equals_Double(8))
+        if (monthFromTime==(8))
         {
             return dayWithinYear - 242 - InLeapYear(t);
         }
-        if (monthFromTime.Equals_Double(9))
+        if (monthFromTime==(9))
         {
             return dayWithinYear - 272 - InLeapYear(t);
         }
-        if (monthFromTime.Equals_Double(10))
+        if (monthFromTime==(10))
         {
             return dayWithinYear - 303 - InLeapYear(t);
         }
-        if (monthFromTime.Equals_Double(11))
+        if (monthFromTime==(11))
         {
             return dayWithinYear - 333 - InLeapYear(t);
         }
@@ -671,7 +673,7 @@ class DatePrototype extends jint.native.date.DateInstance
     public var LocalTza(get_LocalTza, never):Float;
     public function get_LocalTza():Float
     {
-        return Engine.Options.GetBaseUtcOffset().TotalMilliseconds;
+        return Date.now().getTime();
     }
 
     public function DaylightSavingTa(t:Float):Float
@@ -687,20 +689,19 @@ class DatePrototype extends jint.native.date.DateInstance
         }
         else
         {
-            var isLeapYear:Bool = InLeapYear(t).Equals_Double(1);
+            var isLeapYear:Bool = InLeapYear(t)==(1);
             year = isLeapYear ? 2000 : 1999;
         }
-        var dateTime:Date = new Date(Std.int(year), 1, 1).AddMilliseconds(timeInYear);
+        var dateTime:Date = new Date(Std.int(year), 1, 1, 0, 0, 0);
+		dateTime=Date.fromTime(dateTime.getTime()+timeInYear);
         return Engine.Options.IsDaylightSavingTime(dateTime) ? MsPerHour : 0;
     }
     public function ToLocalTime(t:Date):Date
     {
-        if (t.Kind == DateKind.Unspecified)
-        {
+      
             return t;
-        }
-        var offset:system.TimeSpan = Engine.Options.GetBaseUtcOffset();
-        return new DateOffset(t.Ticks + offset.Ticks, offset);
+      
+        
     }
     public function LocalTime(t:Float):Float
     {
@@ -712,15 +713,15 @@ class DatePrototype extends jint.native.date.DateInstance
     }
     public static function HourFromTime(t:Float):Float
     {
-        return system.MathCS.Floor_Double(t / MsPerHour) % HoursPerDay;
+        return Math.floor(t / MsPerHour) % HoursPerDay;
     }
     public static function MinFromTime(t:Float):Float
     {
-        return system.MathCS.Floor_Double(t / MsPerMinute) % MinutesPerHour;
+        return Math.floor(t / MsPerMinute) % MinutesPerHour;
     }
     public static function SecFromTime(t:Float):Float
     {
-        return system.MathCS.Floor_Double(t / MsPerSecond) % SecondsPerMinute;
+        return Math.floor(t / MsPerSecond) % SecondsPerMinute;
     }
     public static function MsFromTime(t:Float):Float
     {
@@ -741,7 +742,7 @@ class DatePrototype extends jint.native.date.DateInstance
         {
             day += month;
         }
-        if (month >= 2 && InLeapYear(year).Equals_Double(1))
+        if (month >= 2 && InLeapYear(year)==(1))
         {
             day++;
         }

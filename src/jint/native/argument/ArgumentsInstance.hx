@@ -2,7 +2,7 @@ package jint.native.argument;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class ArgumentsInstance extends jint.native.object.ObjectInstance
 {
     public function new(engine:jint.Engine)
@@ -56,7 +56,7 @@ class ArgumentsInstance extends jint.native.object.ObjectInstance
         return obj;
     }
     public var ParameterMap:jint.native.object.ObjectInstance;
-    override public function get_Class():String
+    override public function get_JClass():String
     {
         return "Arguments";
     }
@@ -99,8 +99,8 @@ class ArgumentsInstance extends jint.native.object.ObjectInstance
         var desc:jint.runtime.descriptors.PropertyDescriptor = GetProperty(propertyName);
         if (desc.IsAccessorDescriptor())
         {
-            var setter:jint.native.ICallable = desc.JSet.TryCast();
-            setter.Call(new jint.native.JsValue().Creator_ObjectInstance(this), [ value ]);
+            var setter:jint.native.ICallable = desc.JSet.TryCast(jint.native.ICallable);
+            setter.Call(this, [ value ]);
         }
         else
         {
@@ -134,7 +134,7 @@ class ArgumentsInstance extends jint.native.object.ObjectInstance
                     {
                         map.Put(propertyName, desc.Value, throwOnError);
                     }
-                    if (desc.Writable.HasValue && desc.Writable.Value == false)
+                    if (desc.Writable!=null && desc.Writable == false)
                     {
                         map.Delete(propertyName, false);
                     }

@@ -2,7 +2,7 @@ package jint.native.global;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class GlobalObject extends jint.native.object.ObjectInstance
 {
     public function new(engine:jint.Engine)
@@ -162,7 +162,7 @@ class GlobalObject extends jint.native.object.ObjectInstance
         }
         var separator:Int = 0;
         var isNan:Bool = true;
-        var number:system.Decimal = 0;
+        var number:Float = 0;
         var i:Int = 0;
         { //for
             while (i < trimmedString.length)
@@ -274,7 +274,7 @@ class GlobalObject extends jint.native.object.ObjectInstance
                 k++;
             }
         } //end for
-        return jint.native.JsValue.op_Explicit_Float((sign * number));
+        return (sign * number);
     }
     public static function IsNaN(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
@@ -321,7 +321,7 @@ class GlobalObject extends jint.native.object.ObjectInstance
             while (k < strLen)
             {
                 var c:Int = uriString.charCodeAt(k);
-                if (system.Array.IndexOf__T(unescapedUriSet, c) != -1)
+                if ( unescapedUriSet.indexOf( c) != -1)
                 {
                     r.Append_Char(c);
                 }
@@ -350,7 +350,7 @@ class GlobalObject extends jint.native.object.ObjectInstance
                         }
                         v = (c - 0xD800) * 0x400 + (kChar - 0xDC00) + 0x10000;
                     }
-                    var octets:haxe.io.Bytes;
+                    var octets:Array<Int>;
                     if (v >= 0 && v <= 0x007F)
                     {
                         octets = [ v ];
@@ -379,10 +379,12 @@ class GlobalObject extends jint.native.object.ObjectInstance
                         var j:Int = 0;
                         while (j < octets.length)
                         {
-                            var jOctet:Int = octets.get(j);
-                            var x1:Int = HexaMap.charCodeAt(jOctet / 16);
+                            var jOctet:Int = octets[j];
+                            var x1:Int = HexaMap.charCodeAt(Std.int(jOctet / 16));
                             var x2:Int = HexaMap.charCodeAt(jOctet % 16);
-                            r.Append_Char(37).Append_Char(x1).Append_Char(x2);
+                            r.Append_Char(37);
+							r.Append_Char(x1);
+							r.Append_Char(x2);
                             j++;
                         }
                     } //end for
@@ -433,7 +435,7 @@ class GlobalObject extends jint.native.object.ObjectInstance
                     if ((B & 0x80) == 0)
                     {
                         C = B;
-                        if (system.Array.IndexOf__T(reservedSet, C) == -1)
+                        if (reservedSet.indexOf( C) == -1)
                         {
                             R.Append_Char(C);
                         }
@@ -484,7 +486,7 @@ class GlobalObject extends jint.native.object.ObjectInstance
                                 j++;
                             }
                         } //end for
-                        R.Append(system.text.Encoding.UTF8.GetString__Int32_Int32(Octets, 0, Octets.length));
+                        R.Append(Octets.toString());
                     }
                 }
                 k++;

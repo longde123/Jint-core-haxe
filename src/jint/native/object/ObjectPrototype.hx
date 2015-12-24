@@ -83,9 +83,9 @@ class ObjectPrototype extends jint.native.object.ObjectInstance
             return "[object Null]";
         }
         var o:jint.native.object.ObjectInstance = jint.runtime.TypeConverter.ToObject(Engine, thisObject);
-        return "[object " + o.Class + "]";
+        return "[object " + o.JClass + "]";
     }
-    public function HasOwnProperty(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
+     override public function HasOwnProperty(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var p:String = jint.runtime.TypeConverter.toString(arguments[0]);
         var o:jint.native.object.ObjectInstance = jint.runtime.TypeConverter.ToObject(Engine, thisObject);

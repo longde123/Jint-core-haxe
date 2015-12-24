@@ -2,7 +2,7 @@ package jint.native.functions;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class ScriptFunctionInstance extends jint.native.functions.FunctionInstance implements jint.native.IConstructor
 {
     private var _functionDeclaration:jint.parser.IFunctionDeclaration;
@@ -67,11 +67,11 @@ class ScriptFunctionInstance extends jint.native.functions.FunctionInstance impl
     }
     public function Construct(arguments:Array<jint.native.JsValue>):jint.native.object.ObjectInstance
     {
-        var proto:jint.native.object.ObjectInstance = Get("prototype").TryCast();
+        var proto:jint.native.object.ObjectInstance = Get("prototype").TryCast(jint.native.object.ObjectInstance);
         var obj:jint.native.object.ObjectInstance = new jint.native.object.ObjectInstance(Engine);
         obj.Extensible = true;
         obj.Prototype = Cs2Hx.Coalesce(proto, Engine.JObject.PrototypeObject);
-        var result:jint.native.object.ObjectInstance = Call(obj, arguments).TryCast();
+        var result:jint.native.object.ObjectInstance = Call(obj, arguments).TryCast(jint.native.object.ObjectInstance);
         if (result != null)
         {
             return result;

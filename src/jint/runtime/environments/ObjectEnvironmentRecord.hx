@@ -48,7 +48,7 @@ class ObjectEnvironmentRecord extends jint.runtime.environments.EnvironmentRecor
     {
         if (_provideThis)
         {
-            return new jint.native.JsValue().Creator_ObjectInstance(_bindingObject);
+            return _bindingObject;
         }
         return jint.native.Undefined.Instance;
     }

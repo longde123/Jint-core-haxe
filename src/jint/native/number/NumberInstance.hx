@@ -5,18 +5,18 @@ import anonymoustypes.*;
 
 class NumberInstance extends jint.native.object.ObjectInstance implements jint.native.IPrimitiveInstance
 {
-    private static inline var NegativeZeroBits:Float = (-0.0);
+    private static inline var NegativeZeroBits:Float = ( 0.0);
     public function new(engine:jint.Engine)
     {
         super(engine);
     }
-    override public function get_Class():String
+    override public function get_JClass():String
     {
         return "Number";
     }
 
-    var Type(get_Type, never):Int;
-    function get_Type():Int
+    public var JType(get , never):Int;
+    function get_JType():Int
     {
         return jint.runtime.Types.Number;
     }
@@ -25,10 +25,10 @@ class NumberInstance extends jint.native.object.ObjectInstance implements jint.n
     public var PrimitiveValue:jint.native.JsValue;
     public static function IsNegativeZero(x:Float):Bool
     {
-        return x == 0 && system.BitConverter.DoubleToInt64Bits(x) == NegativeZeroBits;
+        return x == 0 ;
     }
     public static function IsPositiveZero(x:Float):Bool
     {
-        return x == 0 && system.BitConverter.DoubleToInt64Bits(x) != NegativeZeroBits;
+        return x == 0 ;
     }
 }

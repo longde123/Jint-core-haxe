@@ -1,5 +1,6 @@
 package jint.runtime;
 using StringTools;
+import jint.native.AbstractJsValue;
 import system.*;
 import anonymoustypes.*;
 using jint.native.StaticJsValue;
@@ -34,7 +35,7 @@ class TypeConverter
         if (o.IsNumber())
         {
             var n:Float = o.AsNumber();
-            if (n.Equals_Double(0) || Cs2Hx.IsNaN(n))
+            if (n==(0) || Cs2Hx.IsNaN(n))
             {
                 return false;
             }
@@ -101,31 +102,38 @@ class TypeConverter
             }
             try
             {
-                if (!system.Cs2Hx.StartsWith_String_StringComparison(s, "0x", system.StringComparison.OrdinalIgnoreCase))
+				//(!s.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
+                if ( !s.toLowerCase().startsWith("0x"))
                 {
                     var start:Int = s.charCodeAt(0);
                     if (start != 43 && start != 45 && start != 46 && !system.Cs2Hx.IsDigit(start))
                     {
                         return Math.NaN;
                     }
-                    var n:Float = system.Double.Parse_String_NumberStyles_IFormatProvider(s, system.globalization.NumberStyles.AllowDecimalPoint | system.globalization.NumberStyles.AllowLeadingSign | system.globalization.NumberStyles.AllowLeadingWhite | system.globalization.NumberStyles.AllowTrailingWhite | system.globalization.NumberStyles.AllowExponent, system.globalization.CultureInfo.InvariantCulture);
-                    if (system.Cs2Hx.StartsWith(s, "-") && n.Equals_Double(0))
+					/*
+                        double n = Double.Parse(s,
+                            NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign |
+                            NumberStyles.AllowLeadingWhite | NumberStyles.AllowTrailingWhite |
+                            NumberStyles.AllowExponent, CultureInfo.InvariantCulture);
+							*/
+                    var n:Float = Std.parseFloat(s);
+                    if (system.Cs2Hx.StartsWith(s, "-") && n==(0))
                     {
                         return -0.0;
                     }
                     return n;
                 }
-                var i:Int = Std.parseInt(s.substr(2), system.globalization.NumberStyles.HexNumber, system.globalization.CultureInfo.InvariantCulture);
+				//  int i = int.Parse(s.Substring(2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+                var i:Int = Std.parseInt(s.substr(2) );
                 return i;
-            }
-            catch (__ex:system.OverflowException)
-            {
-                return system.Cs2Hx.StartsWith(s, "-") ? Math.NEGATIVE_INFINITY : Math.POSITIVE_INFINITY;
             }
             catch (__ex:Dynamic)
             {
-                return Math.NaN;
+                return s.startsWith("-") ? Math.NEGATIVE_INFINITY : Math.POSITIVE_INFINITY;
             }
+           
+            return Math.NaN;
+          
         }
         return ToNumber(ToPrimitive(o, jint.runtime.Types.Number));
     }
@@ -136,7 +144,7 @@ class TypeConverter
         {
             return 0;
         }
-        if (number.Equals_Double(0) || Cs2Hx.IsInfinity(number))
+        if (number==(0) || Cs2Hx.IsInfinity(number))
         {
             return number;
         }
@@ -218,14 +226,14 @@ class TypeConverter
     {
         if (value.IsObject())
         {
-            var primitive:jint.native.IPrimitiveInstance = value.TryCast();
+            var primitive:jint.native.IPrimitiveInstance = value.TryCast(jint.native.IPrimitiveInstance);
             if (primitive != null)
             {
-                return primitive.Type;
+                return primitive.JType;
             }
             return jint.runtime.Types.Object;
-        }
-        return value.Type;
+        } 
+        return value.GetJType();
     }
     public static function CheckObjectCoercible(engine:jint.Engine, o:jint.native.JsValue):Void
     {
@@ -235,9 +243,10 @@ class TypeConverter
         }
     }
  
-    public static function TypeIsNullable(type:system.TypeCS):Bool
-    {
-        return !type.IsValueType;
+    public static function TypeIsNullable(type:Class<Dynamic>):Bool
+    { 
+		//todo
+        return type==null;
     }
     public static function ToString_Double_String_CultureInfo(x:Float, p:String, cultureInfo:Date):String
     {

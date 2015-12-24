@@ -2,7 +2,7 @@ package jint.native.boolean;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class BooleanPrototype extends jint.native.boolean.BooleanInstance
 {
     public function new(engine:jint.Engine)
@@ -32,7 +32,7 @@ class BooleanPrototype extends jint.native.boolean.BooleanInstance
         }
         else
         {
-            var o:jint.native.boolean.BooleanInstance = B.TryCast();
+            var o:jint.native.boolean.BooleanInstance = B.TryCast(jint.native.boolean.BooleanInstance);
             if (o != null)
             {
                 return o.PrimitiveValue;

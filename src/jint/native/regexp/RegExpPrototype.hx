@@ -2,7 +2,7 @@ package jint.native.regexp;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class RegExpPrototype extends jint.native.regexp.RegExpInstance
 {
     public function new(engine:jint.Engine)
@@ -36,7 +36,7 @@ class RegExpPrototype extends jint.native.regexp.RegExpInstance
     private function Test(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var r:jint.native.object.ObjectInstance = jint.runtime.TypeConverter.ToObject(Engine, thisObj);
-        if (r.Class != "RegExp")
+        if (r.JClass != "RegExp")
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
         }

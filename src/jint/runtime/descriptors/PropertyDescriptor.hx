@@ -2,7 +2,7 @@ package jint.runtime.descriptors;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class PropertyDescriptor
 {
     public static var Undefined:jint.runtime.descriptors.PropertyDescriptor;
@@ -14,24 +14,24 @@ class PropertyDescriptor
         Value = value;
         if (writable!=null)
         {
-            Writable = new Null<Bool>(writable);
+            Writable = (writable);
         }
         if (enumerable!=null)
         {
-            Enumerable = new Null<Bool>(enumerable);
+            Enumerable = (enumerable);
         }
         if (configurable!=null)
         {
-            Configurable = new Null<Bool>(configurable);
+            Configurable = (configurable);
         }
         return this;
     }
     public function Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(jget:jint.native.JsValue, jset:jint.native.JsValue, enumerable:Null<Bool> = null, configurable:Null<Bool> = null):jint.runtime.descriptors.PropertyDescriptor
     {
-        if (enumerable == null)
-            enumerable = new Null<Bool>();
-        if (configurable == null)
-            configurable = new Null<Bool>();
+        //if (enumerable == null)
+        //    enumerable = ();
+       // if (configurable == null)
+        //    configurable = ();
         JGet = jget;
         JSet = jset;
         if (enumerable!=null)
@@ -82,7 +82,7 @@ class PropertyDescriptor
     }
     public static function ToPropertyDescriptor(engine:jint.Engine, o:jint.native.JsValue):jint.runtime.descriptors.PropertyDescriptor
     {
-        var obj:jint.native.object.ObjectInstance = o.TryCast();
+        var obj:jint.native.object.ObjectInstance = o.TryCast(jint.native.object.ObjectInstance);
         if (obj == null)
         {
             return throw new jint.runtime.JavaScriptException().Creator(engine.TypeError);
@@ -112,7 +112,7 @@ class PropertyDescriptor
         if (obj.HasProperty("get"))
         {
             var getter:jint.native.JsValue = obj.Get("get");
-            if (!getter.Equals(jint.native.JsValue.Undefined) && getter.TryCast() == null)
+            if (!getter.Equals(jint.native.JsValue.Undefined) && getter.TryCast(null) == null)
             {
                 return throw new jint.runtime.JavaScriptException().Creator(engine.TypeError);
             }
@@ -121,7 +121,7 @@ class PropertyDescriptor
         if (obj.HasProperty("set"))
         {
             var setter:jint.native.JsValue = obj.Get("set");
-            if (!setter.Equals(jint.native.Undefined.Instance) && setter.TryCast() == null)
+            if (!setter.Equals(jint.native.Undefined.Instance) && setter.TryCast(null) == null)
             {
                 return throw new jint.runtime.JavaScriptException().Creator(engine.TypeError);
             }
@@ -145,16 +145,16 @@ class PropertyDescriptor
         var obj:jint.native.object.ObjectInstance = engine.JObject.Construct(jint.runtime.Arguments.Empty);
         if (desc.IsDataDescriptor())
         {
-            obj.DefineOwnProperty("value", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(desc.Value != null ? desc.Value : jint.native.Undefined.Instance, new Null<Bool>(true), new Null<Bool>(true), new Null<Bool>(true)), false);
-            obj.DefineOwnProperty("writable", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(desc.Writable!=null && desc.Writable, new Null<Bool>(true), new Null<Bool>(true), new Null<Bool>(true)), false);
+            obj.DefineOwnProperty("value", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(desc.Value != null ? desc.Value : jint.native.Undefined.Instance, (true), (true), (true)), false);
+            obj.DefineOwnProperty("writable", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(desc.Writable!=null && desc.Writable, (true), (true), (true)), false);
         }
         else
         {
-            obj.DefineOwnProperty("get", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(desc.JGet != null ? desc.JGet : jint.native.Undefined.Instance, new Null<Bool>(true), new Null<Bool>(true), new Null<Bool>(true)), false);
-            obj.DefineOwnProperty("set", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(desc.JSet != null ? desc.JSet : jint.native.Undefined.Instance, new Null<Bool>(true), new Null<Bool>(true), new Null<Bool>(true)), false);
+            obj.DefineOwnProperty("get", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(desc.JGet != null ? desc.JGet : jint.native.Undefined.Instance, (true), (true), (true)), false);
+            obj.DefineOwnProperty("set", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(desc.JSet != null ? desc.JSet : jint.native.Undefined.Instance, (true), (true), (true)), false);
         }
-        obj.DefineOwnProperty("enumerable", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(desc.Enumerable!=null && desc.Enumerable, new Null<Bool>(true), new Null<Bool>(true), new Null<Bool>(true)), false);
-        obj.DefineOwnProperty("configurable", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(desc.Configurable!=null && desc.Configurable, new Null<Bool>(true), new Null<Bool>(true), new Null<Bool>(true)), false);
+        obj.DefineOwnProperty("enumerable", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(desc.Enumerable!=null && desc.Enumerable, (true), (true), (true)), false);
+        obj.DefineOwnProperty("configurable", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(desc.Configurable!=null && desc.Configurable, (true), (true), (true)), false);
         return obj;
     }
     public static function cctor():Void
