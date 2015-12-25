@@ -9,7 +9,7 @@ class Null
     public static inline var Text:String = "null";
     public static function cctor():Void
     {
-        Instance = jint.native.AbstractJsValue.Null;
+        Instance = jint.native.JsValue.Null;
     }
     public function new()
     {

@@ -61,8 +61,16 @@ abstract  JsValue(AbstractJsValue) from AbstractJsValue to AbstractJsValue {
                 return new jint.native.AbstractJsValue().Creator(value);
              if(Std.is(value,Int))
                 return new jint.native.AbstractJsValue().Creator_Double(value);
-             if(Std.is(value,String))
+             if (Std.is(value, String)){
+			 
+			    var regex:String = value;  //EReg
+				if (regex != null&&  (regex.charCodeAt(0) == 47))
+				{
+					var jsRegex:jint.native.regexp.RegExpInstance = engine.JRegExp.Construct_String(system.Cs2Hx.Trim_(regex, [ 47 ]));
+					return jsRegex;
+				}
                 return new jint.native.AbstractJsValue().Creator_String(value.toString());
+			 }
               if(Std.is(value,Date))
                 return engine.JDate.Construct_DateTime(value); 
               if(Std.is(value,Float))
@@ -96,12 +104,7 @@ abstract  JsValue(AbstractJsValue) from AbstractJsValue to AbstractJsValue {
             }
             return jsArray;
         }
-        var regex:system.text.regularexpressions.Regex = value;
-        if (regex != null)
-        {
-            var jsRegex:jint.native.regexp.RegExpInstance = engine.JRegExp.Construct_String(system.Cs2Hx.Trim_(regex.toString(), [ 47 ]));
-            return jsRegex;
-        }
+   
 		//Delegate
         var d = value;
         if (d != null)

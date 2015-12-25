@@ -30,7 +30,7 @@ class RegExpPrototype extends jint.native.regexp.RegExpInstance
     }
     private function ToRegExpString(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
-        var regExp:jint.native.regexp.RegExpInstance = thisObj.TryCast();
+        var regExp:jint.native.regexp.RegExpInstance = thisObj.TryCast(jint.native.regexp.RegExpInstance);
         return "/" + regExp.Source + "/" + (system.Cs2Hx.StringContains(regExp.Flags, "g") ? "g" : "") + (system.Cs2Hx.StringContains(regExp.Flags, "i") ? "i" : "") + (system.Cs2Hx.StringContains(regExp.Flags, "m") ? "m" : "");
     }
     private function Test(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
@@ -62,10 +62,10 @@ class RegExpPrototype extends jint.native.regexp.RegExpInstance
         if (R.Source == "(?:)")
         {
             var aa:jint.native.object.ObjectInstance = InitReturnValueArray(Engine.JArray.Construct(jint.runtime.Arguments.Empty), s, 1, 0);
-            aa.DefineOwnProperty("0", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean("", new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), true);
+            aa.DefineOwnProperty("0", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean("", (true), (true), (true)), true);
             return aa;
         }
-        var r:system.text.regularexpressions.Match = null;
+        var r:RegExpInstance.RegMatch = null;
         if (i < 0 || i > length)
         {
             R.Put("lastIndex", 0, true);
@@ -82,16 +82,15 @@ class RegExpPrototype extends jint.native.regexp.RegExpInstance
         {
             R.Put("lastIndex", e, true);
         }
-        var n:Int = r.Groups.Count;
+        var n:Int = r.Groups.length;
         var matchIndex:Int = r.Index;
         var a:jint.native.object.ObjectInstance = InitReturnValueArray(Engine.JArray.Construct(jint.runtime.Arguments.Empty), s, n, matchIndex);
         { //for
             var k:Int = 0;
             while (k < n)
-            {
-                var group:system.text.regularexpressions.Group = r.Groups.GetValue_Int32(k);
-                var value:jint.native.JsValue = group.Success ? group.Value : jint.native.Undefined.Instance;
-                a.DefineOwnProperty(Std.string(k), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(value, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), true);
+            { 
+                var value:jint.native.JsValue = r.Groups[k];
+                a.DefineOwnProperty(Std.string(k), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(value, (true), (true), (true)), true);
                 k++;
             }
         } //end for
@@ -99,9 +98,9 @@ class RegExpPrototype extends jint.native.regexp.RegExpInstance
     }
     private static function InitReturnValueArray(array:jint.native.object.ObjectInstance, inputValue:String, lengthValue:Int, indexValue:Int):jint.native.object.ObjectInstance
     {
-        array.DefineOwnProperty("index", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(indexValue, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), true);
-        array.DefineOwnProperty("input", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(inputValue, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), true);
-        array.DefineOwnProperty("length", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(lengthValue, new Nullable_Bool(false), new Nullable_Bool(false), new Nullable_Bool(false)), true);
+        array.DefineOwnProperty("index", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(indexValue, (true), (true), (true)), true);
+        array.DefineOwnProperty("input", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(inputValue, (true), (true), (true)), true);
+        array.DefineOwnProperty("length", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(lengthValue, (false), (false), (false)), true);
         return array;
     }
 }

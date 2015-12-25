@@ -26,9 +26,9 @@ class ErrorPrototype extends jint.native.error.ErrorInstance
     }
     public function Configure():Void
     {
-        FastAddProperty("toString", new jint.runtime.interop.ClrFunctionInstance(Engine, toString), true, false, true);
+        FastAddProperty("toString", new jint.runtime.interop.ClrFunctionInstance(Engine, __toString), true, false, true);
     }
-    override public function toString(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
+    public function __toString(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var o:jint.native.object.ObjectInstance = thisObject.TryCast(jint.native.object.ObjectInstance);
         if (o == null)

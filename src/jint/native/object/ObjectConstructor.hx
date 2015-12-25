@@ -214,18 +214,18 @@ class ObjectConstructor extends jint.native.functions.FunctionInstance implement
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
         }
-        var keys:Array<String> = system.linq.Enumerable.Select(o.GetOwnProperties(), function (x:system.collections.generic.KeyValuePair<String, jint.runtime.descriptors.PropertyDescriptor>):String { return x.Key; } );
+        var keys:Array<String> = [for (key in o.GetOwnProperties().keys()) key];
         for (p in keys)
         {
             var desc:jint.runtime.descriptors.PropertyDescriptor = o.GetOwnProperty(p);
             if (desc.IsDataDescriptor())
             {
-                if (desc.Writable.HasValue && desc.Writable.Value)
+                if (desc.Writable!=null && desc.Writable)
                 {
                     desc.Writable = (false);
                 }
             }
-            if (desc.Configurable.HasValue && desc.Configurable.Value)
+            if (desc.Configurable!=null && desc.Configurable)
             {
                 desc.Configurable = (false);
             }
@@ -253,9 +253,9 @@ class ObjectConstructor extends jint.native.functions.FunctionInstance implement
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
         }
-        for (prop in o.GetOwnProperties())
+        for (prop in o.GetOwnProperties().iterator())
         {
-            if (prop.Value.Configurable.Value == true)
+            if (prop.Configurable == true)
             {
                 return false;
             }
@@ -274,17 +274,18 @@ class ObjectConstructor extends jint.native.functions.FunctionInstance implement
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
         }
-        for (p in system.linq.Enumerable.Select(o.GetOwnProperties(), function (x:system.collections.generic.KeyValuePair<String, jint.runtime.descriptors.PropertyDescriptor>):String { return x.Key; } ))
+		var keys:Array<String> = [for (key in o.GetOwnProperties().keys()) key];
+        for (p in keys )
         {
             var desc:jint.runtime.descriptors.PropertyDescriptor = o.GetOwnProperty(p);
             if (desc.IsDataDescriptor())
             {
-                if (desc.Writable.HasValue && desc.Writable.Value)
+                if (desc.Writable!=null && desc.Writable)
                 {
                     return false;
                 }
             }
-            if (desc.Configurable.HasValue && desc.Configurable.Value)
+            if (desc.Configurable!=null && desc.Configurable)
             {
                 return false;
             }
@@ -313,13 +314,30 @@ class ObjectConstructor extends jint.native.functions.FunctionInstance implement
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
         }
-        var enumerableProperties:Array<system.collections.generic.KeyValuePair<String, jint.runtime.descriptors.PropertyDescriptor>> = system.linq.Enumerable.ToArray(system.linq.Enumerable.Where(o.GetOwnProperties(), function (x:system.collections.generic.KeyValuePair<String, jint.runtime.descriptors.PropertyDescriptor>):Bool { return x.Value.Enumerable.HasValue && x.Value.Enumerable.Value; } ));
-        var n:Int = enumerableProperties.length;
+		/*
+            var enumerableProperties = o.GetOwnProperties()
+                .Where(x => x.Value.Enumerable.HasValue && x.Value.Enumerable.Value)
+                .ToArray();
+		*/
+        var enumerableProperties:StringMap< jint.runtime.descriptors.PropertyDescriptor> = new StringMap< jint.runtime.descriptors.PropertyDescriptor>();
+        var OwnProperties = o.GetOwnProperties();
+		
+		var n:Int = 0;
+		for (key in OwnProperties.keys())
+		{
+			var x = OwnProperties.get(key);
+			if (x.Enumerable != null && x.Enumerable)
+			{
+				enumerableProperties.set(key, x);
+				n++;
+			}
+		}
+
         var array:jint.native.object.ObjectInstance = Engine.JArray.Construct([ n ]);
         var index:Int = 0;
-        for (prop in enumerableProperties)
+        for (propKey in enumerableProperties.keys())
         {
-            var p:String = prop.Key;
+            var p:String =propKey;
             array.DefineOwnProperty(jint.runtime.TypeConverter.toString(index), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(p, (true), (true), (true)), false);
             index++;
         }

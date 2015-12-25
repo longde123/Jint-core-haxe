@@ -2,7 +2,7 @@ package jint.runtime.interop;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class DelegateWrapper extends jint.native.functions.FunctionInstance
 {
 	//todo about this

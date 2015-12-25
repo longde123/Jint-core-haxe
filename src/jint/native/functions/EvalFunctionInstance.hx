@@ -63,5 +63,6 @@ class EvalFunctionInstance extends jint.native.functions.FunctionInstance
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.SyntaxError);
         }
+		return null;
     }
 }

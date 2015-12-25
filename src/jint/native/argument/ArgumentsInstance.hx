@@ -92,7 +92,7 @@ class ArgumentsInstance extends jint.native.object.ObjectInstance
         var ownDesc:jint.runtime.descriptors.PropertyDescriptor = GetOwnProperty(propertyName);
         if (ownDesc.IsDataDescriptor())
         {
-            var valueDesc:jint.runtime.descriptors.PropertyDescriptor = new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(value, new Nullable_Bool(), new Nullable_Bool(), new Nullable_Bool());
+            var valueDesc:jint.runtime.descriptors.PropertyDescriptor = new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(value, null, null, null);
             DefineOwnProperty(propertyName, valueDesc, throwOnError);
             return;
         }
@@ -104,7 +104,7 @@ class ArgumentsInstance extends jint.native.object.ObjectInstance
         }
         else
         {
-            var newDesc:jint.runtime.descriptors.PropertyDescriptor = new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(value, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true));
+            var newDesc:jint.runtime.descriptors.PropertyDescriptor = new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(value, (true), (true), (true));
             DefineOwnProperty(propertyName, newDesc, throwOnError);
         }
     }

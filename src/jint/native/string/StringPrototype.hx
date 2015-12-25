@@ -54,7 +54,8 @@ class StringPrototype extends jint.native.string.StringInstance
     static inline var BOM_CHAR:Int = 102;
     private static function IsWhiteSpaceEx(c:Int):Bool
     {
-        return Cs2Hx.IsWhiteSpace(c) || c == BOM_CHAR;
+		
+        return StringTools.isSpace(String.fromCharCode(c),0) || c == BOM_CHAR;
     }
     private static function TrimEndEx(s:String):String
     {
@@ -128,7 +129,7 @@ class StringPrototype extends jint.native.string.StringInstance
     private static function ToUpperCase(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var s:String = jint.runtime.TypeConverter.toString(thisObj);
-        return s.ToUpperInvariant();
+        return s.toUpperCase();
     }
     private static function ToLocaleLowerCase(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
@@ -138,7 +139,7 @@ class StringPrototype extends jint.native.string.StringInstance
     private static function ToLowerCase(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var s:String = jint.runtime.TypeConverter.toString(thisObj);
-        return s.ToLowerInvariant();
+        return s.toLowerCase();
     }
     private static function ToIntegerSupportInfinity(numberVal:jint.native.JsValue):Int
     {
@@ -201,7 +202,7 @@ class StringPrototype extends jint.native.string.StringInstance
         var separator:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 0);
         var l:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 1);
         var a:jint.native.array.ArrayInstance = cast(Engine.JArray.Construct(jint.runtime.Arguments.Empty), jint.native.array.ArrayInstance);
-        var limit:Int = l.Equals(jint.native.Undefined.Instance) ? system.UInt32.MaxValue : jint.runtime.TypeConverter.ToUint32(l);
+        var limit:Int = l.Equals(jint.native.Undefined.Instance) ? 0: jint.runtime.TypeConverter.ToUint32(l);
         var len:Int = s.length;
         if (limit == 0)
         {
@@ -213,7 +214,7 @@ class StringPrototype extends jint.native.string.StringInstance
         }
         else if (separator.Equals(jint.native.Undefined.Instance))
         {
-            return jint.native.JsValue.op_Explicit_jint_native_array_ArrayInstance(Engine.JArray.Construct(jint.runtime.Arguments.From([ s ])));
+            return (Engine.JArray.Construct(jint.runtime.Arguments.From([ s ])));
         }
         else
         {
@@ -226,51 +227,15 @@ class StringPrototype extends jint.native.string.StringInstance
         var regExpForMatchingAllCharactere:String = "(?:)";
         if (rx != null && rx.Source != regExpForMatchingAllCharactere)
         {
-            var match:system.text.regularexpressions.Match = rx.Value.Match_String_Int32(s, 0);
-            if (!match.Success)
-            {
-                a.DefineOwnProperty("0", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(s, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), false);
-                return a;
-            }
-            var lastIndex:Int = 0;
-            var index:Int = 0;
-            while (match.Success && index < limit)
-            {
-                if (match.Length == 0 && (match.Index == 0 || match.Index == len || match.Index == lastIndex))
+            var segments:Array<String> = rx.Value.split(s);
+            { //for
+                var i:Int = 0;
+                while (i < segments.length && i < limit)
                 {
-                    match = match.NextMatch();
-                    continue;
+                    a.DefineOwnProperty(Std.string(i), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(segments[i], (true), (true), (true)), false);
+                    i++;
                 }
-                a.DefineOwnProperty(Std.string(index++), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(s.substr(lastIndex, match.Index - lastIndex), new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), false);
-                if (index >= limit)
-                {
-                    return a;
-                }
-                lastIndex = match.Index + match.Length;
-                { //for
-                    var i:Int = 1;
-                    while (i < match.Groups.Count)
-                    {
-                        var group:system.text.regularexpressions.Group = match.Groups.GetValue_Int32(i);
-                        var item:jint.native.JsValue = jint.native.Undefined.Instance;
-                        if (group.Captures.Count > 0)
-                        {
-                            item = match.Groups.GetValue_Int32(i).Value;
-                        }
-                        a.DefineOwnProperty(Std.string(index++), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(item, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), false);
-                        if (index >= limit)
-                        {
-                            return a;
-                        }
-                        i++;
-                    }
-                } //end for
-                match = match.NextMatch();
-                if (!match.Success)
-                {
-                    a.DefineOwnProperty(Std.string(index++), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(s.substr(lastIndex), new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), false);
-                }
-            }
+            } //end for
             return a;
         }
         else
@@ -286,13 +251,13 @@ class StringPrototype extends jint.native.string.StringInstance
             }
             else
             {
-                segments = system.linq.Enumerable.ToList(system.Cs2Hx.Split__StringSplitOptions(s, [ sep ], system.StringSplitOptions.None));
+                segments = s.split( sep );
             }
             { //for
                 var i:Int = 0;
                 while (i < segments.length && i < limit)
                 {
-                    a.DefineOwnProperty(Std.string(i), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(segments[i], new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), false);
+                    a.DefineOwnProperty(Std.string(i), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(segments[i], (true), (true), (true)), false);
                     i++;
                 }
             } //end for
@@ -304,16 +269,16 @@ class StringPrototype extends jint.native.string.StringInstance
         jint.runtime.TypeConverter.CheckObjectCoercible(Engine, thisObj);
         var s:String = jint.runtime.TypeConverter.toString(thisObj);
         var start:Float = jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 0));
-        if (Math.NEGATIVE_INFINITY.Equals_Double(start))
+        if (Math.NEGATIVE_INFINITY==(start))
         {
             start = 0;
         }
-        if (Math.POSITIVE_INFINITY.Equals_Double(start))
+        if (Math.POSITIVE_INFINITY==(start))
         {
             return "";
         }
         var end:Float = jint.runtime.TypeConverter.ToNumber(jint.runtime.Arguments.At(arguments, 1));
-        if (Math.POSITIVE_INFINITY.Equals_Double(end))
+        if (Math.POSITIVE_INFINITY==(end))
         {
             end = s.length;
         }
@@ -339,7 +304,7 @@ class StringPrototype extends jint.native.string.StringInstance
             regex = jint.native.Null.Text;
         }
         var rx:jint.native.regexp.RegExpInstance = Cs2Hx.Coalesce(cast(jint.runtime.TypeConverter.ToObject(Engine, regex), jint.native.regexp.RegExpInstance), cast(Engine.JRegExp.Construct([ regex ]), jint.native.regexp.RegExpInstance));
-        var match:system.text.regularexpressions.Match = rx.Value.Match(s);
+        var match = rx.Match(s);
         if (!match.Success)
         {
             return -1;
@@ -352,133 +317,24 @@ class StringPrototype extends jint.native.string.StringInstance
         var thisString:String = jint.runtime.TypeConverter.toString(thisObj);
         var searchValue:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 0);
         var replaceValue:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 1);
-        var replaceFunction:jint.native.functions.FunctionInstance = replaceValue.TryCast();
-        if (replaceFunction == null)
-        {
-            replaceFunction = new jint.runtime.interop.ClrFunctionInstance(Engine, function (self:jint.native.JsValue, args:Array<jint.native.JsValue>):jint.native.JsValue
-            {
-                var replaceString:String = jint.runtime.TypeConverter.toString(replaceValue);
-                var matchValue:String = jint.runtime.TypeConverter.toString(jint.runtime.Arguments.At(args, 0));
-                var matchIndex:Int = Std.int(jint.runtime.TypeConverter.ToInteger(jint.runtime.Arguments.At(args, args.length - 2)));
-                var replaceTextContainsPattern:Bool = system.Cs2Hx.IndexOfChar(replaceString, 36) >= 0;
-                if (replaceTextContainsPattern == false)
-                {
-                    return replaceString;
-                }
-                var replacementBuilder:system.text.StringBuilder = new system.text.StringBuilder();
-                { //for
-                    var i:Int = 0;
-                    while (i < replaceString.length)
-                    {
-                        var c:Int = replaceString.charCodeAt(i);
-                        if (c == 36 && i < replaceString.length - 1)
-                        {
-                            c = replaceString.charCodeAt(++i);
-                            if (c == 36)
-                            {
-                                replacementBuilder.Append_Char(36);
-                            }
-                            else if (c == 38)
-                            {
-                                replacementBuilder.Append(matchValue);
-                            }
-                            else if (c == 96)
-                            {
-                                replacementBuilder.Append(thisString.substr(0, matchIndex));
-                            }
-                            else if (c == 39)
-                            {
-                                replacementBuilder.Append(thisString.substr(matchIndex + matchValue.length));
-                            }
-                            else if (c >= 48 && c <= 57)
-                            {
-                                var matchNumber1:Int = c - 48;
-                                var matchNumber2:Int = 0;
-                                if (i < replaceString.length - 1 && replaceString.charCodeAt(i + 1) >= 48 && replaceString.charCodeAt(i + 1) <= 57)
-                                {
-                                    matchNumber2 = matchNumber1 * 10 + (replaceString.charCodeAt(i + 1) - 48);
-                                }
-                                if (matchNumber2 > 0 && matchNumber2 < args.length - 2)
-                                {
-                                    replacementBuilder.Append(jint.runtime.TypeConverter.toString(args[matchNumber2]));
-                                    i++;
-                                }
-                                else if (matchNumber1 > 0 && matchNumber1 < args.length - 2)
-                                {
-                                    replacementBuilder.Append(jint.runtime.TypeConverter.toString(args[matchNumber1]));
-                                }
-                                else
-                                {
-                                    replacementBuilder.Append_Char(36);
-                                    i--;
-                                }
-                            }
-                            else
-                            {
-                                replacementBuilder.Append_Char(36);
-                                replacementBuilder.Append_Char(c);
-                            }
-                        }
-                        else
-                        {
-                            replacementBuilder.Append_Char(c);
-                        }
-                        i++;
-                    }
-                } //end for
-                return replacementBuilder.toString();
-            }
-            );
-        }
+       
         if (searchValue.IsNull())
         {
-            searchValue = new jint.native.JsValue().Creator_String(jint.native.Null.Text);
+            searchValue =  (jint.native.Null.Text);
         }
         if (searchValue.IsUndefined())
         {
-            searchValue = new jint.native.JsValue().Creator_String(jint.native.Undefined.Text);
+            searchValue =  (jint.native.Undefined.Text);
         }
         var rx:jint.native.regexp.RegExpInstance = cast(jint.runtime.TypeConverter.ToObject(Engine, searchValue), jint.native.regexp.RegExpInstance);
         if (rx != null)
         {
-            var result:String = rx.Value.Replace_String_MatchEvaluator_Int32(thisString, function (match:system.text.regularexpressions.Match):String
-            {
-                var args:Array<jint.native.JsValue> = new Array<jint.native.JsValue>();
-                { //for
-                    var k:Int = 0;
-                    while (k < match.Groups.Count)
-                    {
-                        var group:system.text.regularexpressions.Group = match.Groups.GetValue_Int32(k);
-                        args.push(group.Value);
-                        k++;
-                    }
-                } //end for
-                args.push(match.Index);
-                args.push(thisString);
-                var v:String = jint.runtime.TypeConverter.toString(replaceFunction.Call(jint.native.Undefined.Instance, system.Cs2Hx.ToArray(args)));
-                return v;
-            }
-            , rx.Global == true ? -1 : 1);
+            var result:String =  rx.Value.replace(thisString,jint.runtime.TypeConverter.toString(replaceValue));
             return result;
         }
         else
-        {
-            var substr:String = jint.runtime.TypeConverter.toString(searchValue);
-            var start:Int = thisString.indexOf(substr, system.StringComparison.Ordinal);
-            if (start == -1)
-            {
-                return thisString;
-            }
-            var end:Int = start + substr.length;
-            var args:Array<jint.native.JsValue> = new Array<jint.native.JsValue>();
-            args.push(substr);
-            args.push(start);
-            args.push(thisString);
-            var replaceString:String = jint.runtime.TypeConverter.toString(replaceFunction.Call(jint.native.Undefined.Instance, system.Cs2Hx.ToArray(args)));
-            var result:system.text.StringBuilder = new system.text.StringBuilder(thisString.length + (substr.length - substr.length));
-            result.Append_String_Int32_Int32(thisString, 0, start);
-            result.Append(replaceString);
-            result.Append_String_Int32_Int32(thisString, end, thisString.length - end);
+        { 
+            var result = thisString.replace(jint.runtime.TypeConverter.toString(searchValue),jint.runtime.TypeConverter.toString(replaceValue));
             return result.toString();
         }
     }
@@ -487,7 +343,7 @@ class StringPrototype extends jint.native.string.StringInstance
         jint.runtime.TypeConverter.CheckObjectCoercible(Engine, thisObj);
         var s:String = jint.runtime.TypeConverter.toString(thisObj);
         var regex:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 0);
-        var rx:jint.native.regexp.RegExpInstance = regex.TryCast();
+        var rx:jint.native.regexp.RegExpInstance = regex.TryCast(jint.native.regexp.RegExpInstance);
         rx = Cs2Hx.Coalesce(rx, cast(Engine.JRegExp.Construct([ regex ]), jint.native.regexp.RegExpInstance));
         var global:Bool = rx.Get("global").AsBoolean();
         if (!global)
@@ -503,7 +359,7 @@ class StringPrototype extends jint.native.string.StringInstance
             var lastMatch:Bool = true;
             while (lastMatch)
             {
-                var result:jint.native.object.ObjectInstance = Engine.JRegExp.PrototypeObject.Exec(rx, jint.runtime.Arguments.From([ s ])).TryCast();
+                var result:jint.native.object.ObjectInstance = Engine.JRegExp.PrototypeObject.Exec(rx, jint.runtime.Arguments.From([ s ])).TryCast(jint.native.object.ObjectInstance);
                 if (result == null)
                 {
                     lastMatch = false;
@@ -517,7 +373,7 @@ class StringPrototype extends jint.native.string.StringInstance
                         previousLastIndex = thisIndex;
                     }
                     var matchStr:jint.native.JsValue = result.Get("0");
-                    a.DefineOwnProperty(jint.runtime.TypeConverter.toString(n), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(matchStr, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), false);
+                    a.DefineOwnProperty(jint.runtime.TypeConverter.toString(n), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(matchStr, (true), (true), (true)), false);
                     n++;
                 }
             }
@@ -592,7 +448,7 @@ class StringPrototype extends jint.native.string.StringInstance
         {
             pos = 0;
         }
-        return s.indexOf(searchStr, Std.int(pos), system.StringComparison.Ordinal);
+        return s.indexOf(searchStr, Std.int(pos) );
     }
     private function Concat(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
@@ -635,7 +491,7 @@ class StringPrototype extends jint.native.string.StringInstance
     }
     private function ValueOf(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
-        var s:jint.native.string.StringInstance = thisObj.TryCast();
+        var s:jint.native.string.StringInstance = thisObj.TryCast(jint.native.string.StringInstance);
         if (s == null)
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);

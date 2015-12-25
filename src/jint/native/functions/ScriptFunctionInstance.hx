@@ -13,19 +13,19 @@ class ScriptFunctionInstance extends jint.native.functions.FunctionInstance impl
         Engine = engine;
         Extensible = true;
         Prototype = engine.JFunction.PrototypeObject;
-        DefineOwnProperty("length", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(new jint.native.JsValue().Creator_Double(FormalParameters.length), new Nullable_Bool(false), new Nullable_Bool(false), new Nullable_Bool(false)), false);
+        DefineOwnProperty("length", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean((FormalParameters.length), (false), (false), (false)), false);
         var proto:jint.native.object.ObjectInstance = engine.JObject.Construct(jint.runtime.Arguments.Empty);
-        proto.DefineOwnProperty("constructor", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(this, new Nullable_Bool(true), new Nullable_Bool(false), new Nullable_Bool(true)), false);
-        DefineOwnProperty("prototype", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(proto, new Nullable_Bool(true), new Nullable_Bool(false), new Nullable_Bool(false)), false);
+        proto.DefineOwnProperty("constructor", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(this, (true), (false), (true)), false);
+        DefineOwnProperty("prototype", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(proto, (true), (false), (false)), false);
         if (_functionDeclaration.Id != null)
         {
-            DefineOwnProperty("name", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(_functionDeclaration.Id.Name, new Nullable_Bool(), new Nullable_Bool(), new Nullable_Bool()), false);
+            DefineOwnProperty("name", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(_functionDeclaration.Id.Name, null,null, null), false);
         }
         if (strict)
         {
             var thrower:jint.native.functions.FunctionInstance = engine.JFunction.ThrowTypeError;
-            DefineOwnProperty("caller", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(thrower, thrower, new Nullable_Bool(false), new Nullable_Bool(false)), false);
-            DefineOwnProperty("arguments", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(thrower, thrower, new Nullable_Bool(false), new Nullable_Bool(false)), false);
+            DefineOwnProperty("caller", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(thrower, thrower, (false), (false)), false);
+            DefineOwnProperty("arguments", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(thrower, thrower, (false), (false)), false);
         }
     }
     override public function Call(thisArg:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue

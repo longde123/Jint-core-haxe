@@ -17,6 +17,6 @@ class ErrorInstance extends jint.native.object.ObjectInstance
 
     override public function toString():String
     {
-        return Engine.Error.PrototypeObject.toString(this, jint.runtime.Arguments.Empty).ToObject().toString();
+        return Engine.Error.PrototypeObject.__toString(this, jint.runtime.Arguments.Empty).ToObject().toString();
     }
 }

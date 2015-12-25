@@ -34,7 +34,12 @@ class StringConstructor extends jint.native.functions.FunctionInstance implement
                 i++;
             }
         } //end for
-        return new String(chars);
+		var s = "";
+		for (v in chars)
+		{
+		   s += String.fromCharCode(v);
+		}
+        return s;
     }
     override public function Call(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {

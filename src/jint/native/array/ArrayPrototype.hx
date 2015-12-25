@@ -88,7 +88,7 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
         var o:jint.native.object.ObjectInstance = jint.runtime.TypeConverter.ToObject(Engine, thisObj);
         var lenValue:jint.native.JsValue = o.Get("length");
         var len:Int = jint.runtime.TypeConverter.ToUint32(lenValue);
-        var callable:jint.native.ICallable = callbackfn.TryCast(function (x:jint.native.JsValue):Void
+        var callable:jint.native.ICallable = callbackfn.TryCast(jint.native.ICallable ,function (x:jint.native.JsValue):Void
         {
             throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(Engine.TypeError, "Argument must be callable");
         }
@@ -141,7 +141,7 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
         var o:jint.native.object.ObjectInstance = jint.runtime.TypeConverter.ToObject(Engine, thisObj);
         var lenValue:jint.native.JsValue = o.Get("length");
         var len:Int = jint.runtime.TypeConverter.ToUint32(lenValue);
-        var callable:jint.native.ICallable = callbackfn.TryCast(function (x:jint.native.JsValue):Void
+        var callable:jint.native.ICallable = callbackfn.TryCast(jint.native.ICallable ,function (x:jint.native.JsValue):Void
         {
             throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(Engine.TypeError, "Argument must be callable");
         }
@@ -160,7 +160,7 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
                     var selected:jint.native.JsValue = callable.Call(thisArg, [ kvalue, k, o ]);
                     if (jint.runtime.TypeConverter.ToBoolean(selected))
                     {
-                        a.DefineOwnProperty(Std.string(to), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(kvalue, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), false);
+                        a.DefineOwnProperty(Std.string(to), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(kvalue, (true), (true), (true)), false);
                         to++;
                     }
                 }
@@ -176,7 +176,7 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
         var o:jint.native.object.ObjectInstance = jint.runtime.TypeConverter.ToObject(Engine, thisObj);
         var lenValue:jint.native.JsValue = o.Get("length");
         var len:Int = jint.runtime.TypeConverter.ToUint32(lenValue);
-        var callable:jint.native.ICallable = callbackfn.TryCast(function (x:jint.native.JsValue):Void
+        var callable:jint.native.ICallable = callbackfn.TryCast(jint.native.ICallable ,function (x:jint.native.JsValue):Void
         {
             throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(Engine.TypeError, "Argument must be callable");
         }
@@ -192,7 +192,7 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
                 {
                     var kvalue:jint.native.JsValue = o.Get(pk);
                     var mappedValue:jint.native.JsValue = callable.Call(thisArg, [ kvalue, k, o ]);
-                    a.DefineOwnProperty(pk, new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(mappedValue, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), false);
+                    a.DefineOwnProperty(pk, new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(mappedValue, (true), (true), (true)), false);
                 }
                 k++;
             }
@@ -206,7 +206,7 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
         var o:jint.native.object.ObjectInstance = jint.runtime.TypeConverter.ToObject(Engine, thisObj);
         var lenValue:jint.native.JsValue = o.Get("length");
         var len:Int = jint.runtime.TypeConverter.ToUint32(lenValue);
-        var callable:jint.native.ICallable = callbackfn.TryCast(function (x:jint.native.JsValue):Void
+        var callable:jint.native.ICallable = callbackfn.TryCast(jint.native.ICallable ,function (x:jint.native.JsValue):Void
         {
             throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(Engine.TypeError, "Argument must be callable");
         }
@@ -234,7 +234,7 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
         var o:jint.native.object.ObjectInstance = jint.runtime.TypeConverter.ToObject(Engine, thisObj);
         var lenValue:jint.native.JsValue = o.Get("length");
         var len:Int = jint.runtime.TypeConverter.ToUint32(lenValue);
-        var callable:jint.native.ICallable = callbackfn.TryCast(function (x:jint.native.JsValue):Void
+        var callable:jint.native.ICallable = callbackfn.TryCast(jint.native.ICallable ,function (x:jint.native.JsValue):Void
         {
             throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(Engine.TypeError, "Argument must be callable");
         }
@@ -266,7 +266,7 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
         var o:jint.native.object.ObjectInstance = jint.runtime.TypeConverter.ToObject(Engine, thisObj);
         var lenValue:jint.native.JsValue = o.Get("length");
         var len:Int = jint.runtime.TypeConverter.ToUint32(lenValue);
-        var callable:jint.native.ICallable = callbackfn.TryCast(function (x:jint.native.JsValue):Void
+        var callable:jint.native.ICallable = callbackfn.TryCast(jint.native.ICallable ,function (x:jint.native.JsValue):Void
         {
             throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(Engine.TypeError, "Argument must be callable");
         }
@@ -366,7 +366,7 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
                 if (fromPresent)
                 {
                     var fromValue:jint.native.JsValue = o.Get(from);
-                    a.DefineOwnProperty(Std.string(k), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(fromValue, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), false);
+                    a.DefineOwnProperty(Std.string(k), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(fromValue, (true), (true), (true)), false);
                 }
                 k++;
             }
@@ -489,13 +489,13 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
         var compareFn:jint.native.ICallable = null;
         if (!compareArg.Equals(jint.native.Undefined.Instance))
         {
-            compareFn = compareArg.TryCast(function (x:jint.native.JsValue):Void
+            compareFn = compareArg.TryCast(jint.native.ICallable,function (x:jint.native.JsValue):Void
             {
                 throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(Engine.TypeError, "The sort argument must be a function");
             }
             );
         }
-        var comparer:(jint.native.JsValue -> jint.native.JsValue -> Int) = function (x:jint.native.JsValue, y:jint.native.JsValue):Int
+        var comparer  = function (x:jint.native.JsValue, y:jint.native.JsValue):Int
         {
             if (x.Equals(jint.native.Undefined.Instance) && y.Equals(jint.native.Undefined.Instance))
             {
@@ -524,20 +524,13 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
             }
             var xString:String = jint.runtime.TypeConverter.toString(x);
             var yString:String = jint.runtime.TypeConverter.toString(y);
-            var r:Int = system.String.CompareOrdinal(xString, yString);
+            var r:Int = Cs2Hx.CompareOrdinal(xString, yString);
             return r;
         }
         ;
-        var array:Array<jint.native.JsValue> = system.linq.Enumerable.ToArray(system.linq.Enumerable.Select(system.linq.Enumerable.Range(0, lenVal), function (i:Int):jint.native.JsValue { return obj.Get(Std.string(i)); } ));
-        try
-        {
-            system.Array.sort(array, comparer);
-        }
-        catch (e:system.InvalidOperationException)
-        {
-            return throw e.InnerException;
-        }
-        for (i in system.linq.Enumerable.Range(0, lenVal))
+        var array:Array<jint.native.JsValue> =[for(i in 0...lenVal) return obj.Get(Std.string(i))];
+            array.sort(comparer);     
+        for (i in 0... lenVal)
         {
             obj.Put(Std.string(i), array[i], false);
         }
@@ -587,7 +580,7 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
                 if (kPresent)
                 {
                     var kValue:jint.native.JsValue = o.Get(pk);
-                    a.DefineOwnProperty(jint.runtime.TypeConverter.toString(n), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(kValue, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), false);
+                    a.DefineOwnProperty(jint.runtime.TypeConverter.toString(n), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(kValue, (true), (true), (true)), false);
                 }
                 n++;
                 k++;
@@ -634,7 +627,7 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
         var o:jint.native.object.ObjectInstance = jint.runtime.TypeConverter.ToObject(Engine, thisObj);
         var lenVal:jint.native.JsValue = o.Get("length");
         var len:Int = jint.runtime.TypeConverter.ToUint32(lenVal);
-        var middle:Int = Std.int(system.MathCS.Floor(cast(len, system.Decimal) / 2));
+        var middle:Int = Std.int(Math.floor(len/ 2));
         var lower:Int = 0;
         while (lower != middle)
         {
@@ -713,7 +706,7 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
         else
         {
             var elementObj:jint.native.object.ObjectInstance = jint.runtime.TypeConverter.ToObject(Engine, firstElement);
-            var func:jint.native.ICallable = elementObj.Get("toLocaleString").TryCast(function (x:jint.native.JsValue):Void
+            var func:jint.native.ICallable = elementObj.Get("toLocaleString").TryCast(jint.native.ICallable,function (x:jint.native.JsValue):Void
             {
                 throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
             }
@@ -733,7 +726,7 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
                 else
                 {
                     var elementObj:jint.native.object.ObjectInstance = jint.runtime.TypeConverter.ToObject(Engine, nextElement);
-                    var func:jint.native.ICallable = elementObj.Get("toLocaleString").TryCast(function (x:jint.native.JsValue):Void
+                    var func:jint.native.ICallable = elementObj.Get("toLocaleString").TryCast(jint.native.ICallable,function (x:jint.native.JsValue):Void
                     {
                         throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
                     }
@@ -768,7 +761,7 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
                         if (exists)
                         {
                             var subElement:jint.native.JsValue = eArray.Get(p);
-                            a.DefineOwnProperty(jint.runtime.TypeConverter.toString(n), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(subElement, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), false);
+                            a.DefineOwnProperty(jint.runtime.TypeConverter.toString(n), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(subElement, (true), (true), (true)), false);
                         }
                         n++;
                         k++;
@@ -777,20 +770,20 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
             }
             else
             {
-                a.DefineOwnProperty(jint.runtime.TypeConverter.toString(n), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(e, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(true)), false);
+                a.DefineOwnProperty(jint.runtime.TypeConverter.toString(n), new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(e, (true), (true), (true)), false);
                 n++;
             }
         }
-        a.DefineOwnProperty("length", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(n, new Nullable_Bool(), new Nullable_Bool(), new Nullable_Bool()), false);
+        a.DefineOwnProperty("length", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(n, null, null, null), false);
         return a;
     }
     public function __ToString(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var array:jint.native.object.ObjectInstance = jint.runtime.TypeConverter.ToObject(Engine, thisObj);
         var func:jint.native.ICallable;
-        func = array.Get("join").TryCast(function (x:jint.native.JsValue):Void
+        func = array.Get("join").TryCast(jint.native.ICallable,function (x:jint.native.JsValue):Void
         {
-            func = Engine.JObject.PrototypeObject.Get("toString").TryCast(function (y:jint.native.JsValue):Void
+            func = Engine.JObject.PrototypeObject.Get("toString").TryCast(jint.native.ICallable,function (y:jint.native.JsValue):Void
             {
                 throw new system.ArgumentException();
             }
@@ -806,7 +799,7 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
         var o:jint.native.object.ObjectInstance = jint.runtime.TypeConverter.ToObject(Engine, thisObj);
         var lenValue:jint.native.JsValue = o.Get("length");
         var len:Int = jint.runtime.TypeConverter.ToUint32(lenValue);
-        var callable:jint.native.ICallable = callbackfn.TryCast(function (x:jint.native.JsValue):Void
+        var callable:jint.native.ICallable = callbackfn.TryCast(jint.native.ICallable ,function (x:jint.native.JsValue):Void
         {
             throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(Engine.TypeError, "Argument must be callable");
         }

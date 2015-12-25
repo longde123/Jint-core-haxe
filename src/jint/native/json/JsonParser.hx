@@ -100,7 +100,7 @@ class JsonParser
                 var token:jint.native.json.JsonParser_Token = new jint.native.json.JsonParser_Token();
                 token.Type = jint.native.json.JsonParser_Tokens.Punctuator;
                 token.Value = Cs2Hx.CharToString(code);
-                token.LineNumber = new Nullable_Int(_lineNumber);
+                token.LineNumber = (_lineNumber);
                 token.LineStart = _lineStart;
                 token.Range = [ start, _index ];
                 return token;
@@ -166,7 +166,7 @@ class JsonParser
         var token:jint.native.json.JsonParser_Token = new jint.native.json.JsonParser_Token();
         token.Type = jint.native.json.JsonParser_Tokens.Number;
         token.Value = system.Double.Parse_String_NumberStyles_IFormatProvider(number, system.globalization.NumberStyles.AllowLeadingSign | system.globalization.NumberStyles.AllowDecimalPoint | system.globalization.NumberStyles.AllowExponent, system.globalization.CultureInfo.InvariantCulture);
-        token.LineNumber = new Nullable_Int(_lineNumber);
+        token.LineNumber = (_lineNumber);
         token.LineStart = _lineStart;
         token.Range = [ start, _index ];
         return token;
@@ -184,7 +184,7 @@ class JsonParser
             var token:jint.native.json.JsonParser_Token = new jint.native.json.JsonParser_Token();
             token.Type = jint.native.json.JsonParser_Tokens.BooleanLiteral;
             token.Value = s == "true";
-            token.LineNumber = new Nullable_Int(_lineNumber);
+            token.LineNumber = (_lineNumber);
             token.LineStart = _lineStart;
             token.Range = [ start, _index ];
             return token;
@@ -207,7 +207,7 @@ class JsonParser
             var token:jint.native.json.JsonParser_Token = new jint.native.json.JsonParser_Token();
             token.Type = jint.native.json.JsonParser_Tokens.NullLiteral;
             token.Value = jint.native.Null.Instance;
-            token.LineNumber = new Nullable_Int(_lineNumber);
+            token.LineNumber = (_lineNumber);
             token.LineStart = _lineStart;
             token.Range = [ start, _index ];
             return token;
@@ -311,7 +311,7 @@ class JsonParser
         var token:jint.native.json.JsonParser_Token = new jint.native.json.JsonParser_Token();
         token.Type = jint.native.json.JsonParser_Tokens.String;
         token.Value = str;
-        token.LineNumber = new Nullable_Int(_lineNumber);
+        token.LineNumber = (_lineNumber);
         token.LineStart = _lineStart;
         token.Range = [ start, _index ];
         return token;
@@ -323,7 +323,7 @@ class JsonParser
         {
             var token:jint.native.json.JsonParser_Token = new jint.native.json.JsonParser_Token();
             token.Type = jint.native.json.JsonParser_Tokens.EOF;
-            token.LineNumber = new Nullable_Int(_lineNumber);
+            token.LineNumber = (_lineNumber);
             token.LineStart = _lineStart;
             token.Range = [ _index, _index ];
             return token;

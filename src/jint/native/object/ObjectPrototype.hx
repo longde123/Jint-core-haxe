@@ -33,7 +33,7 @@ class ObjectPrototype extends jint.native.object.ObjectInstance
         {
             return false;
         }
-        return desc.Enumerable.HasValue && desc.Enumerable.Value;
+        return desc.Enumerable!=null && desc.Enumerable;
     }
     private function ValueOf(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
@@ -65,7 +65,7 @@ class ObjectPrototype extends jint.native.object.ObjectInstance
     private function ToLocaleString(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var o:jint.native.object.ObjectInstance = jint.runtime.TypeConverter.ToObject(Engine, thisObject);
-        var toString:jint.native.ICallable = o.Get("toString").TryCast(function (x:jint.native.JsValue):Void
+        var toString:jint.native.ICallable = o.Get("toString").TryCast(jint.native.ICallable,function (x:jint.native.JsValue):Void
         {
             throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
         }

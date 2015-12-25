@@ -90,7 +90,7 @@ class Main
 		 
 		trace(Type.getClassFields(Array));
 	 
-		 //Constructors.init();
+		 Constructors.init();
 		return;
 		
 		JavaScriptParser.cctor();

@@ -21,7 +21,7 @@ class ClrFunctionInstance extends jint.native.functions.FunctionInstance
             var result:jint.native.JsValue = _func(thisObject, arguments);
             return result;
         }
-        catch (__ex:system.InvalidCastException)
+        catch (__ex:Dynamic)
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
         }

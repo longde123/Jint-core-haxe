@@ -31,7 +31,7 @@ class FunctionInstance extends jint.native.object.ObjectInstance implements jint
         var po:jint.native.JsValue = Get("prototype");
         if (!po.IsObject())
         {
-            return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.TypeError, Cs2Hx.Format("Function has non-object prototype '{0}' in instanceof check", jint.runtime.TypeConverter.toString(po)));
+            return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.TypeError, Cs2Hx.Format("Function has non-object prototype '{0}' in instanceof check", [jint.runtime.TypeConverter.toString(po)]));
         }
         var o:jint.native.object.ObjectInstance = po.AsObject();
         if (o == null)

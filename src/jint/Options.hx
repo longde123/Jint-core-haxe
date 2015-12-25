@@ -56,7 +56,7 @@ class Options
         _maxStatements = maxStatements;
         return this;
     }
-    public function TimeoutInterval(timeoutInterval:system.TimeSpan):jint.Options
+    public function TimeoutInterval(timeoutInterval:Date):jint.Options
     {
         _timeoutInterval = timeoutInterval;
         return this;

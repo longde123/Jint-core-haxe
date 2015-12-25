@@ -115,12 +115,12 @@ class NumberPrototype extends jint.native.number.NumberInstance
         {
             return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(Engine.RangeError, "precision must be between 1 and 21");
         }
-        var str:String = jint.runtime.TypeConverter.toString(x, "e23", system.globalization.CultureInfo.InvariantCulture);
+        var str:String = jint.runtime.TypeConverter.ToString_Int32_String(x, "e23" );
         var decimals:Int = system.Cs2Hx.IndexOfAny(str, [ 46, 101 ]);
         decimals = decimals == -1 ? str.length : decimals;
         p -= decimals;
         p = p < 1 ? 1 : p;
-        return jint.runtime.TypeConverter.toString(x, "f" + p, system.globalization.CultureInfo.InvariantCulture);
+        return jint.runtime.TypeConverter.ToString_Double_String(x, "f" + p);
     }
     private function ToNumberString_JsValue_(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
@@ -138,7 +138,7 @@ class NumberPrototype extends jint.native.number.NumberInstance
         {
             return "NaN";
         }
-        if (x.Equals_Double(0))
+        if (x==(0))
         {
             return "0";
         }

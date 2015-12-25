@@ -14,8 +14,8 @@ class StringInstance extends jint.native.object.ObjectInstance implements jint.n
         return "String";
     }
 
-    var Type(get_Type, never):Int;
-    function get_Type():Int
+    public var JType(get_Type, never):Int;
+    function get_JType():Int
     {
         return jint.runtime.Types.String;
     }
@@ -62,7 +62,7 @@ class StringInstance extends jint.native.object.ObjectInstance implements jint.n
         {
             return jint.runtime.descriptors.PropertyDescriptor.Undefined;
         }
-        var resultStr:String = Cs2Hx.CharToString(str.AsString().charCodeAt(index));
-        return new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(resultStr, new Nullable_Bool(false), new Nullable_Bool(true), new Nullable_Bool(false));
+        var resultStr:String = String.fromCharCode(str.AsString().charCodeAt(index));
+        return new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(resultStr,  (false),(true),(false));
     }
 }

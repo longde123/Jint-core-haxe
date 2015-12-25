@@ -38,7 +38,7 @@ class RegExpConstructor extends jint.native.functions.FunctionInstance implement
         var f:String;
         var pattern:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 0);
         var flags:jint.native.JsValue = jint.runtime.Arguments.At(arguments, 1);
-        var r:jint.native.regexp.RegExpInstance = pattern.TryCast();
+        var r:jint.native.regexp.RegExpInstance = pattern.TryCast(jint.native.regexp.RegExpInstance);
         if (flags.Equals(jint.native.Undefined.Instance) && r != null)
         {
             return r;
@@ -65,7 +65,7 @@ class RegExpConstructor extends jint.native.functions.FunctionInstance implement
         var options:Int = ParseOptions(r, f);
         try
         {
-            r.Value = new system.text.regularexpressions.Regex(p, options);
+            r.Value = new EReg(p, f);
         }
         catch (e:Dynamic)
         {
@@ -95,13 +95,13 @@ class RegExpConstructor extends jint.native.functions.FunctionInstance implement
         {
             return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(Engine.SyntaxError, "Regexp should start with slash");
         }
-        var lastSlash:Int = regExp.lastIndexOf(47);
+        var lastSlash:Int = regExp.lastIndexOf("/");
         var pattern:String = regExp.substr(1, lastSlash - 1).replace("\\/", "/");
         var flags:String = regExp.substr(lastSlash + 1);
         var options:Int = ParseOptions(r, flags);
         try
         {
-            r.Value = new system.text.regularexpressions.Regex(pattern, options);
+            r.Value = new EReg(pattern, flags);
         }
         catch (e:Dynamic)
         {

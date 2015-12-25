@@ -27,7 +27,7 @@ class FunctionPrototype extends jint.native.functions.FunctionInstance
     }
     private function Bind(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
-        var target:jint.native.ICallable = thisObj.TryCast(function (x:jint.native.JsValue):Void
+        var target:jint.native.ICallable = thisObj.TryCast(jint.native.ICallable,function (x:jint.native.JsValue):Void
         {
             throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
         }
@@ -49,8 +49,8 @@ class FunctionPrototype extends jint.native.functions.FunctionInstance
             f.FastAddProperty("length", 0, false, false, false);
         }
         var thrower:jint.native.functions.FunctionInstance = Engine.JFunction.ThrowTypeError;
-        f.DefineOwnProperty("caller", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(thrower, thrower, new Nullable_Bool(false), new Nullable_Bool(false)), false);
-        f.DefineOwnProperty("arguments", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(thrower, thrower, new Nullable_Bool(false), new Nullable_Bool(false)), false);
+        f.DefineOwnProperty("caller", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(thrower, thrower, (false), (false)), false);
+        f.DefineOwnProperty("arguments", new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_JsValue_NullableBoolean_NullableBoolean(thrower, thrower, (false), (false)), false);
         return f;
     }
     public function __ToString(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue

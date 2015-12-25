@@ -22,7 +22,7 @@ class ObjectEnvironmentRecord extends jint.runtime.environments.EnvironmentRecor
     }
     override public function CreateMutableBinding(name:String, configurable:Bool = true):Void
     {
-        _bindingObject.DefineOwnProperty(name, new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(jint.native.Undefined.Instance, new Nullable_Bool(true), new Nullable_Bool(true), new Nullable_Bool(configurable)), true);
+        _bindingObject.DefineOwnProperty(name, new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(jint.native.Undefined.Instance, (true), (true), (configurable)), true);
     }
     override public function SetMutableBinding(name:String, value:jint.native.JsValue, strict:Bool):Void
     {

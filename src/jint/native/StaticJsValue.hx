@@ -121,7 +121,7 @@ class StaticJsValue
     }
     static public function Invoke(me:JsValue,arguments:Array<jint.native.AbstractJsValue>):jint.native.AbstractJsValue
     {
-        return Invoke_AbstractJsValue_(me,Undefined, arguments);
+        return Invoke_AbstractJsValue_(me,JsValue.Undefined, arguments);
     }
     static public function Invoke_AbstractJsValue_(me:JsValue,thisObj:jint.native.AbstractJsValue, arguments:Array<jint.native.AbstractJsValue>):jint.native.AbstractJsValue
     {

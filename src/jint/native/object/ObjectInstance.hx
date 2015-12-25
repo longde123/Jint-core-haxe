@@ -175,7 +175,7 @@ class ObjectInstance
     }
     public function DefaultValue(hint:Int):jint.native.JsValue
     {
-        if (hint == jint.runtime.Types.String || (hint == jint.runtime.Types.None && Class == "Date"))
+        if (hint == jint.runtime.Types.String || (hint == jint.runtime.Types.None && JClass == "Date"))
         {
             var toString:jint.native.ICallable = Get("toString").TryCast(jint.native.ICallable );
             if (toString != null)
