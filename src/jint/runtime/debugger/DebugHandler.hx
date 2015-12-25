@@ -4,7 +4,7 @@ import jint.native.Null;
 import system.*;
 import anonymoustypes.*;  
 import haxe.ds.StringMap;
-
+using jint.native.StaticJsValue;
 
 class DebugHandler
 {
@@ -69,7 +69,7 @@ class DebugHandler
             return;
         }
 		 
-        var breakpoint:jint.runtime.debugger.BreakPoint =  Lambda.find(_engine.BreakPoints.iterator(),function (breakPoint:jint.runtime.debugger.BreakPoint):Bool { return BpTest(statement, breakPoint); } );
+        var breakpoint:jint.runtime.debugger.BreakPoint =  Lambda.find(_engine.BreakPoints,function (breakPoint:jint.runtime.debugger.BreakPoint):Bool { return BpTest(statement, breakPoint); } );
         var breakpointFound:Bool = false;
         if (breakpoint != null)
         {

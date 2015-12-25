@@ -37,6 +37,6 @@ class Reference
     }
     public function IsPropertyReference():Bool
     {
-        return (_baseValue.IsObject() && _baseValue.TryCast() == null) || HasPrimitiveBase();
+        return (_baseValue.IsObject() && _baseValue.TryCast(jint.runtime.environments.EnvironmentRecord) == null) || HasPrimitiveBase();
     }
 }

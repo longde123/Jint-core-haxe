@@ -59,7 +59,18 @@ class PropertyDescriptor
     public var Enumerable:Null<Bool>;
     public var Writable:Null<Bool>;
     public var Configurable:Null<Bool>;
-    public var Value:jint.native.JsValue;
+    public var Value(get, set):jint.native.JsValue;
+	var __Value:jint.native.JsValue;
+	public function get_Value():jint.native.JsValue
+    {  
+		return __Value;
+    }
+
+    public function set_Value(value:jint.native.JsValue):jint.native.JsValue
+    { 
+		__Value = value;
+        return __Value;
+    }
     public function IsAccessorDescriptor():Bool
     {
         if (JGet == null && JSet == null)

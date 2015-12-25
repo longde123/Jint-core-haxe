@@ -135,6 +135,6 @@ class DateConstructor extends jint.native.functions.FunctionInstance implements 
     }
     public static function cctor():Void
     {
-        Epoch =   DateTools.makeUtc(1970, 1, 1, 0, 0, 0);
+        Epoch =  Date.fromTime( DateTools.makeUtc(1970, 1, 1, 0, 0, 0));
     }
 }

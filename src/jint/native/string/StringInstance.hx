@@ -14,7 +14,7 @@ class StringInstance extends jint.native.object.ObjectInstance implements jint.n
         return "String";
     }
 
-    public var JType(get_Type, never):Int;
+    public var JType(get, never):Int;
     function get_JType():Int
     {
         return jint.runtime.Types.String;

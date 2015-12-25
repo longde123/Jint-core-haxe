@@ -136,21 +136,21 @@ class Engine
     public var BreakPoints:Array<jint.runtime.debugger.BreakPoint>;
 	public var Step:StepDynamic;
 	public var Break:BreakDynamic;
-    public function InvokeStepEvent(info:jint.runtime.debugger.DebugInformation):Int
+    public function InvokeStepEvent(info:jint.runtime.debugger.DebugInformation):Null<Int>
     {
         if (Step != null)
         {
             return  Step(this, info);
         }
-        return -1;
+        return null;
     }
-    public function InvokeBreakEvent(info:jint.runtime.debugger.DebugInformation):Int
+    public function InvokeBreakEvent(info:jint.runtime.debugger.DebugInformation):Null<Int>
     {
         if (Break != null)
         {
             return Break(this, info);
         }
-        return -1;
+        return null;
     }
     public function EnterExecutionContext(lexicalEnvironment:jint.runtime.environments.LexicalEnvironment, variableEnvironment:jint.runtime.environments.LexicalEnvironment, thisBinding:jint.native.JsValue):jint.runtime.environments.ExecutionContext
     {
@@ -161,22 +161,22 @@ class Engine
         _executionContexts.push(executionContext);
         return executionContext;
     }
-    public function SetValue(name:String, value:system.Delegate):jint.Engine
+    public function SetValue(name:String, value:String,item:Dynamic):jint.Engine
     {
-        Global.FastAddProperty(name, new jint.runtime.interop.DelegateWrapper(this, value), true, false, true);
+        Global.FastAddProperty(name, new jint.runtime.interop.DelegateWrapper(this, value,item), true, false, true);
         return this;
     }
     public function SetValue_String_String(name:String, value:String):jint.Engine
     {
-        return SetValue_String_JsValue(name, new jint.native.JsValue().Creator_String(value));
+        return SetValue_String_JsValue(name, (value));
     }
     public function SetValue_String_Double(name:String, value:Float):jint.Engine
     {
-        return SetValue_String_JsValue(name, new jint.native.JsValue().Creator_Double(value));
+        return SetValue_String_JsValue(name, (value));
     }
     public function SetValue_String_Boolean(name:String, value:Bool):jint.Engine
     {
-        return SetValue_String_JsValue(name, new jint.native.JsValue().Creator(value));
+        return SetValue_String_JsValue(name,(value));
     }
     public function SetValue_String_JsValue(name:String, value:jint.native.JsValue):jint.Engine
     {

@@ -3,14 +3,14 @@ using StringTools;
 import jint.native.Null;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class IndexDescriptor extends jint.runtime.descriptors.PropertyDescriptor
 {
 	//todo
     private var _engine:jint.Engine;
     private var _key:String;
     private var _item:Dynamic; 
-    public function new(engine:jint.Engine, targetType:Class<Dynamic>, key:String, item:Dynamic)
+    public function new(engine:jint.Engine,   key:String, item:Dynamic)
     {
         super();
         _engine = engine;
@@ -20,7 +20,7 @@ class IndexDescriptor extends jint.runtime.descriptors.PropertyDescriptor
     override public function get_Value():jint.native.JsValue
     { 
 		try{
-		var invokeValue:Bool = Lambda.has( Reflect.fields(_item), function(k) { return k == _key; } );
+		var invokeValue:Bool = Lambda.has( Reflect.fields(_item),  _key);
             if (invokeValue != true)
             {
                 return jint.native.JsValue.Undefined;

@@ -1,8 +1,10 @@
 package jint.runtime.environments;
 using StringTools;
+import jint.native.AbstractJsValue;
 import system.*;
 import anonymoustypes.*;
 import haxe.ds.StringMap;
+using jint.native.StaticJsValue;
 class DeclarativeEnvironmentRecord extends jint.runtime.environments.EnvironmentRecord
 {
     private var _engine:jint.Engine;
@@ -15,7 +17,7 @@ class DeclarativeEnvironmentRecord extends jint.runtime.environments.Environment
     }
     override public function HasBinding(name:String):Bool
     {
-        return _bindings.exits(name);
+        return _bindings.exists(name);
     }
     override public function CreateMutableBinding(name:String, canBeDeleted:Bool = false):Void
     {
@@ -42,7 +44,7 @@ class DeclarativeEnvironmentRecord extends jint.runtime.environments.Environment
     }
     override public function GetBindingValue(name:String, strict:Bool):jint.native.JsValue
     {
-        var binding:jint.runtime.environments.Binding = _bindings.GetValue_TKey(name);
+        var binding:jint.runtime.environments.Binding = _bindings.get(name);
         if (!binding.Mutable && binding.Value.Equals(jint.native.Undefined.Instance))
         {
             if (strict)
@@ -56,13 +58,14 @@ class DeclarativeEnvironmentRecord extends jint.runtime.environments.Environment
     override public function DeleteBinding(name:String):Bool
     {
         var binding:jint.runtime.environments.Binding =null;
-        if (!_bindings.exits(name ))
+        if (!_bindings.exists(name ))
         {
 			 
             return true;
         }
 		binding = _bindings.get(name);
-        if (!binding.Value.CanBeDeleted)
+		var value:AbstractJsValue = binding.Value;
+        if (!value.CanBeDeleted)
         {
             return false;
         }
@@ -83,11 +86,11 @@ class DeclarativeEnvironmentRecord extends jint.runtime.environments.Environment
     }
     public function InitializeImmutableBinding(name:String, value:jint.native.JsValue):Void
     {
-        var binding:jint.runtime.environments.Binding = _bindings.GetValue_TKey(name);
+        var binding:jint.runtime.environments.Binding = _bindings.get(name);
         binding.Value = value;
     }
     override public function GetAllBindingNames():Array<String>
     {
-        return Lambda.array(_bindings.key().iterator());
+        return [for (key in _bindings.keys()) key] ;
     }
 }

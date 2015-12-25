@@ -2,13 +2,13 @@ package jint.native;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class JsValue_JsValueDebugView
 {
     public var Value:String;
     public function new(value:jint.native.JsValue)
     {
-        switch (value.Type)
+        switch (value.GetJType())
         {
             case jint.runtime.Types.None:
                 Value = "None";

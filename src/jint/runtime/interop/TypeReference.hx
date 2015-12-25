@@ -36,15 +36,8 @@ class TypeReference extends jint.native.functions.FunctionInstance implements ji
                     var i:Int = 0;
                     while (i < arguments.length)
                     {
-                     
-                        if (parameterType == typeof(jint.native.JsValue))
-                        {
-                            parameters[i] = arguments[i];
-                        }
-                        else
-                        {
                             parameters[i] = arguments[i].ToObject() ;
-                        }
+                   
                         i++;
                     }
                 } //end for
@@ -113,17 +106,17 @@ class TypeReference extends jint.native.functions.FunctionInstance implements ji
                
             return jint.runtime.descriptors.PropertyDescriptor.Undefined;
         }
-        var propertyInfo = Lambda.find(Type.getInstanceFields(JType),function(p) return p==propertyName);
+        var propertyInfo = Lambda.has(Type.getInstanceFields(JType),propertyName);
         if (propertyInfo )
         {
             return new jint.runtime.descriptors.specialized.PropertyInfoDescriptor(Engine, propertyName, JType);
         }
-        var fieldInfo =Lambda.find(Type.getClassFields(JType),function(p) return p==propertyName);
+        var fieldInfo =Lambda.has(Type.getClassFields(JType), propertyName);
         if (fieldInfo  )
         {
             return new jint.runtime.descriptors.specialized.FieldInfoDescriptor(Engine, propertyName, JType);
         }
-		var IndexInfo =Lambda.find(Reflect.fields(JType),function(p) return p==propertyName);
+		var IndexInfo =Lambda.has(Reflect.fields(JType), propertyName);
         if (IndexInfo  )
         {
             return new jint.runtime.descriptors.specialized.IndexDescriptor(Engine, propertyName, JType);

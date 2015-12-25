@@ -2,7 +2,7 @@ package jint.runtime.interop;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class NamespaceReference extends jint.native.object.ObjectInstance implements jint.native.ICallable
 {
     private var _path:String;

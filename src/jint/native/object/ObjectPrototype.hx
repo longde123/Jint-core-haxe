@@ -20,7 +20,7 @@ class ObjectPrototype extends jint.native.object.ObjectInstance
         FastAddProperty("toString", new jint.runtime.interop.ClrFunctionInstance(Engine, ToObjectString), true, false, true);
         FastAddProperty("toLocaleString", new jint.runtime.interop.ClrFunctionInstance(Engine, ToLocaleString), true, false, true);
         FastAddProperty("valueOf", new jint.runtime.interop.ClrFunctionInstance(Engine, ValueOf), true, false, true);
-        FastAddProperty("hasOwnProperty", new jint.runtime.interop.ClrFunctionInstance(Engine, HasOwnProperty, 1), true, false, true);
+        FastAddProperty("hasOwnProperty", new jint.runtime.interop.ClrFunctionInstance(Engine, __HasOwnProperty, 1), true, false, true);
         FastAddProperty("isPrototypeOf", new jint.runtime.interop.ClrFunctionInstance(Engine, IsPrototypeOf, 1), true, false, true);
         FastAddProperty("propertyIsEnumerable", new jint.runtime.interop.ClrFunctionInstance(Engine, PropertyIsEnumerable, 1), true, false, true);
     }
@@ -85,7 +85,7 @@ class ObjectPrototype extends jint.native.object.ObjectInstance
         var o:jint.native.object.ObjectInstance = jint.runtime.TypeConverter.ToObject(Engine, thisObject);
         return "[object " + o.JClass + "]";
     }
-     override public function HasOwnProperty(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
+    public function __HasOwnProperty(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var p:String = jint.runtime.TypeConverter.toString(arguments[0]);
         var o:jint.native.object.ObjectInstance = jint.runtime.TypeConverter.ToObject(Engine, thisObject);
