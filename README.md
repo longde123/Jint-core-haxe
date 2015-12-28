@@ -21,4 +21,6 @@ Todo List
 
 Step 1  jint\parser   is ok ~~~
 
-Step 2  jint\runtime   jint\native  to do ...
+Step 2  jint\runtime   jint\native   is ok ~~~
+
+Step 3 debug &&test to do ...
