@@ -67,7 +67,7 @@ class JsonParser
                 }
                 else
                 {
-                    return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.SyntaxError, Cs2Hx.Format("Expected hexadecimal digit:{0}", _source));
+                    return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.SyntaxError, Cs2Hx.Format("Expected hexadecimal digit:{0}", [_source]));
                 }
                 ++i;
             }
@@ -105,7 +105,7 @@ class JsonParser
                 token.Range = [ start, _index ];
                 return token;
         }
-        return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.SyntaxError, Cs2Hx.Format(jint.native.json.JsonParser_Messages.UnexpectedToken, code));
+        return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.SyntaxError, Cs2Hx.Format(jint.native.json.JsonParser_Messages.UnexpectedToken, [code]));
     }
     private function ScanNumericLiteral():jint.native.json.JsonParser_Token
     {
@@ -165,7 +165,7 @@ class JsonParser
         }
         var token:jint.native.json.JsonParser_Token = new jint.native.json.JsonParser_Token();
         token.Type = jint.native.json.JsonParser_Tokens.Number;
-        token.Value = system.Double.Parse_String_NumberStyles_IFormatProvider(number, system.globalization.NumberStyles.AllowLeadingSign | system.globalization.NumberStyles.AllowDecimalPoint | system.globalization.NumberStyles.AllowExponent, system.globalization.CultureInfo.InvariantCulture);
+        token.Value = Std.parseFloat(number);
         token.LineNumber = (_lineNumber);
         token.LineStart = _lineStart;
         token.Range = [ start, _index ];
@@ -191,7 +191,7 @@ class JsonParser
         }
         else
         {
-            return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.SyntaxError, Cs2Hx.Format(jint.native.json.JsonParser_Messages.UnexpectedToken, s));
+            return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.SyntaxError, Cs2Hx.Format(jint.native.json.JsonParser_Messages.UnexpectedToken,[ s]));
         }
     }
     private function ScanNullLiteral():jint.native.json.JsonParser_Token
@@ -214,7 +214,7 @@ class JsonParser
         }
         else
         {
-            return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.SyntaxError, Cs2Hx.Format(jint.native.json.JsonParser_Messages.UnexpectedToken, s));
+            return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.SyntaxError, Cs2Hx.Format(jint.native.json.JsonParser_Messages.UnexpectedToken, [s]));
         }
     }
     private function ScanStringLiteral():jint.native.json.JsonParser_Token
@@ -233,7 +233,7 @@ class JsonParser
             }
             if (ch <= 31)
             {
-                return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.SyntaxError, Cs2Hx.Format("Invalid character '{0}', position:{1}, string:{2}", ch, _index, _source));
+                return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.SyntaxError, Cs2Hx.Format("Invalid character '{0}', position:{1}, string:{2}", [ch, _index, _source]));
             }
             if (ch == 92)
             {
@@ -306,7 +306,7 @@ class JsonParser
         }
         if (quote != 0)
         {
-            return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.SyntaxError, Cs2Hx.Format(jint.native.json.JsonParser_Messages.UnexpectedToken, _source));
+            return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.SyntaxError, Cs2Hx.Format(jint.native.json.JsonParser_Messages.UnexpectedToken, [_source]));
         }
         var token:jint.native.json.JsonParser_Token = new jint.native.json.JsonParser_Token();
         token.Type = jint.native.json.JsonParser_Tokens.String;
@@ -393,11 +393,11 @@ class JsonParser
     {
         var token:jint.native.json.JsonParser_Token = _lookahead;
         _index = token.Range[1];
-        _lineNumber = token.LineNumber.HasValue ? token.LineNumber.Value : 0;
+        _lineNumber = token.LineNumber!=null ? token.LineNumber : 0;
         _lineStart = token.LineStart;
         _lookahead = (_extra.Tokens != null) ? CollectToken() : Advance();
         _index = token.Range[1];
-        _lineNumber = token.LineNumber.HasValue ? token.LineNumber.Value : 0;
+        _lineNumber = token.LineNumber!=null ? token.LineNumber : 0;
         _lineStart = token.LineStart;
         return token;
     }
@@ -413,7 +413,7 @@ class JsonParser
     }
     private function MarkStart():Void
     {
-        if (_extra.Loc.HasValue)
+        if (_extra.Loc!=null)
         {
             _state.MarkerStack.push(_index - _lineStart);
             _state.MarkerStack.push(_lineNumber);
@@ -429,7 +429,7 @@ class JsonParser
         {
             node.Range = [ _state.MarkerStack.pop(), _index ];
         }
-        if (_extra.Loc.HasValue)
+        if (_extra.Loc!=null)
         {
             node.Location = new jint.parser.Location();
             node.Location.Start = new jint.parser.Position();
@@ -446,7 +446,7 @@ class JsonParser
     {
         if (node.Range != null || node.Location != null)
         {
-            if (_extra.Loc.HasValue)
+            if (_extra.Loc!=null)
             {
                 _state.MarkerStack.pop();
                 _state.MarkerStack.pop();
@@ -480,11 +480,11 @@ class JsonParser
     {
         var exception:jint.parser.ParserException;
         var msg:String = Cs2Hx.Format(messageFormat, arguments);
-        if (token.LineNumber.HasValue)
+        if (token.LineNumber!=null)
         {
             exception = new jint.parser.ParserException("Line " + token.LineNumber + ": " + msg);
             exception.Index = token.Range[0];
-            exception.LineNumber = token.LineNumber.Value;
+            exception.LineNumber = token.LineNumber;
             exception.Column = token.Range[0] - _lineStart + 1;
         }
         else
@@ -562,7 +562,7 @@ class JsonParser
             var name:String = Lex().Value.toString();
             if (PropertyNameContainsInvalidChar0To31(name))
             {
-                return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.SyntaxError, Cs2Hx.Format("Invalid character in property name '{0}'", name));
+                return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(_engine.SyntaxError, Cs2Hx.Format("Invalid character in property name '{0}'",[ name]));
             }
             Expect(":");
             var value:jint.native.JsValue = ParseJsonValue();

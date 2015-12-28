@@ -1,5 +1,6 @@
 package jint.runtime.interop;
 using StringTools;
+import jint.native.Null;
 import system.*;
 import anonymoustypes.*;
 
@@ -54,9 +55,9 @@ class ObjectWrapper extends jint.native.object.ObjectInstance implements jint.ru
         {
 			//todo
 			
-            var enumValues:Int =Type.enumIndex(Type.createEnum(cast JType,propertyName));
+            var enumValues= Type.enumIndex(Type.createEnum(cast JType, propertyName));
            
-			if (enumValues!= null)
+		//	if (enumValues!= null)
 			{
 				var descriptor =  new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(enumValues,  (false), (false),  (false));
 				Properties.Add(propertyName, descriptor);

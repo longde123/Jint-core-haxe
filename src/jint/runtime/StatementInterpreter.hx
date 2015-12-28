@@ -2,7 +2,7 @@ package jint.runtime;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class StatementInterpreter
 {
     private var _engine:jint.Engine;
@@ -113,11 +113,11 @@ class StatementInterpreter
         {
             if (forStatement.Init.Type == jint.parser.ast.SyntaxNodes.VariableDeclaration)
             {
-                ExecuteStatement(forStatement.Init.As());
+                ExecuteStatement(forStatement.Init.As(jint.parser.ast.Statement));
             }
             else
             {
-                _engine.GetValue(_engine.EvaluateExpression(forStatement.Init.As()));
+                _engine.GetValue(_engine.EvaluateExpression(forStatement.Init.As(jint.parser.ast.Expression)));
             }
         }
         var v:jint.native.JsValue = jint.native.Undefined.Instance;
@@ -156,7 +156,16 @@ class StatementInterpreter
     }
     public function ExecuteForInStatement(forInStatement:jint.parser.ast.ForInStatement):jint.runtime.Completion
     {
-        var identifier:jint.parser.ast.Identifier = forInStatement.Left.Type == jint.parser.ast.SyntaxNodes.VariableDeclaration ? system.linq.Enumerable.First(forInStatement.Left.As().Declarations).Id : forInStatement.Left.As();
+		/*  Identifier identifier = forInStatement.Left.Type == SyntaxNodes.VariableDeclaration 
+                                        ? forInStatement.Left.As<VariableDeclaration>().Declarations.First().Id 
+                                        : forInStatement.Left.As<Identifier>();*/
+        var identifier:jint.parser.ast.Identifier = null;
+		if (forInStatement.Left.Type == jint.parser.ast.SyntaxNodes.VariableDeclaration ) {
+			identifier = forInStatement.Left.As(jint.parser.ast.VariableDeclaration).Declarations[0].Id ;
+		}else
+		{
+			identifier=forInStatement.Left.As(jint.parser.ast.Identifier);
+		}
         var varRef:jint.runtime.references.Reference = _engine.EvaluateExpression(identifier);
         var exprRef:Dynamic = _engine.EvaluateExpression(forInStatement.Right);
         var experValue:jint.native.JsValue = _engine.GetValue(exprRef);
@@ -170,7 +179,7 @@ class StatementInterpreter
         var processedKeys:system.collections.generic.HashSet<String> = new system.collections.generic.HashSet<String>();
         while (cursor != null)
         {
-            var keys:Array<String> = system.linq.Enumerable.ToArray(system.linq.Enumerable.Select(cursor.GetOwnProperties(), function (x:system.collections.generic.KeyValuePair<String, jint.runtime.descriptors.PropertyDescriptor>):String { return x.Key; } ));
+            var keys:Array<String> = [ for (key in cursor.GetOwnProperties().keys()) key];
             for (p in keys)
             {
                 if (processedKeys.Contains(p))
@@ -183,7 +192,7 @@ class StatementInterpreter
                     continue;
                 }
                 var value:jint.runtime.descriptors.PropertyDescriptor = cursor.GetOwnProperty(p);
-                if (!value.Enumerable.HasValue || !value.Enumerable.Value)
+                if (value.Enumerable==null || !value.Enumerable)
                 {
                     continue;
                 }
@@ -376,7 +385,7 @@ class StatementInterpreter
                 {
                     return throw new system.ArgumentException();
                 }
-                if (lhs.IsStrict() && lhs.GetBase().TryCast() != null && (lhs.GetReferencedName() == "eval" || lhs.GetReferencedName() == "arguments"))
+                if (lhs.IsStrict() && lhs.GetBase().TryCast(jint.runtime.environments.EnvironmentRecord) != null && (lhs.GetReferencedName() == "eval" || lhs.GetReferencedName() == "arguments"))
                 {
                     return throw new jint.runtime.JavaScriptException().Creator(_engine.SyntaxError);
                 }

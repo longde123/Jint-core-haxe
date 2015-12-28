@@ -81,7 +81,8 @@ class PropertyDescriptor
     }
     public function IsDataDescriptor():Bool
     {
-        if (!Writable!=null && Value == null)
+		//todo
+        if (Writable!=null && Value == null)
         {
             return false;
         }

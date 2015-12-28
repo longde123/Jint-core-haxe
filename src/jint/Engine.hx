@@ -4,6 +4,8 @@ import haxe.ds.StringMap.StringMap;
 import jint.native.*;
 import jint.parser.*;
 import jint.parser.ast.*;
+import jint.parser.ast.LabelledStatement;
+import jint.parser.ast.RegExpLiteral;
 import jint.runtime.*;
 import jint.runtime.callstack.*;
 import jint.runtime.debugger.*;
@@ -34,7 +36,7 @@ class Engine
         _statementsCount = 0;
         _timeoutTicks = 0;
         _lastSyntaxNode = null;
-        TypeCache = new system.collections.generic.Dictionary<String, system.TypeCS>();
+        TypeCache = new StringMap<Class<Dynamic>>();
         CallStack = new jint.runtime.callstack.JintCallStack();
        
         Creator(null);
@@ -129,7 +131,7 @@ class Engine
     public var ExecutionContext(get, never):jint.runtime.environments.ExecutionContext;
     public function get_ExecutionContext():jint.runtime.environments.ExecutionContext
     {
-        return _executionContexts.Peek();
+        return _executionContexts[0];
     }
 
     public var Options:jint.Options;
@@ -198,8 +200,8 @@ class Engine
     }
     public function ResetTimeoutTicks():Void
     {
-        var timeoutIntervalTicks:Float = Options.GetTimeoutInterval().Ticks;
-        _timeoutTicks = timeoutIntervalTicks > 0 ? system.DateTime.UtcNow.Ticks + timeoutIntervalTicks : 0;
+        var timeoutIntervalTicks:Float = Options.GetTimeoutInterval().getTime();
+        _timeoutTicks = timeoutIntervalTicks > 0 ? Date.now().getTime() + timeoutIntervalTicks : 0;
     }
     public function ResetCallStack():Void
     {
@@ -248,7 +250,7 @@ class Engine
         {
             return throw new jint.runtime.StatementsCountOverflowException();
         }
-        if (_timeoutTicks > 0 && _timeoutTicks < system.DateTime.UtcNow.Ticks)
+        if (_timeoutTicks > 0 && _timeoutTicks <Date.now().getTime())
         {
             return throw new system.TimeoutException();
         }
@@ -282,7 +284,7 @@ class Engine
             case jint.parser.ast.SyntaxNodes.IfStatement:
                 return _statements.ExecuteIfStatement(statement.As(IfStatement));
             case jint.parser.ast.SyntaxNodes.LabeledStatement:
-                return _statements.ExecuteLabelledStatement(statement.As(LabeledStatement));
+                return _statements.ExecuteLabelledStatement(statement.As(LabelledStatement));
             case jint.parser.ast.SyntaxNodes.ReturnStatement:
                 return _statements.ExecuteReturnStatement(statement.As(ReturnStatement));
             case jint.parser.ast.SyntaxNodes.SwitchStatement:
@@ -325,7 +327,7 @@ class Engine
             case jint.parser.ast.SyntaxNodes.Literal:
                 return _expressions.EvaluateLiteral(expression.As(Literal));
             case jint.parser.ast.SyntaxNodes.RegularExpressionLiteral:
-                return _expressions.EvaluateLiteral(expression.As(RegularExpressionLiteral));
+                return _expressions.EvaluateLiteral(expression.As(Literal));
             case jint.parser.ast.SyntaxNodes.LogicalExpression:
                 return _expressions.EvaluateLogicalExpression(expression.As(LogicalExpression));
             case jint.parser.ast.SyntaxNodes.MemberExpression:
@@ -393,7 +395,7 @@ class Engine
         }
         else
         {
-            var record:jint.runtime.environments.EnvironmentRecord = baseValue.As();
+            var record:jint.runtime.environments.EnvironmentRecord = baseValue.As(jint.runtime.environments.EnvironmentRecord);
             if (record == null)
             {
                 return throw new system.ArgumentException();
@@ -426,7 +428,7 @@ class Engine
         else
         {
             var baseValue:jint.native.JsValue = reference.GetBase();
-            var record:jint.runtime.environments.EnvironmentRecord = baseValue.As();
+            var record:jint.runtime.environments.EnvironmentRecord = baseValue.As(jint.runtime.environments.EnvironmentRecord);
             if (record == null)
             {
                 throw new system.ArgumentNullException();
@@ -475,7 +477,7 @@ class Engine
     public function Invoke_String_Object_(propertyName:String, thisObj:Dynamic, arguments:Array<Dynamic>):jint.native.JsValue
     {
         var value:jint.native.JsValue = GetValue_String(propertyName);
-        var callable:jint.native.ICallable = value.TryCast();
+        var callable:jint.native.ICallable = value.TryCast(jint.native.ICallable);
         if (callable == null)
         {
             return throw new system.ArgumentException("Can only invoke functions");

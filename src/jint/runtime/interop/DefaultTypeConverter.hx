@@ -1,12 +1,13 @@
 package jint.runtime.interop;
 using StringTools;
+import haxe.ds.StringMap.StringMap;
 import system.*;
 import anonymoustypes.*;
 
 class DefaultTypeConverter implements jint.runtime.interop.ITypeConverter
 {
     private var _engine:jint.Engine;
-    private static var _knownConversions:system.collections.generic.Dictionary<String, Bool>;
+    private static var _knownConversions: StringMap< Bool>;
     private static var convertChangeType:String;//"ChangeType"
     private static var jsValueFromObject:String;//"FromObject"
     private static var jsValueToObject:String;//"ToObject"
@@ -28,6 +29,7 @@ class DefaultTypeConverter implements jint.runtime.interop.ITypeConverter
         {
             return value;
         }
+			/*
         if (Std.is(type,Enum))
         {
             var integer:Dynamic = cast value ;
@@ -37,7 +39,7 @@ class DefaultTypeConverter implements jint.runtime.interop.ITypeConverter
             }
             return Type.createEnumIndex(type,integer);
         }
-		/*
+	
         var valueType:system.TypeCS = system.Cs2Hx.GetType(value);
         if (valueType == Type.typeof((jint.native.JsValue -> Array<jint.native.JsValue> -> jint.native.JsValue)))
         {
@@ -66,7 +68,7 @@ class DefaultTypeConverter implements jint.runtime.interop.ITypeConverter
                 }
             }
         }
-		*/
+
         if (Std.is(type,Array))
         {
             var source:Array<Dynamic> = (Std.is(value, Array ) ? cast(value, Array ) : null);
@@ -78,12 +80,15 @@ class DefaultTypeConverter implements jint.runtime.interop.ITypeConverter
             return result;
         }
         return system.Convert.ChangeType_Object_Type_IFormatProvider(value, type, formatProvider);
+				*/
+		return null;
     }
     public function TryConvert(value:Dynamic, type:Class<Dynamic>):system.collections.generic.KeyValuePair<Bool, Dynamic>
     {
-        var canConvert:Null<Bool> = new Null<Bool>(false);
-        var key:String = value == null ? system.String.Format("Null->{0}", type) : system.String.Format_String_Object_Object("{0}->{1}", system.Cs2Hx.GetType(value), type);
+        var canConvert:Null<Bool> = true;
+        var key:String = "";// value == null ?"Null":  ("{0}->{1}", system.Cs2Hx.GetType(value), type);
         var converted:Dynamic = null;
+		/*
         if (!_knownConversions.TryGetValue(key, canConvert))
         {
             {
@@ -91,7 +96,7 @@ class DefaultTypeConverter implements jint.runtime.interop.ITypeConverter
                 {
                     try
                     {
-                        converted = Convert(value, type, formatProvider);
+                        converted = Convert(value, type );
                         _knownConversions.Add(key, true);
                         return new system.collections.generic.KeyValuePair<Bool, Dynamic>(true, converted);
                     }
@@ -104,9 +109,11 @@ class DefaultTypeConverter implements jint.runtime.interop.ITypeConverter
                 }
             }
         }
-        if (canConvert.Value)
+		*/
+		//todo 
+        if (!canConvert)
         {
-            converted = Convert(value, type, formatProvider);
+            converted = Convert(value, type);
             return new system.collections.generic.KeyValuePair<Bool, Dynamic>(true, converted);
         }
         converted = null;
@@ -114,7 +121,7 @@ class DefaultTypeConverter implements jint.runtime.interop.ITypeConverter
     }
     public static function cctor():Void
     {
-        _knownConversions = new system.collections.generic.Dictionary<String, Bool>();
+        _knownConversions = new StringMap< Bool>();
   
         convertChangeType = "ChangeType";
         jsValueFromObject ="FromObject";

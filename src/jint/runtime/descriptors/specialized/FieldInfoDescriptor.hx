@@ -1,5 +1,6 @@
 package jint.runtime.descriptors.specialized;
 using StringTools;
+import jint.native.AbstractJsValue;
 import system.*;
 import anonymoustypes.*;
 using jint.native.StaticJsValue;
@@ -26,7 +27,7 @@ class FieldInfoDescriptor extends jint.runtime.descriptors.PropertyDescriptor
 		//todo 
         var currentValue:jint.native.JsValue = value;
         var obj:Dynamic;
-        if (Type.typeof(_item)== Type.typeof(jint.native.JsValue))
+        if (Std.is(_item, AbstractJsValue))
         {
             obj = currentValue;
         }

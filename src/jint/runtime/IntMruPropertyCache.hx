@@ -7,6 +7,7 @@ package jint.runtime;
  
 using StringTools;
 import haxe.ds.StringMap;
+import jint.native.Null;
 import system.*;
 import anonymoustypes.*;
 import haxe.ds.IntMap;
@@ -63,7 +64,7 @@ class IntMruPropertyCache<TValue>
     public function Clear():Void
     {
         _set = false;
-        _key = null;
+        _key = 0;// null;
         _value = null;
         _dictionary=   new IntMap< TValue >();
     }
@@ -83,7 +84,7 @@ class IntMruPropertyCache<TValue>
         if (_set && key==(_key))
         {
             _set = false;
-            _key = null;
+            _key = 0;//null; //todo
             _value = null;
         }
         return _dictionary.remove(key);
