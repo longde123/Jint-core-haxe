@@ -43,7 +43,7 @@ class DateConstructor extends jint.native.functions.FunctionInstance implements 
     }
     override public function Call(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
-        return PrototypeObject.toString(Construct(jint.runtime.Arguments.Empty), jint.runtime.Arguments.Empty);
+        return PrototypeObject.__ToString(Construct(jint.runtime.Arguments.Empty), jint.runtime.Arguments.Empty);
     }
     public function Construct(arguments:Array<jint.native.JsValue>):jint.native.object.ObjectInstance
     {
@@ -69,7 +69,7 @@ class DateConstructor extends jint.native.functions.FunctionInstance implements 
     {
         if (arguments.length < 2)
         {
-            return throw new system.ArgumentOutOfRangeException("arguments", "There must be at least two arguments.");
+            return throw new system.ArgumentOutOfRangeException("arguments"+ "There must be at least two arguments.");
         }
         var y:Float = jint.runtime.TypeConverter.ToNumber(arguments[0]);
         var m:Int = Std.int(jint.runtime.TypeConverter.ToInteger(arguments[1]));

@@ -1,5 +1,6 @@
 package jint;
 using StringTools;
+import haxe.ds.StringMap.StringMap;
 import jint.native.*;
 import jint.parser.*;
 import jint.parser.ast.*;
@@ -25,7 +26,7 @@ class Engine
     private var _timeoutTicks:Float;
     private var _lastSyntaxNode:jint.parser.ast.SyntaxNode;
     public var ClrTypeConverter:jint.runtime.interop.ITypeConverter;
-    public var TypeCache:system.collections.generic.Dictionary<String, Class<Dynamic>>;
+    public var TypeCache:StringMap<Class<Dynamic>>;
     public var CallStack:jint.runtime.callstack.JintCallStack;
     public function new()
     {

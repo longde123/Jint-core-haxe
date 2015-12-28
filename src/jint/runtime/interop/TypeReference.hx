@@ -4,7 +4,7 @@ import jint.native.JsValue;
 import jint.runtime.descriptors.specialized.IndexDescriptor;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class TypeReference extends jint.native.functions.FunctionInstance implements jint.native.IConstructor implements jint.runtime.interop.IObjectWrapper
 {
     public function new(engine:jint.Engine)
@@ -101,7 +101,8 @@ class TypeReference extends jint.native.functions.FunctionInstance implements ji
            
 			if (enumValues!= null)
 			{
-				return new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(enumValues,  (false), (false),  (false));
+				//todo
+				//return new jint.runtime.descriptors.PropertyDescriptor().Creator_JsValue_NullableBoolean_NullableBoolean_NullableBoolean(enumValues,  (false), (false),  (false));
 			}
                
             return jint.runtime.descriptors.PropertyDescriptor.Undefined;

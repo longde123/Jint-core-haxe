@@ -2,7 +2,7 @@ package jint.runtime.descriptors.specialized;
 using StringTools;
 import system.*;
 import anonymoustypes.*;
-
+using jint.native.StaticJsValue;
 class PropertyInfoDescriptor extends jint.runtime.descriptors.PropertyDescriptor
 {
     private var _engine:jint.Engine;
@@ -32,9 +32,9 @@ class PropertyInfoDescriptor extends jint.runtime.descriptors.PropertyDescriptor
         else
         {
             obj = currentValue.ToObject();
-            if (obj != null && system.Cs2Hx.GetType(obj) != Type.typeof(_item) )
+            if (obj != null && Type.getClass(obj) != Type.getClass(_item) )
             {
-                obj = _engine.ClrTypeConverter.Convert(obj, Type.typeof(_item)  );
+                obj = _engine.ClrTypeConverter.Convert(obj, Type.getClass(_item)  );
             }
         }
 		_item=obj;

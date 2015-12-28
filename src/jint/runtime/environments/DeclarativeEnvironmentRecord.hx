@@ -65,9 +65,10 @@ class DeclarativeEnvironmentRecord extends jint.runtime.environments.Environment
         }
 		binding = _bindings.get(name);
 		var value:AbstractJsValue = binding.Value;
-        if (!value.CanBeDeleted)
+		//todo deleted
+      //  if (!value.CanBeDeleted)
         {
-            return false;
+         //   return false;
         }
         _bindings.remove(name);
         return true;

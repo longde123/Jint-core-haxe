@@ -167,8 +167,7 @@ import jint.runtime.interop.ITypeConverter;
 import jint.runtime.interop.ObjectWrapper;
 import jint.runtime.interop.SetterFunctionInstance;
 import jint.runtime.interop.TypeReference;
-import jint.runtime.JavaScriptException;
-import jint.runtime.MruPropertyCache;
+import jint.runtime.JavaScriptException; 
 import jint.runtime.RecursionDepthOverflowException;
 import jint.runtime.references.Reference;
 import jint.runtime.StatementInterpreter;
@@ -182,14 +181,12 @@ class Constructors
     public static function init()
     {
         TimeSpan.cctor();
-        Arguments.cctor();
-        CachedPowers.cctor();
+        Arguments.cctor(); 
         Completion.cctor();
         DateConstructor.cctor();
         DatePrototype.cctor();
         DefaultTypeConverter.cctor();
-        EvalCodeScope.cctor();
-        FastDtoaBuilder.cctor();
+        EvalCodeScope.cctor(); 
         GlobalObject.cctor();
         JavaScriptParser.cctor();
         JavaScriptParser_Regexes.cctor();

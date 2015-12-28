@@ -74,7 +74,7 @@ class DebugHandler
         if (breakpoint != null)
         {
             var info:jint.runtime.debugger.DebugInformation = CreateDebugInformation(statement);
-            var result:Null<Int> = _engine.InvokeBreakEvent(info);
+            var result= _engine.InvokeBreakEvent(info);
             if (result!=null)
             {
                 _stepMode = result;
@@ -84,7 +84,7 @@ class DebugHandler
         if (breakpointFound == false && _stepMode == jint.runtime.debugger.StepMode.Into)
         {
             var info:jint.runtime.debugger.DebugInformation = CreateDebugInformation(statement);
-            var result:Null<Int> = _engine.InvokeStepEvent(info);
+            var result = _engine.InvokeStepEvent(info);
             if (result!=null)
             {
                 _stepMode = result;
@@ -92,14 +92,14 @@ class DebugHandler
         }
         if (old == jint.runtime.debugger.StepMode.Into && _stepMode == jint.runtime.debugger.StepMode.Out)
         {
-            _callBackStepOverDepth = _debugCallStack.Count;
+            _callBackStepOverDepth = _debugCallStack.length;
         }
         else if (old == jint.runtime.debugger.StepMode.Into && _stepMode == jint.runtime.debugger.StepMode.Over)
         {
             var expressionStatement:jint.parser.ast.ExpressionStatement = cast(statement, jint.parser.ast.ExpressionStatement);
             if (expressionStatement != null && Std.is(expressionStatement.Expression, jint.parser.ast.CallExpression))
             {
-                _callBackStepOverDepth = _debugCallStack.Count;
+                _callBackStepOverDepth = _debugCallStack.length;
             }
             else
             {
@@ -140,7 +140,7 @@ class DebugHandler
         }
         return info;
     }
-    private static function GetLocalVariables(lex:jint.runtime.environments.LexicalEnvironment):system.collections.generic.Dictionary<String, jint.native.JsValue>
+    private static function GetLocalVariables(lex:jint.runtime.environments.LexicalEnvironment):StringMap<jint.native.JsValue>
     {
         var locals:StringMap<jint.native.JsValue> = new StringMap< jint.native.JsValue>();
         if (lex != null && lex.Record != null)
@@ -149,7 +149,7 @@ class DebugHandler
         }
         return locals;
     }
-    private static function GetGlobalVariables(lex:jint.runtime.environments.LexicalEnvironment):system.collections.generic.Dictionary<String, jint.native.JsValue>
+    private static function GetGlobalVariables(lex:jint.runtime.environments.LexicalEnvironment):StringMap<jint.native.JsValue>
     {
         var globals:StringMap< jint.native.JsValue> = new StringMap< jint.native.JsValue>();
         var tempLex:jint.runtime.environments.LexicalEnvironment = lex;
@@ -165,12 +165,12 @@ class DebugHandler
         var bindings:Array<String> = lex.Record.GetAllBindingNames();
         for (binding in bindings)
         { 
-            if (locals.exits(binding) == false)
+            if (locals.exists(binding) == false)
             {
                 var jsValue:jint.native.JsValue = lex.Record.GetBindingValue(binding, false);
-                if (jsValue.TryCast() == null)
+                if (jsValue.TryCast(jint.native.ICallable) == null)
                 {
-                    locals.Add(binding, jsValue);
+                    locals.set(binding, jsValue);
                 }
             }
         }

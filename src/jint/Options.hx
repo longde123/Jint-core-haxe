@@ -148,10 +148,10 @@ class Options
         _objectConverters = new Array<jint.runtime.interop.IObjectConverter>();
         _maxStatements = 0;
         _maxRecursionDepth = -1;
-        _timeoutInterval = new Date();
+        _timeoutInterval =   Date.now();
 		//todo
-        _culture = new Date();
-        _localTimeZone = new Date();
+        _culture = Date.now();
+        _localTimeZone =Date.now();
         _lookupAssemblies = new Array<Dynamic>();
     }
 }

@@ -29,39 +29,21 @@ class NamespaceReference extends jint.native.object.ObjectInstance implements ji
     }
     public function Call(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
-        var genericTypes:Array<system.TypeCS> = [  ];
-        { //for
-            var i:Int = 0;
-            while (i < arguments.length)
-            {
-                var genericTypeReference:jint.native.JsValue = jint.runtime.Arguments.At(arguments, i);
-                if (genericTypeReference.Equals(jint.native.Undefined.Instance) || !genericTypeReference.IsObject() || genericTypeReference.AsObject().JClass != "TypeReference")
-                {
-                    return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(Engine.TypeError, "Invalid generic type parameter");
-                }
-                genericTypes[i] = jint.runtime.Arguments.At(arguments, i).As(TypeReference).JType;
-                i++;
-            }
-        } //end for
-        var typeReference:jint.runtime.interop.TypeReference = GetPath(_path + "`" + jint.runtime.TypeConverter.toString(arguments.length, system.globalization.CultureInfo.InvariantCulture)).As();
-        if (typeReference == null)
-        {
-            return jint.native.Undefined.Instance;
-        }
-        var genericType:system.TypeCS = typeReference.JType.MakeGenericType(genericTypes);
-        return jint.runtime.interop.TypeReference.CreateTypeReference(Engine, genericType);
+		//todo 
+        return  null;
     }
     override public function Get(propertyName:String):jint.native.JsValue
     {
         var newPath:String = _path + "." + propertyName;
-        return GetPath(newPath);
+        return null;//todo GetPath(newPath);
     }
-    public function GetPath(  path:String):JsValue
+    public function GetPath(  path:String):jint.native.JsValue
 	{
-		var type;
+		var type:Class<Dynamic>;
 
-		if (Engine.TypeCache.TryGetValue(path,   type))
+		if (Engine.TypeCache.exists(path   ))
 		{
+			type = Engine.TypeCache.get(path);
 			if (type == null)
 			{
 				return new NamespaceReference(Engine, path);
@@ -71,12 +53,14 @@ class NamespaceReference extends jint.native.object.ObjectInstance implements ji
 		}
 
 		// search for type in mscorlib
-		type = Type.GetType(path);
+		type = Type.resolveClass(path);
 		if (type != null)
 		{
-			Engine.TypeCache.Add(path, type);
+			Engine.TypeCache.set(path, type);
 			return TypeReference.CreateTypeReference(Engine, type);
 		}
+		
+		return null;//todo 
 	}
     override public function GetOwnProperty(propertyName:String):jint.runtime.descriptors.PropertyDescriptor
     {
