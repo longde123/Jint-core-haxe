@@ -1,6 +1,5 @@
 package system;
-using StringTools;
-import system.collections.generic.IComparer.IComparer;
+using StringTools; 
 import system.Exception;
 
 class Cs2Hx
@@ -328,18 +327,7 @@ class Cs2Hx
 		return Std.int(f - s);
 	}
 	
-	public static function Sort_Int32_Int32_IComparer<T>(array:Array<T>, startAt:Int, len:Int, comp:IComparer<T>):Void
-	{
-		var tmp = new Array<T>();
-		
-		for (i in startAt...(len + startAt))
-			tmp.push(array[i]);
-			
-		tmp.sort(function (a:T, b:T):Int { return comp.Compare(a, b); } );
-		
-		for (i in 0...tmp.length)
-			array[i + startAt] = tmp[i];
-	}
+ 
 	
 	public static function NewGuid():String
 	{

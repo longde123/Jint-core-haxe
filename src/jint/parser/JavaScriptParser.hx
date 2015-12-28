@@ -2365,7 +2365,7 @@ class JavaScriptParser
         {
             label = ParseVariableIdentifier();
             var key:String = "$" + label.Name;
-            if (!_state.LabelSet.Contains(key))
+            if (_state.LabelSet.indexOf(key)==-1)
             {
                 ThrowError(jint.parser.Token.Empty, jint.parser.Messages.UnknownLabel, [ label.Name ]);
             }
@@ -2402,7 +2402,7 @@ class JavaScriptParser
         {
             label = ParseVariableIdentifier();
             var key:String = "$" + label.Name;
-            if (!_state.LabelSet.Contains(key))
+            if (_state.LabelSet.indexOf(key)==-1)
             {
                 ThrowError(jint.parser.Token.Empty, jint.parser.Messages.UnknownLabel, [ label.Name ]);
             }
@@ -2637,13 +2637,13 @@ class JavaScriptParser
         {
             Lex();
             var key:String = "$" + (cast(expr, jint.parser.ast.Identifier)).Name;
-            if (_state.LabelSet.Contains(key))
+            if (_state.LabelSet.indexOf(key)!=-1)
             {
                 ThrowError(jint.parser.Token.Empty, jint.parser.Messages.Redeclaration, [ "Label", (cast(expr, jint.parser.ast.Identifier)).Name ]);
             }
-            _state.LabelSet.Add(key);
+            _state.LabelSet.push(key);
             var labeledBody:jint.parser.ast.Statement = ParseStatement();
-            _state.LabelSet.Remove(key);
+            _state.LabelSet.remove(key);
             return MarkEnd(CreateLabeledStatement(cast(expr, jint.parser.ast.Identifier), labeledBody));
         }
         ConsumeSemicolon();
@@ -2685,11 +2685,11 @@ class JavaScriptParser
                 }
             }
         }
-        var oldLabelSet:system.collections.generic.HashSet<String> = _state.LabelSet;
+        var oldLabelSet:Array<String> = _state.LabelSet;
         var oldInIteration:Bool = _state.InIteration;
         var oldInSwitch:Bool = _state.InSwitch;
         var oldInFunctionBody:Bool = _state.InFunctionBody;
-        _state.LabelSet = new system.collections.generic.HashSet<String>();
+        _state.LabelSet = new Array<String>();
         _state.InIteration = false;
         _state.InSwitch = false;
         _state.InFunctionBody = true;
@@ -2721,7 +2721,7 @@ class JavaScriptParser
         Expect("(");
         if (!Match(")"))
         {
-            var paramSet:system.collections.generic.HashSet<String> = new system.collections.generic.HashSet<String>();
+            var paramSet:Array<String> = new Array<String>();
             while (_index < _length)
             {
                 var token:jint.parser.Token = _lookahead;
@@ -2734,7 +2734,7 @@ class JavaScriptParser
                         stricted = token;
                         message = jint.parser.Messages.StrictParamName;
                     }
-                    if (paramSet.Contains(key))
+                    if (paramSet.indexOf(key)!=-1)
                     {
                         stricted = token;
                         message = jint.parser.Messages.StrictParamDupe;
@@ -2752,14 +2752,14 @@ class JavaScriptParser
                         firstRestricted = token;
                         message = jint.parser.Messages.StrictReservedWord;
                     }
-                    else if (paramSet.Contains(key))
+                    else if (paramSet.indexOf(key)!=-1)
                     {
                         firstRestricted = token;
                         message = jint.parser.Messages.StrictParamDupe;
                     }
                 }
                 parameters.push(param);
-                paramSet.Add(key);
+                paramSet.push(key);
                 if (Match(")"))
                 {
                     break;
@@ -2998,7 +2998,7 @@ class JavaScriptParser
         _lookahead = null;
         _state = new jint.parser.State();
         _state.AllowIn = true;
-        _state.LabelSet = new system.collections.generic.HashSet<String>();
+        _state.LabelSet = new Array<String>();
         _state.InFunctionBody = false;
         _state.InIteration = false;
         _state.InSwitch = false;
@@ -3053,7 +3053,7 @@ class JavaScriptParser
         _lookahead = null;
         _state = new jint.parser.State();
         _state.AllowIn = true;
-        _state.LabelSet = new system.collections.generic.HashSet<String>();
+        _state.LabelSet = new Array<String>();
         _state.InFunctionBody = true;
         _state.InIteration = false;
         _state.InSwitch = false;

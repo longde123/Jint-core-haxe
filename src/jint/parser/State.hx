@@ -7,7 +7,7 @@ class State
 {
     public var LastCommentStart:Int;
     public var AllowIn:Bool;
-    public var LabelSet:system.collections.generic.HashSet<String>;
+    public var LabelSet:Array<String>;
     public var InFunctionBody:Bool;
     public var InIteration:Bool;
     public var InSwitch:Bool;

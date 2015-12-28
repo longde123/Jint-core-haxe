@@ -82,14 +82,14 @@ class StringMruPropertyCache<TValue>
         }
         return _dictionary.remove(key);
     }
-    public function TryGetValue(key:String, value:TValue):Bool
+	
+	public function Get(key:String):TValue
     {
-        if (_set && key==(_key))
-        {
-            value = _value;
-            return true;
+		if (_set && key==(_key))
+        { 
+            return _value;
         }
-         value = _dictionary.get(key);
-		 return true;
+		 return  _dictionary.get(key);
     }
+   
 }

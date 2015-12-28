@@ -89,14 +89,12 @@ class IntMruPropertyCache<TValue>
         }
         return _dictionary.remove(key);
     }
-    public function TryGetValue(key:Int, value:TValue):Bool
+    public function Get(key:Int):TValue
     {
         if (_set && key==(_key))
-        {
-            value = _value;
-            return true;
+        { 
+            return _value;
         }
-         value = _dictionary.get(key);
-		 return true;
+		 return  _dictionary.get(key);
     }
 }

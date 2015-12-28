@@ -633,7 +633,7 @@ class JsonParser
         _lookahead = null;
         _state = new jint.parser.State();
         _state.AllowIn = true;
-        _state.LabelSet = new system.collections.generic.HashSet<String>();
+        _state.LabelSet = new Array<String>();
         _state.InFunctionBody = false;
         _state.InIteration = false;
         _state.InSwitch = false;

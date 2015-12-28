@@ -7,5 +7,5 @@ import anonymoustypes.*;
 interface ITypeConverter
 {
     function Convert(value:Dynamic, type:Class<Dynamic>):Dynamic;
-    function TryConvert(value:Dynamic, type:Class<Dynamic>):system.collections.generic.KeyValuePair<Bool, Dynamic>;
+    function TryConvert(value:Dynamic, type:Class<Dynamic>):Array< Dynamic>;
 }

@@ -176,17 +176,17 @@ class StatementInterpreter
         var obj:jint.native.object.ObjectInstance = jint.runtime.TypeConverter.ToObject(_engine, experValue);
         var v:jint.native.JsValue = jint.native.Null.Instance;
         var cursor:jint.native.object.ObjectInstance = obj;
-        var processedKeys:system.collections.generic.HashSet<String> = new system.collections.generic.HashSet<String>();
+        var processedKeys:Array<String> = new Array<String>();
         while (cursor != null)
         {
             var keys:Array<String> = [ for (key in cursor.GetOwnProperties().keys()) key];
             for (p in keys)
             {
-                if (processedKeys.Contains(p))
+                if (processedKeys.indexOf(p)!=-1)
                 {
                     continue;
                 }
-                processedKeys.Add(p);
+                processedKeys.push(p);
                 if (!cursor.HasOwnProperty(p))
                 {
                     continue;
@@ -310,7 +310,7 @@ class StatementInterpreter
         var c:jint.runtime.Completion = new jint.runtime.Completion(jint.runtime.Completion.Normal, null, null);
         var sl:jint.runtime.Completion = c;
         var s:jint.parser.ast.Statement = null;
-        try
+       // try
         {
             for (statement in statementList)
             {
@@ -324,12 +324,13 @@ class StatementInterpreter
                 sl = c;
             }
         }
-        catch (v:jint.runtime.JavaScriptException)
+       /* catch (v:jint.runtime.JavaScriptException)
         {
             c = new jint.runtime.Completion(jint.runtime.Completion.Throw, v.Error, null);
             c.Location = s.Location;
             return c;
         }
+		*/
         return new jint.runtime.Completion(c.Type, c.GetValueOrDefault(), c.Identifier);
     }
     public function ExecuteThrowStatement(throwStatement:jint.parser.ast.ThrowStatement):jint.runtime.Completion

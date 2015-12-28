@@ -55,10 +55,10 @@ class ObjectInstance
     }
     public function GetOwnProperty(propertyName:String):jint.runtime.descriptors.PropertyDescriptor
     {
-        var x:jint.runtime.descriptors.PropertyDescriptor= new jint.runtime.descriptors.PropertyDescriptor();
-        if (Properties.TryGetValue(propertyName, x))
+        var x:jint.runtime.descriptors.PropertyDescriptor= null;
+        if (Properties.Contains(propertyName))
         {
-            return x;
+            return x=Properties.Get(propertyName);
         }
         return jint.runtime.descriptors.PropertyDescriptor.Undefined;
     }
@@ -126,7 +126,7 @@ class ObjectInstance
         {
             return Extensible;
         }
-        var inherited:jint.runtime.descriptors.PropertyDescriptor = Prototype.GetProperty(propertyName);
+        var inherited:jint.runtime.descriptors.PropertyDescriptor = Prototype.GetProperty(propertyName); 
         if (inherited == jint.runtime.descriptors.PropertyDescriptor.Undefined)
         {
             return Extensible;

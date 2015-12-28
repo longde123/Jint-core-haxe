@@ -46,9 +46,9 @@ class ObjectWrapper extends jint.native.object.ObjectInstance implements jint.ru
     override public function GetOwnProperty(propertyName:String):jint.runtime.descriptors.PropertyDescriptor
     {
         var x:jint.runtime.descriptors.PropertyDescriptor = (null);
-        if (Properties.TryGetValue(propertyName, x))
+        if (Properties.Contains(propertyName))
         {
-            return x;
+            return x=Properties.Get(propertyName);
         }
 		var JType = Type.getClass(Target);
         if (Reflect.isEnumValue(JType))

@@ -201,9 +201,9 @@ class ArrayInstance extends jint.native.object.ObjectInstance
         if (IsArrayIndex(propertyName, index))
         {
             var result:jint.runtime.descriptors.PropertyDescriptor = null;
-            if (_array.TryGetValue(index, result))
+            if (_array.Contains(index))
             {
-                return result;
+                return result=_array.Get(index);
             }
             else
             {

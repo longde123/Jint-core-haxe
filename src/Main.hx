@@ -71,9 +71,10 @@ class Main
 		stage.scaleMode = StageScaleMode.NO_SCALE;
 		stage.align = StageAlign.TOP_LEFT; 
 	 
-		// Constructors.init();
+		 Constructors.init();
 		 
-		 var square = new Engine().SetValue_String_Double("x", 3).Execute("x * x").GetCompletionValue(); 
+		 var square = new Engine().SetValue_String_Double("x", 3).Execute("x").GetCompletionValue();
+		// .Execute("x * x")
         trace("square.ToObject()",square.ToObject());
 		/*
 		

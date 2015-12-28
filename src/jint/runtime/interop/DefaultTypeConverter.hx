@@ -83,7 +83,7 @@ class DefaultTypeConverter implements jint.runtime.interop.ITypeConverter
 				*/
 		return null;
     }
-    public function TryConvert(value:Dynamic, type:Class<Dynamic>):system.collections.generic.KeyValuePair<Bool, Dynamic>
+    public function TryConvert(value:Dynamic, type:Class<Dynamic>):Array<Dynamic>
     {
         var canConvert:Null<Bool> = true;
         var key:String = "";// value == null ?"Null":  ("{0}->{1}", system.Cs2Hx.GetType(value), type);
@@ -114,10 +114,10 @@ class DefaultTypeConverter implements jint.runtime.interop.ITypeConverter
         if (!canConvert)
         {
             converted = Convert(value, type);
-            return new system.collections.generic.KeyValuePair<Bool, Dynamic>(true, converted);
+            return [true, converted];
         }
         converted = null;
-        return new system.collections.generic.KeyValuePair<Bool, Dynamic>(false, null);
+        return [false, null];
     }
     public static function cctor():Void
     {
