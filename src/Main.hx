@@ -73,7 +73,7 @@ class Main
 	 
 		 Constructors.init();
 		 
-		 var square = new Engine().SetValue_String_Double("x", 3).Execute("x").GetCompletionValue();
+		 var square = new Engine().SetValue_String_Double("x", 3).Execute("x* x").GetCompletionValue();
 		// .Execute("x * x")
         trace("square.ToObject()",square.ToObject());
 		/*

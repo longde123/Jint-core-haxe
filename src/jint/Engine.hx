@@ -131,7 +131,7 @@ class Engine
     public var ExecutionContext(get, never):jint.runtime.environments.ExecutionContext;
     public function get_ExecutionContext():jint.runtime.environments.ExecutionContext
     {
-        return _executionContexts[0];
+        return _executionContexts[_executionContexts.length-1];
     }
 
     public var Options:jint.Options;
