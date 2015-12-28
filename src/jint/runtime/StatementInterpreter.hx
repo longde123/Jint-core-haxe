@@ -395,11 +395,7 @@ class StatementInterpreter
     {
         if (_engine.Options.IsDebuggerStatementAllowed())
         {
-            if (!system.diagnostics.Debugger.IsAttached)
-            {
-                system.diagnostics.Debugger.Launch();
-            }
-            system.diagnostics.Debugger.Break();
+          //todo
         }
         return new jint.runtime.Completion(jint.runtime.Completion.Normal, null, null);
     }

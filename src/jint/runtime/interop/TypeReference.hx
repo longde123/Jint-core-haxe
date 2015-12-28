@@ -124,7 +124,7 @@ class TypeReference extends jint.native.functions.FunctionInstance implements ji
         }
         return jint.runtime.descriptors.PropertyDescriptor.Undefined;
     }
-    public var Target(get_Target, never):Dynamic;
+    public var Target(get , never):Dynamic;
     public function get_Target():Dynamic
     {
         return JType;

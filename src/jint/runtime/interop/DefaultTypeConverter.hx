@@ -22,7 +22,7 @@ class DefaultTypeConverter implements jint.runtime.interop.ITypeConverter
             {
                 return null;
             }
-            return throw new system.NotSupportedException(system.Cs2Hx.Format("Unable to convert null to '{0}'", type.FullName));
+            return throw new ArgumentNullException("Unable to convert null to '{0}'");
         }
         if (Type.getSuperClass(value)==type )
         {

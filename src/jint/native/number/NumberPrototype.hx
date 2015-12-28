@@ -29,7 +29,7 @@ class NumberPrototype extends jint.native.number.NumberInstance
     }
     private function ToLocaleString(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
-        if (!thisObject.IsNumber() && (thisObject.TryCast() == null))
+        if (!thisObject.IsNumber() && (thisObject.TryCast(jint.native.number.NumberInstance) == null))
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
         }
@@ -38,7 +38,7 @@ class NumberPrototype extends jint.native.number.NumberInstance
         {
             return "NaN";
         }
-        if (m.Equals_Double(0))
+        if (m==(0))
         {
             return "0";
         }
@@ -54,7 +54,7 @@ class NumberPrototype extends jint.native.number.NumberInstance
         {
             return "-Infinity";
         }
-        return jint.runtime.TypeConverter.toString(m, "n", Engine.Options.GetCulture());
+        return jint.runtime.TypeConverter.ToString_Double_String_CultureInfo(m, "n", Engine.Options.GetCulture());
     }
     private function ValueOf(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
@@ -82,7 +82,7 @@ class NumberPrototype extends jint.native.number.NumberInstance
         {
             return ToNumberString(x);
         }
-        return jint.runtime.TypeConverter.toString(x, "f" + f, system.globalization.CultureInfo.InvariantCulture);
+        return jint.runtime.TypeConverter.ToString_Double_String(x, "f" + f);
     }
     private function ToExponential(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
@@ -95,9 +95,9 @@ class NumberPrototype extends jint.native.number.NumberInstance
         if (Cs2Hx.IsNaN(x))
         {
             return "NaN";
-        }
-        var format:String = system.String.Concat_String_String_String("#.", new String(48, f), "e+0");
-        return jint.runtime.TypeConverter.toString(x, format, system.globalization.CultureInfo.InvariantCulture);
+         }
+       //todo var format:String =("#."+ new String(48, f)+"e+0");
+        return  x ;
     }
     private function ToPrecision(thisObj:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
@@ -115,8 +115,8 @@ class NumberPrototype extends jint.native.number.NumberInstance
         {
             return throw new jint.runtime.JavaScriptException().Creator_ErrorConstructor_String(Engine.RangeError, "precision must be between 1 and 21");
         }
-        var str:String = jint.runtime.TypeConverter.ToString_Int32_String(x, "e23" );
-        var decimals:Int = system.Cs2Hx.IndexOfAny(str, [ 46, 101 ]);
+        var str:String = jint.runtime.TypeConverter.ToString_Double_String(x, "e23" );
+        var decimals:Int = 0;//todo system.Cs2Hx.IndexOfAny(str, [ 46, 101 ]);
         decimals = decimals == -1 ? str.length : decimals;
         p -= decimals;
         p = p < 1 ? 1 : p;
@@ -124,7 +124,7 @@ class NumberPrototype extends jint.native.number.NumberInstance
     }
     private function ToNumberString_JsValue_(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
-        if (!thisObject.IsNumber() && (thisObject.TryCast() == null))
+        if (!thisObject.IsNumber() && (thisObject.TryCast(jint.native.number.NumberInstance) == null))
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
         }
@@ -157,7 +157,7 @@ class NumberPrototype extends jint.native.number.NumberInstance
         var integer:Float = x;
         var fraction:Float = x - integer;
         var result:String = ToBase(integer, radix);
-        if (!fraction.Equals_Double(0))
+        if (fraction!=(0))
         {
             result += "." + ToFractionBase(fraction, radix);
         }

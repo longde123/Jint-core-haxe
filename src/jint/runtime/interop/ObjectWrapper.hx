@@ -5,11 +5,18 @@ import anonymoustypes.*;
 
 class ObjectWrapper extends jint.native.object.ObjectInstance implements jint.runtime.interop.IObjectWrapper
 {
-    public var Target:Dynamic;
+    public  var Target(get , never):Dynamic;
+	var _Target:Dynamic;
+	public function get_Target():Dynamic
+    {
+        return _Target;
+    }
+
+   
     public function new(engine:jint.Engine, obj:Dynamic)
     {
         super(engine);
-        Target = obj;
+        _Target = obj;
     }
     override public function Put(propertyName:String, value:jint.native.JsValue, throwOnError:Bool):Void
     {
@@ -37,16 +44,17 @@ class ObjectWrapper extends jint.native.object.ObjectInstance implements jint.ru
     }
     override public function GetOwnProperty(propertyName:String):jint.runtime.descriptors.PropertyDescriptor
     {
-        var x:CsRef<jint.runtime.descriptors.PropertyDescriptor> = new CsRef<jint.runtime.descriptors.PropertyDescriptor>(null);
+        var x:jint.runtime.descriptors.PropertyDescriptor = (null);
         if (Properties.TryGetValue(propertyName, x))
         {
-            return x.Value;
+            return x;
         }
-		var JType = Type.typeof(Target);
+		var JType = Type.getClass(Target);
         if (Reflect.isEnumValue(JType))
         {
+			//todo
 			
-            var enumValues =Type.resolveEnum(propertyName);
+            var enumValues:Int =Type.enumIndex(Type.createEnum(cast JType,propertyName));
            
 			if (enumValues!= null)
 			{
@@ -58,21 +66,21 @@ class ObjectWrapper extends jint.native.object.ObjectInstance implements jint.ru
             return jint.runtime.descriptors.PropertyDescriptor.Undefined;
         }
         var propertyInfo = Lambda.find(Type.getInstanceFields(JType),function(p) return p==propertyName);
-        if (propertyInfo )
+        if (propertyInfo!=null )
         {
             var descriptor =  new jint.runtime.descriptors.specialized.PropertyInfoDescriptor(Engine, propertyName, JType);
 			Properties.Add(propertyName, descriptor);
 			return descriptor;
         }
         var fieldInfo =Lambda.find(Type.getClassFields(JType),function(p) return p==propertyName);
-        if (fieldInfo  )
+        if (fieldInfo !=null )
         {
             var descriptor =  new jint.runtime.descriptors.specialized.FieldInfoDescriptor(Engine, propertyName, JType);
 			Properties.Add(propertyName, descriptor);
 			return descriptor;
         }
 		var IndexInfo =Lambda.find(Reflect.fields(JType),function(p) return p==propertyName);
-        if (IndexInfo  )
+        if (IndexInfo!=null  )
         {
             var descriptor =  new jint.runtime.descriptors.specialized.IndexDescriptor(Engine, propertyName, JType);
 			Properties.Add(propertyName, descriptor);

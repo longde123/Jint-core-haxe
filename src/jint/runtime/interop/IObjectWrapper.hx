@@ -5,5 +5,6 @@ import anonymoustypes.*;
 
 interface IObjectWrapper
 {
-    var Target(get_Target, never):Dynamic;
+	      var Target(get , never):Dynamic;
+ 
 }
