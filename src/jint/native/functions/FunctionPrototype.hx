@@ -36,7 +36,8 @@ class FunctionPrototype extends jint.native.functions.FunctionInstance
         var f:jint.native.functions.BindFunctionInstance = new jint.native.functions.BindFunctionInstance(Engine);
         f.TargetFunction = thisObj;
         f.BoundThis = thisArg;
-        f.BoundArgs = system.linq.Enumerable.ToArray(system.linq.Enumerable.Skip(arguments, 1));
+		// arguments.Skip(1).ToArray();
+        f.BoundArgs =[ for( i in 1...arguments.length) arguments[i]];
         f.Prototype = Engine.JFunction.PrototypeObject;
         var o:jint.native.functions.FunctionInstance = (Std.is(target, jint.native.functions.FunctionInstance) ? cast(target, jint.native.functions.FunctionInstance) : null);
         if (o != null)
@@ -102,7 +103,8 @@ class FunctionPrototype extends jint.native.functions.FunctionInstance
         {
             return throw new jint.runtime.JavaScriptException().Creator(Engine.TypeError);
         }
-        return func.Call(jint.runtime.Arguments.At(arguments, 0), arguments.length == 0 ? arguments : system.linq.Enumerable.ToArray(system.linq.Enumerable.Skip(arguments, 1)));
+		//Skip(arguments, 1)
+        return func.Call(jint.runtime.Arguments.At(arguments, 0), arguments.length == 0 ? arguments :  [ for ( i in 1...arguments.length) arguments[i]]);
     }
     override public function Call(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {

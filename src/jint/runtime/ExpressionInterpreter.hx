@@ -710,7 +710,7 @@ class ExpressionInterpreter
     }
     public function EvaluateArrayExpression(arrayExpression:jint.parser.ast.ArrayExpression):jint.native.JsValue
     {
-        var a:jint.native.object.ObjectInstance = _engine.JArray.Construct([ system.linq.Enumerable.Count(arrayExpression.Elements) ]);
+        var a:jint.native.object.ObjectInstance = _engine.JArray.Construct([  (arrayExpression.Elements).length ]);
         var n:Int = 0;
         for (expr in arrayExpression.Elements)
         {

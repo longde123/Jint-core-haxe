@@ -84,14 +84,14 @@ class FunctionConstructor extends jint.native.functions.FunctionInstance impleme
         blockStatement.Type = jint.parser.ast.SyntaxNodes.BlockStatement;
         blockStatement.Body = [ function_.Body ];
         functionDeclaration.Body = blockStatement;
-        functionDeclaration.Parameters = system.linq.Enumerable.ToArray(system.linq.Enumerable.Select(parameters, function (x:String):jint.parser.ast.Identifier
+        functionDeclaration.Parameters = parameters.map( function (x:String):jint.parser.ast.Identifier
         {
             var identifier:jint.parser.ast.Identifier = new jint.parser.ast.Identifier();
             identifier.Type = jint.parser.ast.SyntaxNodes.Identifier;
             identifier.Name = x;
             return identifier;
         }
-        ));
+        );
         functionDeclaration.FunctionDeclarations = function_.FunctionDeclarations;
         functionDeclaration.VariableDeclarations = function_.VariableDeclarations;
         var functionObject:jint.native.functions.ScriptFunctionInstance = new jint.native.functions.ScriptFunctionInstance(Engine, functionDeclaration, jint.runtime.environments.LexicalEnvironment.NewDeclarativeEnvironment(Engine, Engine.ExecutionContext.LexicalEnvironment), function_.Strict);

@@ -8,7 +8,7 @@ class ScriptFunctionInstance extends jint.native.functions.FunctionInstance impl
     private var _functionDeclaration:jint.parser.IFunctionDeclaration;
     public function new(engine:jint.Engine, functionDeclaration:jint.parser.IFunctionDeclaration, scope:jint.runtime.environments.LexicalEnvironment, strict:Bool)
     {
-        super(engine, system.linq.Enumerable.ToArray(system.linq.Enumerable.Select(functionDeclaration.Parameters, function (x:jint.parser.ast.Identifier):String { return x.Name; } )), scope, strict);
+        super(engine,  functionDeclaration.Parameters.map( function (x:jint.parser.ast.Identifier):String { return x.Name; } ), scope, strict);
         _functionDeclaration = functionDeclaration;
         Engine = engine;
         Extensible = true;

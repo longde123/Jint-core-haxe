@@ -482,7 +482,7 @@ class Engine
         {
             return throw new system.ArgumentException("Can only invoke functions");
         }
-        return callable.Call(jint.native.JsValue.FromObject(this, thisObj), system.linq.Enumerable.ToArray(system.linq.Enumerable.Select(arguments, function (x:Dynamic):jint.native.JsValue { return jint.native.JsValue.FromObject(this, x); } )));
+        return callable.Call(jint.native.JsValue.FromObject(this, thisObj),  arguments.map(function (x:Dynamic):jint.native.JsValue { return jint.native.JsValue.FromObject(this, x); } ));
     }
     public function GetValue_String(propertyName:String):jint.native.JsValue
     {
@@ -572,15 +572,19 @@ class Engine
                 env.SetMutableBinding("arguments", argsObj, false);
             }
         }
-        for (d in system.linq.Enumerable.SelectMany(variableDeclarations, function (x:jint.parser.ast.VariableDeclaration):Array<jint.parser.ast.VariableDeclarator> { return x.Declarations; } ))
-        {
-            var dn:String = d.Id.Name;
-            var varAlreadyDeclared:Bool = env.HasBinding(dn);
-            if (!varAlreadyDeclared)
-            {
-                env.CreateMutableBinding(dn, configurableBindings);
-                env.SetMutableBinding(dn, jint.native.Undefined.Instance, strict);
-            }
-        }
+		for (x in variableDeclarations)
+		{
+			var declarations= x.Declarations; 
+			for (d in declarations)
+			{
+				var dn:String = d.Id.Name;
+				var varAlreadyDeclared:Bool = env.HasBinding(dn);
+				if (!varAlreadyDeclared)
+				{
+					env.CreateMutableBinding(dn, configurableBindings);
+					env.SetMutableBinding(dn, jint.native.Undefined.Instance, strict);
+				}
+			}
+		}
     }
 }

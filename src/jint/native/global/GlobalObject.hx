@@ -304,7 +304,7 @@ class GlobalObject extends jint.native.object.ObjectInstance
     public function EncodeUri(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var uriString:String = jint.runtime.TypeConverter.toString(jint.runtime.Arguments.At(arguments, 0));
-        var unescapedUriSet:Array<Int> = system.linq.Enumerable.ToArray(system.linq.Enumerable.Concat(system.linq.Enumerable.Concat(UriReserved, UriUnescaped), [ 35 ]));
+        var unescapedUriSet:Array<Int> = UriReserved.concat(UriUnescaped).concat([ 35 ]);
         return Encode(uriString, unescapedUriSet);
     }
     public function EncodeUriComponent(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
@@ -397,7 +397,7 @@ class GlobalObject extends jint.native.object.ObjectInstance
     public function DecodeUri(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue
     {
         var uriString:String = jint.runtime.TypeConverter.toString(jint.runtime.Arguments.At(arguments, 0));
-        var reservedUriSet:Array<Int> = system.linq.Enumerable.ToArray(system.linq.Enumerable.Concat(UriReserved, [ 35 ]));
+        var reservedUriSet:Array<Int> =  UriReserved.concat([ 35 ]);
         return Decode(uriString, reservedUriSet);
     }
     public function DecodeUriComponent(thisObject:jint.native.JsValue, arguments:Array<jint.native.JsValue>):jint.native.JsValue

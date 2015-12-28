@@ -370,8 +370,9 @@ class ArrayPrototype extends jint.native.array.ArrayInstance
                 }
                 k++;
             }
-        } //end for
-        var items:Array<jint.native.JsValue> = system.linq.Enumerable.ToArray(system.linq.Enumerable.Skip(arguments, 2));
+        } //end for 
+		//todo Skip(2).ToArray();
+        var items:Array<jint.native.JsValue> = [ for( i in 2...arguments.length) arguments[i]];
         if (items.length < actualDeleteCount)
         {
             { //for

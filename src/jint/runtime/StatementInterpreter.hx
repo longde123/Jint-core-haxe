@@ -344,7 +344,7 @@ class StatementInterpreter
         var b:jint.runtime.Completion = ExecuteStatement(tryStatement.Block);
         if (b.Type == jint.runtime.Completion.Throw)
         {
-            if (system.linq.Enumerable.Any(tryStatement.Handlers))
+            if (tryStatement.Handlers.length>0)
             {
                 for (catchClause in tryStatement.Handlers)
                 {

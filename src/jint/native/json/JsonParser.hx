@@ -473,7 +473,7 @@ class JsonParser
     public function CreateArrayInstance(values:Array<jint.native.JsValue>):jint.native.object.ObjectInstance
     {
         var jsArray:jint.native.object.ObjectInstance = _engine.JArray.Construct(jint.runtime.Arguments.Empty);
-        _engine.JArray.PrototypeObject.Push(jsArray, system.linq.Enumerable.ToArray(values));
+        _engine.JArray.PrototypeObject.Push(jsArray,  (values));
         return jsArray;
     }
     private function ThrowError(token:jint.native.json.JsonParser_Token, messageFormat:String, ?arguments:Array<Dynamic>):Void

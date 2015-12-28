@@ -2291,7 +2291,7 @@ class JavaScriptParser
                 _state.AllowIn = false;
                 init = ParseForVariableDeclaration();
                 _state.AllowIn = true;
-                if (system.linq.Enumerable.Count(init.As(VariableDeclaration).Declarations) == 1 && MatchKeyword("in"))
+                if ( (init.As(VariableDeclaration).Declarations).length == 1 && MatchKeyword("in"))
                 {
                     Lex();
                     left = init;
