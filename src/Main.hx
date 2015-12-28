@@ -6,7 +6,7 @@ import flash.Lib;
 import flash.media.AVPeriodInfo;
   
 
- 
+  /*
 import test.parser.JavascriptParserTests;
 import jint.parser.*;
 import jint.parser.ast.*;
@@ -14,7 +14,7 @@ import jint.parser.ast.*;
 import jint.DeclarationBindingType; 
 import jint.EvalCodeScope;
 import jint.StrictModeScope;
- /*
+
 import jint.runtime.Arguments;
 import jint.runtime.callstack.CallStackElementComparer;
 import jint.runtime.callstack.JintCallStack;
@@ -56,42 +56,26 @@ import jint.runtime.TypeConverter;
 import jint.runtime.Types;
  */
 import jint.StrictModeScope;
-import jint.native.JsValue;
-using  TestAbstract;
-
- 
+import jint.native.JsValue; 
+using  jint.native.StaticJsValue;
+import jint.Engine;
 
 class Main 
 {
 	 
-	static function test(a:Int ,b: Float):Void
-	{
-	 
-	}
-	inline static function testMyAbstract(a):MyAbstract
-	{
-	 
-		return a;
-	}
+ 
 	static function main() 
 	{ 
-		var c:ColorAbstract =  1;
-		c.testColor();
-		var a:MyAbstract = "3";
-		a.test();  
+		 
 		var stage = Lib.current.stage;
 		stage.scaleMode = StageScaleMode.NO_SCALE;
-		stage.align = StageAlign.TOP_LEFT;
-		var sms:StrictModeScope = new StrictModeScope();
-		var tmp = [1, 1];
- 
-		trace(Reflect.fields( tmp));
-		trace(Type.getInstanceFields(Array));
-		 
-		trace(Type.getClassFields(Array));
+		stage.align = StageAlign.TOP_LEFT; 
 	 
-		 Constructors.init();
-		return;
+		// Constructors.init();
+		 
+		 var square = new Engine().SetValue_String_Double("x", 3).Execute("x * x").GetCompletionValue(); 
+        trace("square.ToObject()",square.ToObject());
+		/*
 		
 		JavaScriptParser.cctor();
 		JavaScriptParser_Regexes.cctor();
@@ -106,6 +90,14 @@ class Main
 		
 		
 		r.run();
+		
+			var tmp = [1, 1];
+ 
+		trace(Reflect.fields( tmp));
+		trace(Type.getInstanceFields(Array));
+		 
+		trace(Type.getClassFields(Array));
+		 */
 	}
 	
 }
