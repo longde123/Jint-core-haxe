@@ -74,18 +74,19 @@ class Main
 		stage.scaleMode = StageScaleMode.NO_SCALE;
 		stage.align = StageAlign.TOP_LEFT; 
 	 
-		 Constructors.init();
+		Constructors.init();
 		 
-		 var square = new Engine().SetValue_String_Double("x", 3).Execute("x* x").GetCompletionValue();
+		var square = new Engine().SetValue_String_Double("x", 3).Execute("x* x").GetCompletionValue();
 		// .Execute("x * x")
-        trace("square.ToObject()",square.ToObject());
-	    var add:AbstractJsValue = new Engine().Execute("function add(a, b) { return a + b; }").GetValue_String("add");
+        trace("square.ToObject()", square.ToObject());
 		var arguments:Array<jint.native.JsValue> = [];
 		arguments.push(1);
 		arguments.push(2);
-		var a = add.Invoke(arguments); // -> 3
+		var add= new Engine().Execute("function add(a, b) { return a + b; }").GetValue_String("add").Invoke(arguments); // -> 3
+
+ 
 		
-		  trace("a.ToObject()",a.ToObject());
+		  trace("add.ToObject()",add.ToObject());
 		 /*
 	 
 		var r = new haxe.unit.TestRunner();
