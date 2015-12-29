@@ -62,7 +62,7 @@ class RegExpConstructor extends jint.native.functions.FunctionInstance implement
         r = new jint.native.regexp.RegExpInstance(Engine);
         r.Prototype = PrototypeObject;
         r.Extensible = true;
-        var options:Int = ParseOptions(r, f);
+        
         try
         {
             r.Value = new EReg(p, f);
@@ -98,7 +98,7 @@ class RegExpConstructor extends jint.native.functions.FunctionInstance implement
         var lastSlash:Int = regExp.lastIndexOf("/");
         var pattern:String = regExp.substr(1, lastSlash - 1).replace("\\/", "/");
         var flags:String = regExp.substr(lastSlash + 1);
-        var options:Int = ParseOptions(r, flags);
+       
         try
         {
             r.Value = new EReg(pattern, flags);
@@ -116,54 +116,6 @@ class RegExpConstructor extends jint.native.functions.FunctionInstance implement
         r.FastAddProperty("lastIndex", 0, true, false, false);
         return r;
     }
-    private function ParseOptions(r:jint.native.regexp.RegExpInstance, flags:String):Int
-    {
-        { //for
-            var k:Int = 0;
-            while (k < flags.length)
-            {
-                var c:Int = flags.charCodeAt(k);
-                if (c == 103)
-                {
-                    if (r.Global)
-                    {
-                        return throw new jint.runtime.JavaScriptException().Creator(Engine.SyntaxError);
-                    }
-                    r.Global = true;
-                }
-                else if (c == 105)
-                {
-                    if (r.IgnoreCase)
-                    {
-                        return throw new jint.runtime.JavaScriptException().Creator(Engine.SyntaxError);
-                    }
-                    r.IgnoreCase = true;
-                }
-                else if (c == 109)
-                {
-                    if (r.Multiline)
-                    {
-                        return throw new jint.runtime.JavaScriptException().Creator(Engine.SyntaxError);
-                    }
-                    r.Multiline = true;
-                }
-                else
-                {
-                    return throw new jint.runtime.JavaScriptException().Creator(Engine.SyntaxError);
-                }
-                k++;
-            }
-        } //end for
-        var options:Int = system.text.regularexpressions.RegexOptions.ECMAScript;
-        if (r.Multiline)
-        {
-            options = options | system.text.regularexpressions.RegexOptions.Multiline;
-        }
-        if (r.IgnoreCase)
-        {
-            options = options | system.text.regularexpressions.RegexOptions.IgnoreCase;
-        }
-        return options;
-    }
+   
     public var PrototypeObject:jint.native.regexp.RegExpPrototype;
 }

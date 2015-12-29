@@ -315,7 +315,7 @@ class GlobalObject extends jint.native.object.ObjectInstance
     private function Encode(uriString:String, unescapedUriSet:Array<Int>):String
     {
         var strLen:Int = uriString.length;
-        var r:system.text.StringBuilder = new system.text.StringBuilder(uriString.length);
+        var r= Std.string(uriString.length);
         { //for
             var k:Int = 0;
             while (k < strLen)
@@ -323,7 +323,7 @@ class GlobalObject extends jint.native.object.ObjectInstance
                 var c:Int = uriString.charCodeAt(k);
                 if ( unescapedUriSet.indexOf( c) != -1)
                 {
-                    r.Append_Char(c);
+                    r+=String.fromCharCode(c);
                 }
                 else
                 {
@@ -382,9 +382,9 @@ class GlobalObject extends jint.native.object.ObjectInstance
                             var jOctet:Int = octets[j];
                             var x1:Int = HexaMap.charCodeAt(Std.int(jOctet / 16));
                             var x2:Int = HexaMap.charCodeAt(jOctet % 16);
-                            r.Append_Char(37);
-							r.Append_Char(x1);
-							r.Append_Char(x2);
+                            r+=String.fromCharCode(37);
+							r+=String.fromCharCode(x1);
+							r+=String.fromCharCode(x2);
                             j++;
                         }
                     } //end for
@@ -409,7 +409,7 @@ class GlobalObject extends jint.native.object.ObjectInstance
     public function Decode(uriString:String, reservedSet:Array<Int>):String
     {
         var strLen:Int = uriString.length;
-        var R:system.text.StringBuilder = new system.text.StringBuilder(strLen);
+        var R = Std.string(strLen);
         { //for
             var k:Int = 0;
             while (k < strLen)
@@ -417,7 +417,7 @@ class GlobalObject extends jint.native.object.ObjectInstance
                 var C:Int = uriString.charCodeAt(k);
                 if (C != 37)
                 {
-                    R.Append_Char(C);
+                    R+=String.fromCharCode(C);
                 }
                 else
                 {
@@ -437,11 +437,11 @@ class GlobalObject extends jint.native.object.ObjectInstance
                         C = B;
                         if (reservedSet.indexOf( C) == -1)
                         {
-                            R.Append_Char(C);
+                            R+=String.fromCharCode(C);
                         }
                         else
                         {
-                            R.Append(uriString.substr(start, k - start + 1));
+                            R+=(uriString.substr(start, k - start + 1));
                         }
                     }
                     else
@@ -486,7 +486,7 @@ class GlobalObject extends jint.native.object.ObjectInstance
                                 j++;
                             }
                         } //end for
-                        R.Append(Octets.toString());
+                        R+=(Octets.toString());
                     }
                 }
                 k++;

@@ -454,12 +454,12 @@ class StringPrototype extends jint.native.string.StringInstance
     {
         jint.runtime.TypeConverter.CheckObjectCoercible(Engine, thisObj);
         var s:String = jint.runtime.TypeConverter.toString(thisObj);
-        var sb:system.text.StringBuilder = new system.text.StringBuilder(s);
+        var sb=(s);
         { //for
             var i:Int = 0;
             while (i < arguments.length)
             {
-                sb.Append(jint.runtime.TypeConverter.toString(arguments[i]));
+                sb+=(jint.runtime.TypeConverter.toString(arguments[i]));
                 i++;
             }
         } //end for

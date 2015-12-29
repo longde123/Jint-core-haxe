@@ -170,12 +170,13 @@ class NumberPrototype extends jint.native.number.NumberInstance
         {
             return "0";
         }
-        var result:system.text.StringBuilder = new system.text.StringBuilder();
+        var result= "";
         while (n > 0)
         {
             var digit:Int = Std.int(n % radix);
             n = n / radix;
-            result.Insert_Int32_String(0, Cs2Hx.CharToString(digits.charCodeAt(digit)));
+			//todo
+            result= Cs2Hx.CharToString(digits.charCodeAt(digit))+result;
         }
         return result.toString();
     }
@@ -186,13 +187,13 @@ class NumberPrototype extends jint.native.number.NumberInstance
         {
             return "0";
         }
-        var result:system.text.StringBuilder = new system.text.StringBuilder();
-        while (n > 0 && result.Length < 50)
+        var result = "";
+        while (n > 0 && result.length < 50)
         {
             var c:Float = n * radix;
             var d:Int = Std.int(c);
             n = c - d;
-            result.Append(Cs2Hx.CharToString(digits.charCodeAt(d)));
+            result+=(Cs2Hx.CharToString(digits.charCodeAt(d)));
         }
         return result.toString();
     }
