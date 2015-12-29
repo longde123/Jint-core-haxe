@@ -49,11 +49,7 @@ class Cs2Hx
 		for (e in a)
 			func(e);
 	}
-	
-	public static inline function GetType(c:Dynamic):TypeCS
-	{
-		return new system.TypeCS(c);
-	}
+	 
 	
 	
 	public static function IndexOfAny__Int32(s:String, chars:Array<Int>, startat:Int):Int
@@ -351,41 +347,8 @@ class Cs2Hx
 		return throw new NotImplementedException();
 	}
 	
-	public static function TryParseInt(s:String, out:CsRef<Int>):Bool
-	{
-		var i = Std.parseInt(s);
-		
-		if (i == 0 && s != "0")
-			return false;
-			
-		out.Value = i;
-		return true;
-	}
+	 
 	
-	public static function TryParseFloat(s:String, out:CsRef<Float>):Bool
-	{
-		var i = Std.parseFloat(s);
-		
-		if (i == 0 && s != "0")
-			return false;
-			
-		out.Value = i;
-		return true;
-	}
-	public static function TryParseBool(s:String, out:CsRef<Bool>):Bool
-	{
-		switch (s.toLowerCase())
-		{
-			case "true":
-				out.Value = true;
-				return true;
-			case "false":
-				out.Value = false;
-				return true;
-			default:
-				return false;
-		}
-	}
-	
+ 
 
 }

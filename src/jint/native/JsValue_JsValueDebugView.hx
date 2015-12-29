@@ -23,7 +23,7 @@ class JsValue_JsValueDebugView
             case jint.runtime.Types.Number:
                 Value = value.AsNumber() + " (number)";
             case jint.runtime.Types.Object:
-                Value = system.Cs2Hx.GetType(value.AsObject()).Name;
+                Value = (value.AsObject()).toString();
             default:
                 Value = "Unknown";
         }
