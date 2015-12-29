@@ -199,6 +199,7 @@ class NumberPrototype extends jint.native.number.NumberInstance
     }
     public static function ToNumberString(m:Float):String
     {
+		
         if (Cs2Hx.IsNaN(m))
         {
             return "NaN";
@@ -215,6 +216,8 @@ class NumberPrototype extends jint.native.number.NumberInstance
         {
             return "-" + ToNumberString(-m);
         }
+		return Std.string(m);
+		/*
         //todo v8 Fast Dtoa
        
         var s:String = null;
@@ -248,5 +251,6 @@ class NumberPrototype extends jint.native.number.NumberInstance
             return s + "e" + (n - 1 < 0 ? "-" : "+") + system.MathCS.Abs_Int32(n - 1);
         }
         return s.substr(0, 1) + "." + s.substr(1) + "e" + (n - 1 < 0 ? "-" : "+") + system.MathCS.Abs_Int32(n - 1);
+		*/
     }
 }
