@@ -23,7 +23,7 @@ class ArgumentsInstance extends jint.native.object.ObjectInstance
         var indx:Int = 0;
         while (indx <= len - 1)
         {
-            var indxStr:String = jint.runtime.TypeConverter.toString(indx);
+            var indxStr:String = Std.string(indx);//todo
             var val:jint.native.JsValue = args[indx];
             obj.FastAddProperty(indxStr, val, true, true, true);
             if (indx < names.length)

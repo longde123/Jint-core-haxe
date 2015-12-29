@@ -358,7 +358,8 @@ class Engine
             {
                 return GetValue(completion.Value);
             }
-            return value;
+			var returnValue:jint.native.JsValue = value;
+            return returnValue;
         }
         if (reference.IsUnresolvableReference())
         {

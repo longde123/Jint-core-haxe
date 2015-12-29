@@ -4,6 +4,7 @@ import flash.display.StageAlign;
 import flash.display.StageScaleMode;
 import flash.Lib;
 import flash.media.AVPeriodInfo;
+import jint.native.AbstractJsValue;
   
 
   /*
@@ -59,7 +60,9 @@ import jint.StrictModeScope;
 import jint.native.JsValue; 
 using  jint.native.StaticJsValue;
 import jint.Engine;
-
+import jint.parser.*;
+import jint.parser.ast.*;
+import test.parser.JavascriptParserTests;
 class Main 
 {
 	 
@@ -76,12 +79,14 @@ class Main
 		 var square = new Engine().SetValue_String_Double("x", 3).Execute("x* x").GetCompletionValue();
 		// .Execute("x * x")
         trace("square.ToObject()",square.ToObject());
-		/*
+	    var add:AbstractJsValue = new Engine().Execute("function add(a, b) { return a + b; }").GetValue_String("add");
+		var arguments:Array<jint.native.JsValue> = [];
+		arguments.push(1);
+		arguments.push(2);
+		var a = add.Invoke(arguments); // -> 3
 		
-		JavaScriptParser.cctor();
-		JavaScriptParser_Regexes.cctor();
-		Messages.cctor();
-		Token.cctor();
+		  trace("a.ToObject()",a.ToObject());
+		 /*
 	 
 		var r = new haxe.unit.TestRunner();
 		r.add(new JavascriptParserTests());
@@ -98,7 +103,7 @@ class Main
 		trace(Type.getInstanceFields(Array));
 		 
 		trace(Type.getClassFields(Array));
-		 */
+	*/
 	}
 	
 }
